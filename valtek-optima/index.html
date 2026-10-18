@@ -639,8 +639,8 @@
     .upload-filename { font-size: 0.65rem; color: var(--clean); font-weight: 500; margin-top: 0.25rem; word-break: break-all; max-width: 90%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
     /* ── INTERFAZ DE DOCUMENTOS (TABLA) ── */
-    .doc-thumbnail { width: 32px; height: 32px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-right: 0.25rem; }
-    .doc-thumbnail:hover { border-color: var(--accent); transform: scale(1.1); box-shadow: 0 0 10px rgba(0,242,254,0.3); }
+    .doc-thumbnail { height: 30px; padding: 0 0.5rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); gap: 0.25rem; cursor: pointer; transition: all 0.2s; margin-right: 0.25rem; }
+    .doc-thumbnail:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,242,254,0.15); }
     .badge-status-lg { padding: 0.25rem 0.6rem; border-radius: 10px; font-size: 0.75rem; font-weight: 700; display: inline-block; text-transform: uppercase; }
     .badge-status-lg.pendiente { background: rgba(245,158,11,0.15); color: var(--process); border: 1px solid rgba(245,158,11,0.3); }
     .badge-status-lg.aprobado { background: rgba(16,185,129,0.15); color: var(--clean); border: 1px solid rgba(16,185,129,0.3); }
@@ -1551,14 +1551,10 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>RUT</th>
-                <th>Email</th>
-                <th>Documentos</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-                <th>Ingresó</th>
-                <th>Hora Ingreso</th>
+                <th style="text-align:left;">Visitante</th>
+                <th style="text-align:left;">Acreditación</th>
+                <th style="text-align:left;">Flujo de Acceso</th>
+                <th style="text-align:left; width: 220px;">Acciones</th>
               </tr>
             </thead>
             <tbody id="evento-invitados-tbody"></tbody>
@@ -1781,6 +1777,11 @@
         <img id="photo-after-preview" style="display:none;" />
       </div>
       <input type="file" id="photo-after-file" accept="image/*" style="display:none;" onchange="handlePhotoAfterSelect(event)" />
+    </div>
+    
+    <div class="f-group" style="margin-top: 1rem; text-align: left;">
+      <label class="f-label" style="font-size:0.8rem; margin-bottom: 0.25rem;">💬 Comentario / Observación (Opcional)</label>
+      <textarea class="f-input" id="finish-comment-input" rows="2" placeholder="Ej: Jabón repuesto, papel higiénico recargado, etc." style="resize: none; background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 8px; color: #fff; width: 100%; box-sizing: border-box; padding: 0.5rem;"></textarea>
     </div>
     
     <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
@@ -4323,6 +4324,15 @@
 
   // ── WORKFLOW ──
   function startZone(zid) { 
+    const wid = state.activePhoneWorker;
+    if (wid) {
+      const activeZone = state.zones.find(z => z.assignedTo === wid && z.status === 'en-proceso');
+      if (activeZone) {
+        showToast('⚠ Ya tienes una zona en proceso: ' + activeZone.name + '. Finalízala antes de comenzar otra.', true);
+        return;
+      }
+    }
+    
     state.pendingDiagnosticZone = zid; 
     const z = state.zones.find(x => x.id === zid); 
     document.getElementById('diag-zone-name').textContent = z ? z.name : ''; 
@@ -4386,6 +4396,9 @@
     document.getElementById('photo-after-placeholder').style.display = 'block';
     document.getElementById('photo-after-file').value = '';
     
+    const commentInput = document.getElementById('finish-comment-input');
+    if (commentInput) commentInput.value = '';
+    
     document.getElementById('finish-zone-name').textContent = 'Sube una foto de cómo quedó la zona limpia (' + z.name + ').';
     document.getElementById('finish-modal').style.display = 'flex';
   }
@@ -4401,11 +4414,15 @@
     const z = state.zones.find(x => x.id === zid);
     if (!z || z.status !== 'en-proceso') return;
     
+    const commentInput = document.getElementById('finish-comment-input');
+    const comment = commentInput ? commentInput.value.trim() : '';
+    z.comment = comment;
+    
     z.salidaTime = Date.now(); 
     z.status = 'limpio'; 
     
     closeFinishModal();
-    updateAuditEntry(z, tempPhotoAfterBase64); 
+    updateAuditEntry(z, tempPhotoAfterBase64, comment); 
     saveData();
     renderPhoneBody(); 
     updateMonitoreo(); 
@@ -4435,12 +4452,13 @@
     renderAuditTable(); 
   }
 
-  function updateAuditEntry(z, photoAfter = null) { 
+  function updateAuditEntry(z, photoAfter = null, comment = '') { 
     const e = [...state.auditLog].reverse().find(x => x.zid === z.id && x.status === 'en-proceso');
     if (e) {
       e.salidaTime = z.salidaTime;
       e.status = 'limpio';
       e.photoAfter = photoAfter;
+      e.comment = comment;
     } 
     renderAuditTable(); 
   }
@@ -4508,8 +4526,10 @@
       }
       photosHtml += '</div>';
       
+      const commentHtml = e.comment ? '<div style="font-size:0.75rem; color:var(--text-muted); font-style:italic; margin-top:0.25rem;">💬 Obs: ' + e.comment + '</div>' : '';
+      
       return '<tr>' +
-        '<td><strong>' + e.zoneName + '</strong></td>' +
+        '<td><strong>' + e.zoneName + '</strong>' + commentHtml + '</td>' +
         '<td>' + e.workerName + '</td>' +
         '<td style="color:var(--process);">' + fmt(e.entradaTime) + '</td>' +
         '<td>' + de + '</td>' +
@@ -4712,8 +4732,10 @@
           }
           photosHtml += '</div>';
           
+          const commentHtml = e.comment ? '<div style="font-size:0.75rem; color:var(--text-muted); font-style:italic; margin-top:0.25rem;">💬 Obs: ' + e.comment + '</div>' : '';
+          
           return '<tr>' +
-            '<td><strong>' + e.zoneName + '</strong></td>' +
+            '<td><strong>' + e.zoneName + '</strong>' + commentHtml + '</td>' +
             '<td>' + e.workerName + '</td>' +
             '<td style="color:var(--process);">' + fmt(e.entradaTime) + '</td>' +
             '<td>' + de + '</td>' +
@@ -5119,9 +5141,7 @@
     const dup = state.invitadosAcceso.find(i => i.eventoId === eventoId && i.rut.replace(/[^0-9kK]/gi,'') === rut.replace(/[^0-9kK]/gi,''));
     if (dup) return { error: 'Este RUT ya está registrado para este evento' };
     
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let token = 'QR_';
-    for (let i = 0; i < 8; i++) token += chars.charAt(Math.floor(Math.random() * chars.length));
+    const token = rut.replace(/[^0-9kK]/gi,'').toUpperCase();
     
     const inv = {
       id: 'inv_' + Date.now(),
@@ -5147,8 +5167,15 @@
   }
 
   function apiPorteriaValidarQr(qrToken, puerta) {
-    const inv = state.invitadosAcceso.find(i => i.qrToken === qrToken);
-    if (!inv) return { allow: false, reason: 'QR Inválido — Token no encontrado en el sistema.' };
+    const cleanToken = qrToken.trim().toUpperCase();
+    const cleanTokenRut = qrToken.replace(/[^0-9kK]/gi,'').toUpperCase();
+    
+    const inv = state.invitadosAcceso.find(i => {
+      const cleanInvToken = i.qrToken.trim().toUpperCase();
+      const cleanInvRut = i.rut.replace(/[^0-9kK]/gi,'').toUpperCase();
+      return cleanInvToken === cleanToken || cleanInvRut === cleanToken || cleanInvRut === cleanTokenRut;
+    });
+    if (!inv) return { allow: false, reason: 'QR Inválido — Token/RUT no encontrado en el sistema.' };
     const ev = state.eventos.find(e => e.id === inv.eventoId);
     if (!ev) return { allow: false, reason: 'Evento asociado no encontrado.' };
     
@@ -5308,8 +5335,13 @@
       renderPorteriaEventosHoy();
     } else {
       showToast('❌ ' + result.reason, true);
-      // Also log denied in feed
-      const inv = state.invitadosAcceso.find(i => i.qrToken === token);
+      const cleanToken = token.trim().toUpperCase();
+      const cleanTokenRut = token.replace(/[^0-9kK]/gi,'').toUpperCase();
+      const inv = state.invitadosAcceso.find(i => {
+        const cleanInvToken = i.qrToken.trim().toUpperCase();
+        const cleanInvRut = i.rut.replace(/[^0-9kK]/gi,'').toUpperCase();
+        return cleanInvToken === cleanToken || cleanInvRut === cleanToken || cleanInvRut === cleanTokenRut;
+      });
       if (inv) {
         const ev = state.eventos.find(e => e.id === inv.eventoId);
         if (ev) emitWsFeedEvent(inv, ev, puerta, false);
@@ -5477,6 +5509,7 @@
   }
 
   let currentSelectedEventId = null;
+
   function verInvitadosEvento(evId) {
     currentSelectedEventId = evId;
     const card = document.getElementById('evento-invitados-card');
@@ -5492,24 +5525,38 @@
     
     const invitados = state.invitadosAcceso.filter(i => i.eventoId === evId);
     if (!invitados.length) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:1rem;">No hay visitantes registrados para este evento aún.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem;">No hay visitantes registrados para este evento aún.</td></tr>';
     } else {
       tbody.innerHTML = invitados.map(inv => {
-        const ingresoStatus = inv.ingresoMarcado ? '<span class="badge badge-clean">✅ INGRESÓ</span>' : '<span class="badge badge-pending">⏳ Pendiente</span>';
-        const ingresoHora = inv.ingresoMarcado && inv.horaIngreso ? new Date(inv.horaIngreso).toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'}) : '—';
+        // Visitor column (consolidated)
+        const contactInfo = [];
+        if (inv.email) contactInfo.push(inv.email);
+        if (inv.telefono) contactInfo.push(inv.telefono);
+        const contactStr = contactInfo.join(' · ');
         
-        let docsHtml = '';
+        const visitorHtml = '<div style="display:flex; flex-direction:column; gap:0.2rem; text-align:left;">' +
+          '<span style="font-size:0.95rem; font-weight:700; color:#fff;">' + inv.nombreCompleto + '</span>' +
+          '<span style="font-size:0.78rem; color:var(--text-muted); font-family:monospace;">' + inv.rut + '</span>' +
+          (contactStr ? '<span style="font-size:0.75rem; color:var(--text-dim);">' + contactStr + '</span>' : '') +
+          '</div>';
+
+        // Documents column
+        let docsHtml = '<div style="display:flex; gap:0.4rem; justify-content:flex-start; align-items:center;">';
         if (inv.fotoCarnetFrontal) {
-          docsHtml += '<button class="doc-thumbnail" title="Ver Carnet Frente" onclick="viewDoc(\'' + inv.fotoCarnetFrontal + '\', \'Carnet Identidad (Frente) - ' + inv.nombreCompleto + '\')">🪪</button>';
+          docsHtml += '<button class="doc-thumbnail" title="Ver Carnet Frente" onclick="viewDoc(\'' + inv.fotoCarnetFrontal + '\', \'Carnet Identidad (Frente) - ' + inv.nombreCompleto + '\')">🪪 Frente</button>';
         }
         if (inv.fotoCarnetTrasera) {
-          docsHtml += '<button class="doc-thumbnail" title="Ver Carnet Reverso" onclick="viewDoc(\'' + inv.fotoCarnetTrasera + '\', \'Carnet Identidad (Reverso) - ' + inv.nombreCompleto + '\')">🪪</button>';
+          docsHtml += '<button class="doc-thumbnail" title="Ver Carnet Reverso" onclick="viewDoc(\'' + inv.fotoCarnetTrasera + '\', \'Carnet Identidad (Reverso) - ' + inv.nombreCompleto + '\')">🪪 Atrás</button>';
         }
         if (inv.fotoCara) {
-          docsHtml += '<button class="doc-thumbnail" title="Ver Selfie" onclick="viewDoc(\'' + inv.fotoCara + '\', \'Selfie de Rostro - ' + inv.nombreCompleto + '\')">📸</button>';
+          docsHtml += '<button class="doc-thumbnail" title="Ver Selfie" onclick="viewDoc(\'' + inv.fotoCara + '\', \'Selfie de Rostro - ' + inv.nombreCompleto + '\')">📸 Selfie</button>';
         }
-        if (!docsHtml) docsHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Sin docs</span>';
+        if (!inv.fotoCarnetFrontal && !inv.fotoCarnetTrasera && !inv.fotoCara) {
+          docsHtml += '<span style="color:var(--text-muted); font-size:0.75rem;">Sin docs</span>';
+        }
+        docsHtml += '</div>';
         
+        // Flow column (consolidated approval and transit logs)
         const estado = inv.estadoAprobacion || 'aprobado';
         let badgeClass = 'aprobado';
         let estadoLabel = 'Aprobado';
@@ -5522,29 +5569,49 @@
         }
         const statusBadge = '<span class="badge-status-lg ' + badgeClass + '">' + estadoLabel + '</span>';
         
-        let actionsHtml = '<div class="flex-row" style="gap:0.35rem; align-items:center;">' +
-          '<button class="btn-xs btn-blue" onclick="openFichaAcreditacion(\'' + inv.id + '\')">🔍 Ficha</button>';
+        let transitHtml = '';
         if (estado === 'pendiente') {
-          actionsHtml += '<button class="btn-xs btn-green" onclick="aprobarInvitado(\'' + inv.id + '\')">🟢 Aprobar</button>' +
-            '<button class="btn-xs btn-red" onclick="rechazarInvitado(\'' + inv.id + '\')">🔴 Rechazar</button>';
+          transitHtml = '<span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">⏳ En espera de revisión</span>';
+        } else if (estado === 'rechazado') {
+          transitHtml = '<span style="font-size:0.75rem; color:var(--dirty); font-weight:600;">⛔ Bloqueado por seguridad</span>';
+        } else {
+          if (inv.ingresoMarcado) {
+            const timeStr = inv.horaIngreso ? new Date(inv.horaIngreso).toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'}) : '';
+            transitHtml = '<span style="font-size:0.75rem; color:var(--clean); font-weight:600; display:flex; align-items:center; gap:0.25rem;">🟢 Acceso Completado (P2) ' + (timeStr ? 'a las ' + timeStr : '') + '</span>';
+          } else if (inv.scanP1) {
+            const timeStr = inv.timeP1 ? new Date(inv.timeP1).toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'}) : '';
+            transitHtml = '<span style="font-size:0.75rem; color:var(--process); font-weight:600; display:flex; align-items:center; gap:0.25rem;">🟡 En Recinto (P1) ' + (timeStr ? 'desde las ' + timeStr : '') + '</span>';
+          } else {
+            transitHtml = '<span style="font-size:0.75rem; color:var(--text-muted);">⚪ Sin registrar ingreso</span>';
+          }
+        }
+        
+        const flowHtml = '<div style="display:flex; flex-direction:column; gap:0.35rem; text-align:left; align-items:flex-start;">' +
+          statusBadge +
+          transitHtml +
+          '</div>';
+
+        // Actions column
+        let actionsHtml = '<div style="display:flex; gap:0.4rem; align-items:center;">' +
+          '<button class="btn-xs btn-blue" style="font-size:0.72rem; padding:0.3rem 0.6rem;" onclick="openFichaAcreditacion(\'' + inv.id + '\')">🔍 Ficha</button>';
+        if (estado === 'pendiente') {
+          actionsHtml += '<button class="btn-xs btn-green" style="font-size:0.72rem; padding:0.3rem 0.6rem;" onclick="aprobarInvitado(\'' + inv.id + '\')">🟢 Aprobar</button>' +
+            '<button class="btn-xs btn-red" style="font-size:0.72rem; padding:0.3rem 0.6rem;" onclick="rechazarInvitado(\'' + inv.id + '\')">🔴 Rechazar</button>';
         }
         actionsHtml += '</div>';
         
         return '<tr>' +
-          '<td><strong>' + inv.nombreCompleto + '</strong></td>' +
-          '<td>' + inv.rut + '</td>' +
-          '<td>' + (inv.email || '—') + '</td>' +
+          '<td>' + visitorHtml + '</td>' +
           '<td>' + docsHtml + '</td>' +
-          '<td>' + statusBadge + '</td>' +
+          '<td>' + flowHtml + '</td>' +
           '<td>' + actionsHtml + '</td>' +
-          '<td>' + ingresoStatus + '</td>' +
-          '<td>' + ingresoHora + '</td>' +
         '</tr>';
       }).join('');
     }
     card.style.display = 'block';
     card.scrollIntoView({ behavior: 'smooth' });
   }
+
 
   function openEnrolamiento(evId) {
     currentEnrolEventId = evId;
