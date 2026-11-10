@@ -25,7 +25,7 @@
 - `valtek-optima/assets/valtek.css`: Sistema de diseño v6 (minimalista, oscuro) que reemplaza el CSS inline.
 - `valtek-optima/assets/shell.js`: Navegación por módulos (menú lateral + topbar), rutas por rol, Centro de control, sesión persistente y landing. Los módulos son **Aseo y Personal** (Optima Clean) y **Seguridad y Acceso** (Optima Access).
 - `docs/PITCH.md`: Planteamiento comercial, speech y guion de demo.
-- Probar en local: `python3 -m http.server 5173 --directory valtek-optima` (o la configuración `valtek-optima` de `.claude/launch.json`).
+- Probar en local: `python3 tools/serve.py` y abrir http://localhost:5173 (servidor sin caché, IPv4 e IPv6).
 - `valtek-optima/public/demo/index.html`: Copia de respaldo intacta del demo interactivo.
 - `valtek-optima/package.json`, `vite.config.js`, `.env.example`: Base inicial para la migración a **Vite + Supabase (PostgreSQL + Auth + Storage + Edge Functions)**.
 - Archivos en la raíz (`index.html`, `app.js`, `style.css`, `temp_js.js`): Prototipo antiguo legado (no modificar; el desarrollo activo está en `valtek-optima/`).
