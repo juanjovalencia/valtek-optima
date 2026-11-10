@@ -1,829 +1,409 @@
 <!DOCTYPE html>
 <html lang="es">
-<!-- Valtek Optima Live Build -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valtek Optima – Gestión Inteligente de Aseo Institucional</title>
-  <meta name="description" content="Valtek Optima: plataforma SaaS de optimización, trazabilidad de aseo, control de portería y contratistas para colegios y universidades.">
+  <title>Valtek Optima · Aseo y seguridad para instituciones</title>
+  <meta name="description" content="Valtek Optima: plataforma para universidades, colegios y centros comerciales que unifica el control de aseo y el control de acceso y seguridad, en tiempo real.">
+  <meta name="theme-color" content="#05070b">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z' fill='%2305070b' stroke='%2346dcff' stroke-width='2'/%3E%3Cpath d='M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5Z' fill='%232fd39a'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --font-body: 'Inter', sans-serif; --font-display: 'Outfit', sans-serif;
-      --bg: #070913; --bg2: #0d1124;
-      --card: rgba(15,21,46,0.75); --border: rgba(255,255,255,0.08);
-      --border-glow: rgba(99,102,241,0.4);
-      --primary: #6366f1; --primary-dark: #4f46e5; --accent: #00f2fe;
-      --clean: #10b981; --process: #f59e0b; --dirty: #ef4444;
-      --text: #e2e8f0; --text-muted: #64748b; --text-dim: #94a3b8;
-      --p1: #00c6ff; --p2: #00f260; --p3: #c084fc; --common: #f97316;
-      --gold: #f59e0b; --shadow: 0 8px 32px rgba(0,0,0,0.5); --glow: 0 0 30px rgba(99,102,241,0.3);
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
-    button { cursor: pointer; border: none; font-family: var(--font-body); }
-    input, select, textarea { font-family: var(--font-body); }
-    a { text-decoration: none; color: inherit; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg2); }
-    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
-    /* ── NAVBAR ── */
-    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 900; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 60px; background: rgba(7,9,19,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-    .nav-logo-area { display: flex; align-items: center; gap: 1rem; }
-    .nav-logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .nav-links { display: flex; gap: 0.5rem; align-items: center; }
-    .nav-btn { padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; background: transparent; color: var(--text-dim); border: 1px solid transparent; transition: all 0.2s; }
-    .nav-btn:hover { color: var(--text); border-color: var(--border); background: var(--card); }
-    .nav-btn.active { color: var(--primary); border-color: var(--border-glow); }
-    .nav-btn-primary { padding: 0.4rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; transition: all 0.2s; }
-    .nav-btn-primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: var(--glow); }
-    #navbar-user-info { display: none; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--text-dim); }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: #fff; }
-    .user-avatar.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .role-chip { font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 99px; }
-    .role-chip.superadmin { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
-    .role-chip.admin { background: rgba(99,102,241,0.15); color: var(--primary); border: 1px solid rgba(99,102,241,0.3); }
-    .role-chip.trabajador { background: rgba(16,185,129,0.15); color: var(--clean); border: 1px solid rgba(16,185,129,0.3); }
-    .role-chip.proveedor { background: rgba(99,102,241,0.15); color: var(--accent); border: 1px solid rgba(99,102,241,0.3); }
-    .role-chip.porteria { background: rgba(16,185,129,0.15); color: var(--clean); border: 1px solid rgba(16,185,129,0.3); }
-    .role-chip.jefe { background: rgba(245,158,11,0.15); color: var(--process); border: 1px solid rgba(245,158,11,0.3); }
-
-    /* ── VIEWS ── */
-    .app-view { display: none; padding-top: 60px; min-height: 100vh; }
-    .app-view.active { display: block; }
-
-    /* ── AUTH ── */
-    #view-auth { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.15) 0%, var(--bg) 70%); padding: 1rem; }
-    #view-auth.hidden { display: none; }
-    .auth-card { width: 100%; max-width: 440px; background: rgba(13,17,36,0.95); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; backdrop-filter: blur(30px); box-shadow: 0 20px 80px rgba(0,0,0,0.6), 0 0 60px rgba(99,102,241,0.1); }
-    .auth-logo { text-align: center; margin-bottom: 0.4rem; font-family: var(--font-display); font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .auth-tagline { text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 2rem; }
-    .auth-lock-badge { display: flex; align-items: center; justify-content: center; gap: 0.4rem; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: 0.55rem 1rem; margin-bottom: 1.5rem; font-size: 0.78rem; color: var(--gold); }
-    .form-group { margin-bottom: 1rem; }
-    .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .form-input { width: 100%; padding: 0.75rem 1rem; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); font-size: 0.9rem; transition: all 0.2s; outline: none; }
-    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
-    .btn-full { width: 100%; padding: 0.85rem; border-radius: 10px; font-size: 0.95rem; font-weight: 700; transition: all 0.2s; }
-    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: var(--glow); }
-    .error-msg { color: var(--dirty); font-size: 0.8rem; margin-top: 0.4rem; display: none; }
-    .error-msg.show { display: block; }
-
-    /* ── LANDING ── */
-    #view-landing { background: radial-gradient(circle at 30% 20%, rgba(99,102,241,0.12) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(0,242,254,0.06) 0%, transparent 50%), var(--bg); }
-    .hero { min-height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(99,102,241,0.15) 0%, transparent 70%); pointer-events: none; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; border-radius: 99px; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); font-size: 0.8rem; font-weight: 600; color: var(--primary); margin-bottom: 1.5rem; }
-    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulse-dot 2s infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
-    .hero-title { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; line-height: 1.05; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 30%, var(--primary) 60%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero-subtitle { font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--text-dim); max-width: 600px; margin: 0 auto 1rem; line-height: 1.6; }
-    .hero-impact { font-size: 0.95rem; color: var(--text-muted); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
-    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn-hero-primary { padding: 1rem 2.5rem; border-radius: 12px; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; transition: all 0.25s; box-shadow: 0 4px 20px rgba(99,102,241,0.4); }
-    .btn-hero-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(99,102,241,0.5); }
-    .btn-hero-outline { padding: 1rem 2.5rem; border-radius: 12px; font-size: 1rem; font-weight: 700; background: transparent; border: 1px solid var(--border); color: var(--text-dim); transition: all 0.25s; }
-    .btn-hero-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-    .section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
-    .section-tag { display: inline-block; padding: 0.3rem 0.9rem; border-radius: 99px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-    .section-title { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 0.75rem; }
-    .section-desc { color: var(--text-dim); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; font-size: 1rem; }
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; backdrop-filter: blur(10px); }
-    .feature-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: var(--glow), var(--shadow); }
-    .card-icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: var(--primary); }
-    .card-icon svg { width: 26px; height: 26px; }
-    .card-icon.red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); color: var(--dirty); }
-    .card-icon.green { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); color: var(--clean); }
-    .card-icon.orange { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.2); color: var(--common); }
-    .card-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .card-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
-
-    /* ── SUPER ADMIN (ADMINISTRADOR MAYOR) ── */
-    #view-superadmin { background: radial-gradient(circle at 80% 20%, rgba(245,158,11,0.06) 0%, transparent 40%), var(--bg); }
-    .sa-header { background: rgba(245,158,11,0.04); border-bottom: 1px solid rgba(245,158,11,0.15); padding: 1.5rem 2rem 0; }
-    .sa-header-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-    .sa-crown { font-size: 1.8rem; }
-    .sa-title-text { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--gold); }
-    .sa-title-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.1rem; }
-    .sa-tabs { display: flex; gap: 0.25rem; overflow-x: auto; }
-    .sa-tab { padding: 0.7rem 1.4rem; border-radius: 10px 10px 0 0; background: transparent; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
-    .sa-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(245,158,11,0.05); }
-    .sa-tab:hover:not(.active) { color: var(--text-dim); background: rgba(255,255,255,0.02); }
-    .sa-body { padding: 2rem; max-width: 1200px; }
-    .sa-tab-content { display: none; }
-    .sa-tab-content.active { display: block; }
-    .plan-badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.18rem 0.55rem; border-radius: 99px; font-size: 0.7rem; font-weight: 700; }
-    .plan-basico { background: rgba(100,116,139,0.15); color: var(--text-dim); border: 1px solid var(--border); }
-    .plan-profesional { background: rgba(99,102,241,0.12); color: var(--primary); border: 1px solid rgba(99,102,241,0.25); }
-    .plan-enterprise { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
-
-    /* ── PROVEEDOR PANEL ── */
-    #view-proveedor { background: radial-gradient(circle at 10% 20%, rgba(99,102,241,0.06) 0%, transparent 40%), var(--bg); }
-    .prov-header { background: rgba(99,102,241,0.04); border-bottom: 1px solid rgba(99,102,241,0.15); padding: 1.5rem 2rem 0; }
-    .prov-tabs { display: flex; gap: 0.25rem; overflow-x: auto; }
-    .prov-tab { padding: 0.7rem 1.4rem; border-radius: 10px 10px 0 0; background: transparent; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
-    .prov-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(99,102,241,0.05); }
-    .prov-tab:hover:not(.active) { color: var(--text-dim); background: rgba(255,255,255,0.02); }
-    .prov-body { padding: 2rem; max-width: 1200px; }
-    .prov-tab-content { display: none; }
-    .prov-tab-content.active { display: block; }
-
-    .doc-list { display: flex; flex-direction: column; gap: 1rem; }
-    .doc-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; gap: 1rem; flex-wrap: wrap; }
-    .doc-info { display: flex; flex-direction: column; gap: 0.25rem; }
-    .doc-name { font-weight: 600; font-size: 0.9rem; }
-    .doc-meta { font-size: 0.75rem; color: var(--text-muted); }
-
-    /* ── PORTERIA PANEL ── */
-    #view-porteria { background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.04) 0%, var(--bg) 80%); }
-    .port-container { max-width: 700px; margin: 0 auto; padding: 2rem 1rem; }
-    .port-search-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; text-align: center; box-shadow: var(--shadow); margin-bottom: 2rem; }
-    .port-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text); }
-    .port-subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 2rem; }
-    .port-input-wrapper { display: flex; gap: 0.75rem; max-width: 500px; margin: 0 auto; }
-    .port-input { flex: 1; padding: 0.9rem 1.2rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; font-size: 1.1rem; text-align: center; letter-spacing: 0.05em; outline: none; transition: all 0.2s; }
-    .port-input:focus { border-color: var(--clean); box-shadow: 0 0 15px rgba(16,185,129,0.2); }
-    .btn-port-search { padding: 0 1.5rem; border-radius: 12px; font-weight: 700; background: linear-gradient(135deg, var(--clean), #059669); color: #fff; transition: all 0.2s; }
-    .btn-port-search:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    .status-screen { padding: 2rem; border-radius: 16px; margin-top: 1.5rem; border: 1px solid transparent; text-align: left; display: none; }
-    .status-screen.active { display: block; animation: slideDown 0.3s ease-out; }
-
-    .status-authorized { background: rgba(6,78,59,0.4); border-color: rgba(16,185,129,0.3); box-shadow: 0 0 30px rgba(16,185,129,0.1); }
-    .status-blocked { background: rgba(127,29,29,0.4); border-color: rgba(239,68,68,0.3); box-shadow: 0 0 30px rgba(239,68,68,0.1); }
-    .status-notfound { background: rgba(30,41,59,0.6); border-color: var(--border); }
-
-    .status-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-    .status-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-    .status-authorized .status-icon { background: rgba(16,185,129,0.2); color: var(--clean); }
-    .status-blocked .status-icon { background: rgba(239,68,68,0.2); color: var(--dirty); }
-    .status-notfound .status-icon { background: rgba(255,255,255,0.05); color: var(--text-muted); }
-    .status-text { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; }
-
-    .worker-detail-grid { display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; margin-bottom: 1.5rem; align-items: center; }
-    @media(max-width: 500px) { .worker-detail-grid { grid-template-columns: 1fr; text-align: center; justify-items: center; } }
-    .worker-avatar-lg { width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; font-weight: 800; border: 2px solid rgba(255,255,255,0.1); }
-    .worker-info-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    @media(max-width: 400px) { .worker-info-fields { grid-template-columns: 1fr; } }
-    .info-item { display: flex; flex-direction: column; gap: 0.15rem; }
-    .info-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-    .info-val { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-
-    .status-reasons { background: rgba(0,0,0,0.25); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }
-    .reason-title { font-size: 0.82rem; font-weight: 700; color: var(--dirty); margin-bottom: 0.5rem; text-transform: uppercase; }
-    .reason-list { font-size: 0.8rem; color: var(--text-dim); padding-left: 1.2rem; }
-
-    .action-buttons { display: flex; gap: 1rem; }
-    .btn-action { flex: 1; padding: 0.85rem; border-radius: 10px; font-weight: 700; text-align: center; font-size: 0.95rem; transition: all 0.2s; }
-    .btn-action-in { background: linear-gradient(135deg, var(--clean), #059669); color: #fff; }
-    .btn-action-out { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
-    .btn-action:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    .badge-authorized { background: rgba(16,185,129,0.15); color: var(--clean); border: 1px solid rgba(16,185,129,0.3); }
-    .badge-rejected { background: rgba(239,68,68,0.15); color: var(--dirty); border: 1px solid rgba(239,68,68,0.3); }
-    .badge-expired { background: rgba(245,158,11,0.15); color: var(--process); border: 1px solid rgba(245,158,11,0.3); }
-
-    /* ── JEFE PANEL ── */
-    #view-jefe { background: var(--bg); }
-    .jefe-header { padding: 1.5rem 2rem 0; border-bottom: 1px solid var(--border); }
-    .jefe-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
-    .jefe-title span { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-left: 0.5rem; }
-    .jefe-tabs { display: flex; gap: 0.25rem; overflow-x: auto; }
-    .jefe-tab { padding: 0.75rem 1.2rem; border-radius: 10px 10px 0 0; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
-    .jefe-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(99,102,241,0.05); }
-    .jefe-tab:hover:not(.active) { color: var(--text-dim); background: rgba(255,255,255,0.03); }
-    .jefe-body { padding: 2rem; max-width: 1200px; }
-    .jefe-tab-content { display: none; }
-    .jefe-tab-content.active { display: block; }
-
-    /* ── SHARED ── */
-    .j-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(10px); margin-bottom: 1.5rem; }
-    .j-card-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .j-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    @media(max-width:768px){ .j-grid-2 { grid-template-columns: 1fr; } }
-    .f-group { margin-bottom: 1rem; }
-    .f-label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .f-input { width: 100%; padding: 0.65rem 0.9rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text); font-size: 0.9rem; outline: none; transition: all 0.2s; }
-    .f-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-    .phone-input-wrapper { display: flex; align-items: center; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; padding-left: 0.9rem; transition: all 0.2s; width: 100%; }
-    .phone-input-wrapper:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-    .f-select { -webkit-appearance: none; appearance: none; cursor: pointer; }
-    .btn-sm { padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
-    .btn-green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
-    .btn-green:hover { opacity: 0.85; transform: translateY(-1px); }
-    .btn-red { background: rgba(239,68,68,0.12); color: var(--dirty); border: 1px solid rgba(239,68,68,0.2); }
-    .btn-red:hover { background: rgba(239,68,68,0.2); }
-    .btn-blue { background: rgba(99,102,241,0.15); color: var(--primary); border: 1px solid rgba(99,102,241,0.3); }
-    .btn-blue:hover { background: rgba(99,102,241,0.25); }
-    .btn-gold-sm { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
-    .btn-gold-sm:hover { background: rgba(245,158,11,0.2); }
-    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .data-table th { padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
-    .data-table td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-dim); vertical-align: middle; }
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
-    .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.72rem; font-weight: 700; }
-    .badge-clean { background: rgba(16,185,129,0.12); color: var(--clean); border: 1px solid rgba(16,185,129,0.2); }
-    .badge-process { background: rgba(245,158,11,0.12); color: var(--process); border: 1px solid rgba(245,158,11,0.2); }
-    .badge-pending { background: rgba(100,116,139,0.12); color: var(--text-muted); border: 1px solid var(--border); }
-    .empty-row td { text-align: center; color: var(--text-muted); padding: 2rem !important; font-size: 0.88rem; }
-    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
-    @media(max-width:640px){ .steps-grid { grid-template-columns: 1fr; } }
-    .step-card { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 12px; padding: 1.25rem; text-align: center; }
-    .step-num { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; }
-    .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; }
-    .step-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
-    .zone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 0.5rem; margin-top: 1rem; max-height: 420px; overflow-y: auto; padding-right: 0.25rem; }
-    .zone-check-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); font-size: 0.82rem; color: var(--text-dim); cursor: pointer; transition: all 0.15s; }
-    .zone-check-item:hover { border-color: var(--border-glow); color: var(--text); }
-    .zone-check-item input[type=checkbox] { accent-color: var(--primary); width: 14px; height: 14px; cursor: pointer; }
-    .zone-check-item.checked { border-color: rgba(99,102,241,0.3); background: rgba(99,102,241,0.06); color: var(--text); }
-    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .kpi-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
-    .kpi-value { font-family: var(--font-display); font-size: 2rem; font-weight: 800; }
-    .kpi-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .circle-wrapper { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
-    .circle-svg-area { position: relative; }
-    .circle-center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-    .circle-pct { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; }
-    .circle-sub { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-    .circle-bg { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 10; }
-    .circle-progress { fill: none; stroke: url(#progressGradient); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 0.8s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
-    .flex-row { display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; }
-    .flex-row .f-group { flex: 1; min-width: 130px; margin-bottom: 0; }
-
-    /* ── LIVE MONITOR ── */
-    .live-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
-    .live-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; position: relative; overflow: hidden; transition: all 0.3s; }
-    .live-card.active { border-color: rgba(245,158,11,0.4); animation: live-pulse 2s ease-in-out infinite; }
-    @keyframes live-pulse { 0%,100%{ box-shadow: 0 0 0 0 rgba(245,158,11,0); } 50%{ box-shadow: 0 0 20px rgba(245,158,11,0.15); } }
-    .live-card.idle { opacity: 0.6; }
-    .live-card .live-dot { width: 8px; height: 8px; border-radius: 50%; position: absolute; top: 1.25rem; right: 1.25rem; }
-    .live-dot.on { background: var(--process); animation: blink 1s infinite; }
-    .live-dot.off { background: var(--text-muted); }
-    @keyframes blink { 0%,100%{ opacity: 1; } 50%{ opacity: 0.3; } }
-    .live-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
-    .live-zone { font-size: 0.82rem; color: var(--process); font-weight: 600; margin-bottom: 0.25rem; }
-    .live-info { font-size: 0.75rem; color: var(--text-muted); }
-    .live-stats { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem; display: flex; gap: 0.75rem; }
-    .live-stats span { display: flex; align-items: center; gap: 0.25rem; }
-
-    /* ── RANKING ── */
-    .rank-medal { font-size: 1.2rem; margin-right: 0.25rem; }
-    .rank-bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.06); overflow: hidden; margin-top: 0.35rem; }
-    .rank-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
-    .report-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-    .report-header h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; }
-    .stat-card-value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; }
-    .stat-card-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
-
-    /* ── PRINT REPORT ── */
-    #report-print-area { display: none; }
-    @media print {
-      body {
-        background: #ffffff !important;
-        color: #0f172a !important;
-        font-family: 'Inter', system-ui, sans-serif !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-      #navbar, #view-auth, #view-landing, #view-superadmin, #view-jefe, #view-trabajador, #view-proveedor, #view-porteria, #diagnostic-modal, #toast, #upload-modal, #finish-modal, #photo-comparison-modal {
-        display: none !important;
-      }
-      #report-print-area {
-        display: block !important;
-        padding: 0;
-        margin: 0;
-      }
-      @page {
-        margin: 1.6cm 1.2cm;
-      }
-      .page-break {
-        page-break-before: always;
-        break-before: page;
-      }
-      /* Typography & Headers */
-      h1, h2, h3 {
-        font-family: 'Outfit', system-ui, sans-serif !important;
-        color: #0f172a !important;
-        font-weight: 700;
-        margin-top: 0;
-      }
-      h1 {
-        font-size: 1.8rem;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 0.5rem;
-        margin-bottom: 1rem;
-      }
-      h2 {
-        font-size: 1.3rem;
-        margin-top: 1.5rem;
-        margin-bottom: 0.75rem;
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 0.25rem;
-      }
-      p {
-        font-size: 0.9rem;
-        color: #475569;
-        margin-bottom: 1rem;
-        line-height: 1.5;
-      }
-      
-      /* Print Header bar */
-      .print-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 3px solid #6366f1;
-        padding-bottom: 0.75rem;
-        margin-bottom: 1.5rem;
-      }
-      .print-logo {
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 900;
-        color: #0f172a;
-      }
-      .print-logo span {
-        color: #6366f1;
-      }
-      .print-report-meta {
-        text-align: right;
-        font-size: 0.8rem;
-        color: #64748b;
-      }
-
-      /* KPI Cards Grid */
-      .print-kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-      }
-      .print-kpi-card {
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        border-radius: 8px;
-        padding: 0.75rem;
-        text-align: center;
-      }
-      .print-kpi-val {
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: #6366f1;
-      }
-      .print-kpi-lbl {
-        font-size: 0.7rem;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-top: 0.2rem;
-      }
-
-      /* Tables styling */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 1.5rem;
-        page-break-inside: auto;
-      }
-      tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-      }
-      th, td {
-        padding: 0.6rem 0.8rem;
-        border-bottom: 1px solid #e2e8f0;
-        text-align: left;
-        font-size: 0.82rem;
-      }
-      th {
-        background: #1e1b4b !important;
-        color: #ffffff !important;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.02em;
-      }
-      tbody tr:nth-child(even) {
-        background: #f8fafc !important;
-      }
-      
-      /* Badges */
-      .print-badge {
-        display: inline-block;
-        padding: 0.2rem 0.5rem;
-        font-size: 0.7rem;
-        font-weight: 600;
-        border-radius: 4px;
-        text-align: center;
-        white-space: nowrap;
-      }
-      .print-badge-success {
-        background: #f0fdf4 !important;
-        color: #16a34a !important;
-        border: 1px solid #bbf7d0;
-      }
-      .print-badge-warning {
-        background: #fffbeb !important;
-        color: #d97706 !important;
-        border: 1px solid #fef3c7;
-      }
-      .print-badge-danger {
-        background: #fef2f2 !important;
-        color: #dc2626 !important;
-        border: 1px solid #fee2e2;
-      }
-      .print-badge-info {
-        background: #eff6ff !important;
-        color: #2563eb !important;
-        border: 1px solid #dbeafe;
-      }
-
-      /* Thumbnail photos for evidence */
-      .print-photos-container {
-        display: flex;
-        gap: 0.4rem;
-      }
-      .print-photo-thumb {
-        width: 32px;
-        height: 32px;
-        border-radius: 4px;
-        border: 1px solid #cbd5e1;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f1f5f9;
-      }
-      .print-photo-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .print-photo-thumb.empty {
-        font-size: 0.6rem;
-        color: #94a3b8;
-      }
-
-      /* Two Column layouts for rankings */
-      .print-two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-        margin-top: 1rem;
-      }
-    }
-
-    /* ── WORKER PHONE ── */
-    #view-trabajador { display: none; padding-top: 60px; min-height: 100vh; background: radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.1) 0%, var(--bg) 60%); align-items: flex-start; justify-content: center; padding: 80px 1rem 2rem; }
-    #view-trabajador.active { display: flex; }
-    .phone-frame { width: 100%; max-width: 390px; background: #111827; border-radius: 42px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05); min-height: 700px; }
-    .phone-notch { background: #111827; height: 30px; display: flex; align-items: center; justify-content: center; padding-top: 8px; }
-    .notch-bar { width: 100px; height: 8px; border-radius: 99px; background: #1f2937; }
-    .phone-status-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 1.25rem 0.5rem; font-size: 0.72rem; color: var(--text-dim); }
-    .phone-header { background: linear-gradient(135deg, rgba(16,185,129,0.85), rgba(5,150,105,0.85)); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; }
-    .phone-user-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #fff; }
-    .phone-role-badge { font-size: 0.7rem; background: rgba(255,255,255,0.2); padding: 0.2rem 0.55rem; border-radius: 99px; color: rgba(255,255,255,0.9); }
-    .msg-banner { margin: 0.75rem 1.25rem; background: rgba(99,102,241,0.12); border-left: 3px solid var(--primary); border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; display: none; }
-    .msg-banner.show { display: block; }
-    .msg-banner strong { color: var(--primary); font-size: 0.75rem; display: block; margin-bottom: 0.2rem; }
-    .phone-body { padding: 0 1.25rem 1.25rem; overflow-y: auto; max-height: 560px; }
-    .phone-section-title { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--text-dim); margin: 0.75rem 0 0.5rem; display: flex; justify-content: space-between; align-items: center; }
-    .phone-counter { font-size: 0.78rem; color: var(--text-muted); }
-    .task-card { border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 0.6rem; border-left: 4px solid; background: rgba(255,255,255,0.03); transition: all 0.2s; }
-    .task-card:hover { background: rgba(255,255,255,0.05); }
-    .task-card.p1 { border-color: var(--p1); } .task-card.p2 { border-color: var(--p2); } .task-card.p3 { border-color: var(--p3); } .task-card.pc { border-color: var(--common); }
-    .task-card.limpio { border-color: var(--clean); background: rgba(16,185,129,0.06); }
-    .task-card.en-proceso { border-color: var(--process); background: rgba(245,158,11,0.06); }
-    .task-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
-    .task-card-meta { display: flex; align-items: center; gap: 0.6rem; }
-    .task-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .task-icon svg { width: 18px; height: 18px; }
-    .task-icon.p1 { background: rgba(0,198,255,0.15); color: var(--p1); } .task-icon.p2 { background: rgba(0,242,96,0.15); color: var(--p2); } .task-icon.p3 { background: rgba(192,132,252,0.15); color: var(--p3); } .task-icon.pc { background: rgba(249,115,22,0.15); color: var(--common); }
-    .task-name { font-weight: 600; font-size: 0.88rem; }
-    .task-floor { font-size: 0.72rem; color: var(--text-muted); }
-    .task-status-badge { font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 99px; }
-    .task-status-badge.pendiente { background: rgba(100,116,139,0.15); color: var(--text-muted); }
-    .task-status-badge.en-proceso { background: rgba(245,158,11,0.15); color: var(--process); }
-    .task-status-badge.limpio { background: rgba(16,185,129,0.15); color: var(--clean); }
-    .task-action-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
-    .task-btn { flex: 1; padding: 0.55rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; transition: all 0.15s; text-align: center; }
-    .task-btn-start { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
-    .task-btn-finish { background: linear-gradient(135deg, var(--clean), #059669); color: #fff; }
-    .task-btn-start:hover, .task-btn-finish:hover { opacity: 0.88; }
-    .task-time-info { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
-    .task-time-info span { color: var(--process); font-weight: 600; }
-    .empty-tasks { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem; }
-
-    /* ── DIAG + TOAST ── */
-    #diagnostic-modal { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 1rem; }
-    #diagnostic-modal.open { display: flex; }
-    .diag-card { background: rgba(13,17,36,0.97); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,0.7); }
-    .diag-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .diag-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.75rem; }
-    .diag-emojis { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; }
-    .diag-emoji-btn { width: 80px; height: 80px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 2px solid var(--border); font-size: 2rem; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem; }
-    .diag-emoji-btn:hover { transform: scale(1.08); }
-    .diag-emoji-btn.good:hover { border-color: var(--clean); background: rgba(16,185,129,0.12); }
-    .diag-emoji-btn.mid:hover { border-color: var(--process); background: rgba(245,158,11,0.12); }
-    .diag-emoji-btn.bad:hover { border-color: var(--dirty); background: rgba(239,68,68,0.12); }
-    .diag-emoji-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
-    .diag-cancel { font-size: 0.82rem; color: var(--text-muted); cursor: pointer; }
-    .diag-cancel:hover { color: var(--text); }
-    #toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; padding: 0.9rem 1.5rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; background: rgba(16,185,129,0.9); color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.4); backdrop-filter: blur(10px); transform: translateY(100px); opacity: 0; transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
-    #toast.show { transform: translateY(0); opacity: 1; }
-    #toast.error { background: rgba(239,68,68,0.9); }
-
-    .j-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
-    @media(max-width:992px){ .j-grid-3 { grid-template-columns: 1fr; } }
-
-    /* Active emoji selection */
-    .diag-emoji-btn.selected { transform: scale(1.08); }
-    .diag-emoji-btn.good.selected { border-color: var(--clean); background: rgba(16,185,129,0.2); }
-    .diag-emoji-btn.mid.selected { border-color: var(--process); background: rgba(245,158,11,0.2); }
-    .diag-emoji-btn.bad.selected { border-color: var(--dirty); background: rgba(239,68,68,0.2); }
-
-    /* Photo Upload Area in Modals */
-    .photo-upload-section { margin-top: 1rem; margin-bottom: 1.5rem; text-align: left; }
-    .photo-preview-container { margin-top: 0.5rem; border: 1px dashed var(--border); border-radius: 10px; height: 110px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; cursor: pointer; }
-    .photo-preview-container:hover { background: rgba(255,255,255,0.05); }
-    .photo-preview-container img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-preview-placeholder { font-size: 0.75rem; color: var(--text-muted); text-align: center; padding: 0.5rem; }
-
-    /* Photo Comparison Slider / Side-by-side */
-    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-    .comparison-pane { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.02); }
-    .comparison-pane-title { font-size: 0.75rem; font-weight: 700; padding: 0.4rem 0.6rem; background: rgba(0,0,0,0.4); text-align: center; border-bottom: 1px solid var(--border); }
-    .comparison-pane-image { height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .comparison-pane-image img { width: 100%; height: 100%; object-fit: cover; }
-    .comparison-pane-image span { font-size: 0.8rem; color: var(--text-muted); }
-
-    /* Thumbnails inside Tables */
-    .table-photos-col { display: flex; gap: 0.4rem; align-items: center; }
-    .table-photo-thumb { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #111; overflow: hidden; cursor: pointer; transition: transform 0.15s; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; }
-    .table-photo-thumb:hover { transform: scale(1.2); }
-    .table-photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .table-photo-thumb.empty { color: var(--text-muted); border-style: dashed; cursor: default; }
-    .table-photo-thumb.empty:hover { transform: none; }
-
-    /* ── EVENTOS / ENROLAMIENTO ── */
-    #view-enrolamiento { position: fixed; inset: 0; z-index: 950; background: radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.15) 0%, var(--bg) 70%); display: none; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto; }
-    #view-enrolamiento.active { display: flex; }
-    .enrol-card { width: 100%; max-width: 460px; background: rgba(13,17,36,0.95); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem 2rem; backdrop-filter: blur(30px); box-shadow: 0 20px 80px rgba(0,0,0,0.6), 0 0 60px rgba(99,102,241,0.1); }
-    .enrol-success { text-align: center; }
-    .qr-display { width: 200px; height: 200px; margin: 1.5rem auto; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .qr-grid { display: grid; grid-template-columns: repeat(21, 1fr); gap: 0; width: 180px; height: 180px; }
-    .qr-cell { aspect-ratio: 1; }
-    .qr-cell.dark { background: #111; }
-    .qr-cell.light { background: #fff; }
-    .event-detail-card { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 12px; padding: 1rem; margin: 1rem 0; text-align: left; }
-    .event-detail-card .ed-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.85rem; }
-    .event-detail-card .ed-label { color: var(--text-muted); }
-    .event-detail-card .ed-value { color: var(--text); font-weight: 600; }
-    .consent-check { display: flex; align-items: flex-start; gap: 0.6rem; padding: 1rem; border-radius: 10px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15); margin: 1rem 0; cursor: pointer; }
-    .consent-check input[type=checkbox] { accent-color: var(--primary); width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; }
-    .consent-check label { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; cursor: pointer; }
-
-    /* ── PORTERÍA EVENTOS ── */
-    .port-tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; }
-    .port-tab-btn { padding: 0.65rem 1.2rem; border-radius: 10px 10px 0 0; background: transparent; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
-    .port-tab-btn.active { color: var(--clean); border-bottom-color: var(--clean); background: rgba(16,185,129,0.05); }
-    .port-tab-btn:hover:not(.active) { color: var(--text-dim); background: rgba(255,255,255,0.03); }
-    .port-tab-panel { display: none; }
-    .port-tab-panel.active { display: block; }
-
-    .ws-feed { display: flex; flex-direction: column; gap: 0.75rem; max-height: 300px; overflow-y: auto; }
-    .ws-feed-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 12px; border-left: 4px solid var(--clean); background: rgba(16,185,129,0.06); animation: wsFadeIn 0.4s ease-out; }
-    .ws-feed-card.denied { border-left-color: var(--dirty); background: rgba(239,68,68,0.06); }
-    @keyframes wsFadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-    .ws-feed-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-    .ws-feed-card .ws-feed-icon { background: rgba(16,185,129,0.15); }
-    .ws-feed-card.denied .ws-feed-icon { background: rgba(239,68,68,0.15); }
-    .ws-feed-info { flex: 1; }
-    .ws-feed-name { font-weight: 700; font-size: 0.9rem; }
-    .ws-feed-detail { font-size: 0.78rem; color: var(--text-muted); }
-    .ws-feed-time { font-size: 0.72rem; color: var(--text-muted); text-align: right; }
-
-    .qr-scanner-sim { background: rgba(99,102,241,0.04); border: 2px dashed rgba(99,102,241,0.2); border-radius: 16px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
-    .qr-scanner-sim .scan-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-
-    /* Event list cards */
-    .evento-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; transition: all 0.2s; }
-    .evento-card:hover { border-color: var(--border-glow); }
-    .evento-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
-    .evento-card-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
-    .evento-card-date { font-size: 0.78rem; color: var(--text-muted); }
-    .evento-card-meta { display: flex; gap: 1.5rem; font-size: 0.82rem; color: var(--text-dim); margin-bottom: 0.75rem; }
-    .evento-card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-
-    /* ── FOTO UPLOAD SIMULADO ── */
-    .upload-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
-    .upload-box { background: rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.15); border-radius: 12px; padding: 1rem 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; }
-    .upload-box:hover { border-color: var(--primary); background: rgba(99,102,241,0.04); }
-    .upload-box.uploaded { border-color: var(--clean); background: rgba(16,185,129,0.04); }
-    .upload-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
-    .upload-label { font-size: 0.7rem; font-weight: 600; color: var(--text-dim); }
-    .upload-filename { font-size: 0.65rem; color: var(--clean); font-weight: 500; margin-top: 0.25rem; word-break: break-all; max-width: 90%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-
-    /* ── INTERFAZ DE DOCUMENTOS (TABLA) ── */
-    .doc-thumbnail { height: 30px; padding: 0 0.5rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); gap: 0.25rem; cursor: pointer; transition: all 0.2s; margin-right: 0.25rem; }
-    .doc-thumbnail:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,242,254,0.15); }
-    .badge-status-lg { padding: 0.25rem 0.6rem; border-radius: 10px; font-size: 0.75rem; font-weight: 700; display: inline-block; text-transform: uppercase; }
-    .badge-status-lg.pendiente { background: rgba(245,158,11,0.15); color: var(--process); border: 1px solid rgba(245,158,11,0.3); }
-    .badge-status-lg.aprobado { background: rgba(16,185,129,0.15); color: var(--clean); border: 1px solid rgba(16,185,129,0.3); }
-    .badge-status-lg.rechazado { background: rgba(239,68,68,0.15); color: var(--dirty); border: 1px solid rgba(239,68,68,0.3); }
-
-    /* ── MODAL VISOR DE DOCUMENTOS ── */
-    #view-doc-modal { position: fixed; inset: 0; z-index: 1200; background: rgba(7,9,19,0.9); display: none; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(8px); }
-    #view-doc-modal.active { display: flex; }
-    .vdoc-card { background: rgba(13,17,36,0.95); border: 1px solid var(--border); border-radius: 20px; width: 100%; max-width: 500px; padding: 1.5rem; text-align: center; box-shadow: 0 20px 80px rgba(0,0,0,0.6); position: relative; }
-    .vdoc-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem; color: #fff; }
-    .vdoc-image-container { width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 1rem; }
-    .vdoc-image { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .vdoc-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
-    .vdoc-close:hover { color: #fff; }
-
-    /* ── MODAL FICHA DE ACREDITACIÓN ── */
-    #view-profile-modal { position: fixed; inset: 0; z-index: 1200; background: rgba(7,9,19,0.9); display: none; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(8px); overflow-y: auto; }
-    #view-profile-modal.active { display: flex; }
-    .profile-card { background: rgba(13,17,36,0.98); border: 1px solid var(--border); border-radius: 20px; width: 100%; max-width: 600px; padding: 2rem; box-shadow: 0 20px 80px rgba(0,0,0,0.6); position: relative; max-height: 90vh; overflow-y: auto; }
-    .profile-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
-    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; text-align: left; }
-    .profile-field { display: flex; flex-direction: column; }
-    .profile-field-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
-    .profile-field-value { font-size: 0.9rem; color: #fff; font-weight: 600; }
-    .profile-docs-section { margin-bottom: 1.5rem; text-align: left; }
-    .profile-docs-title { font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .profile-docs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-    .profile-doc-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-    .profile-doc-box:hover { border-color: var(--accent); background: rgba(0,242,254,0.02); }
-    .profile-doc-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.25rem; font-weight: 600; }
-    .profile-doc-img-wrap { width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .profile-doc-img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .profile-actions { display: flex; gap: 1rem; margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
-    .profile-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
-    .profile-close:hover { color: #fff; }
-    /* ── SIMULADOR DE ACCESO AUTOMÁTICO ── */
-    .auto-access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-    .auto-reader-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; text-align: center; position: relative; transition: all 0.3s; }
-    .auto-reader-card.active-scan { border-color: var(--accent); box-shadow: 0 0 15px rgba(0,242,254,0.15); }
-    .auto-reader-card.success-scan { border-color: var(--clean); background: rgba(16,185,129,0.03); box-shadow: 0 0 20px rgba(16,185,129,0.1); }
-    .auto-reader-card.error-scan { border-color: var(--dirty); background: rgba(239,68,68,0.03); box-shadow: 0 0 20px rgba(239,68,68,0.1); }
-    .reader-status-indicator { font-size: 1rem; font-weight: 700; margin: 1rem 0; padding: 0.5rem; border-radius: 8px; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: 1px solid var(--border); }
-    .reader-status-indicator.closed { color: var(--text-muted); }
-    .reader-status-indicator.open { color: var(--clean); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
-    .reader-status-indicator.denied { color: var(--dirty); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
-    
-    .demo-timeline-container { background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
-    .demo-timeline { display: flex; justify-content: space-between; margin: 1.5rem 0; position: relative; padding: 0.5rem 0; }
-    .demo-timeline::before { content: ""; position: absolute; top: 50%; left: 10px; right: 10px; height: 4px; background: rgba(255,255,255,0.05); z-index: 1; transform: translateY(-50%); }
-    .demo-timeline-progress { position: absolute; top: 50%; left: 10px; width: 0%; height: 4px; background: var(--accent); z-index: 2; transform: translateY(-50%); transition: width 0.3s ease; }
-    .demo-timeline-step { width: 36px; height: 36px; border-radius: 50%; background: #12162b; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; z-index: 3; position: relative; transition: all 0.3s; color: var(--text-dim); }
-    .demo-timeline-step.active { border-color: var(--accent); background: #070a19; color: #fff; box-shadow: 0 0 12px rgba(0,242,254,0.4); }
-    .demo-timeline-step.completed { border-color: var(--clean); background: var(--clean); color: #fff; }
-    .demo-timeline-step.failed { border-color: var(--dirty); background: var(--dirty); color: #fff; }
-    .demo-timeline-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
-    .demo-timeline-label { width: 80px; text-align: center; line-height: 1.3; }
-    .demo-timeline-label.active { color: #fff; }
-    .demo-timeline-label.completed { color: var(--clean); }
-    .demo-timeline-label.failed { color: var(--dirty); }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/valtek.css">
 </head>
 <body>
+<!-- Definiciones SVG compartidas (gradiente de marca) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="brandGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2fd39a"/><stop offset=".5" stop-color="#46dcff"/><stop offset="1" stop-color="#9d8cff"/>
+    </linearGradient>
+  </defs>
+</svg>
 
-<!-- NAVBAR -->
-<nav id="navbar">
-  <div class="nav-logo-area">
-    <span class="nav-logo">⬡ Valtek Optima</span>
+<!-- ═══════════════ HEADER PÚBLICO ═══════════════ -->
+<header id="site-header">
+  <a class="brand" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
+    Valtek Optima
+  </a>
+  <nav class="site-nav">
+    <a href="#modulos">Plataforma</a>
+    <a href="#acceso">Acceso automatizado</a>
+    <a href="#sectores">Sectores</a>
+    <a href="#seguridad">Seguridad</a>
+    <a href="#planes">Planes</a>
+  </nav>
+  <div class="site-actions">
+    <button class="btn btn-ghost" onclick="showAuth()">Ingresar</button>
+    <button class="btn btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo</button>
   </div>
-  <div class="nav-links">
-    <div id="navbar-user-info">
-      <div class="user-avatar" id="nav-avatar">?</div>
-      <div>
-        <div id="nav-username" style="font-size:0.85rem;color:var(--text-dim);">Usuario</div>
-        <div id="nav-role-chip"></div>
-      </div>
+</header>
+
+<!-- ═══════════════ SIDEBAR DE LA APLICACIÓN ═══════════════ -->
+<aside id="app-sidebar">
+  <div class="sb-brand">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
+      Valtek Optima
     </div>
-    <button class="nav-btn active" id="nav-landing" onclick="showView('landing')">Inicio</button>
-    <button class="nav-btn" id="nav-superadmin" onclick="showView('superadmin')" style="display:none;">juanjo</button>
-    <button class="nav-btn" id="nav-proveedor" onclick="showView('proveedor')" style="display:none;">🏢 Proveedores</button>
-    <button class="nav-btn" id="nav-porteria" onclick="showView('porteria')" style="display:none;">🚪 Portería</button>
-    <button class="nav-btn" id="nav-directora" onclick="showJefeView('admin')" style="display:none;">👑 Directora</button>
-    <button class="nav-btn" id="nav-jefe" onclick="showJefeView('jefe')" style="display:none;">👔 Jefe de Aseo</button>
-    <button class="nav-btn" id="nav-trabajador" onclick="showView('trabajador')" style="display:none;">📱 Trabajador</button>
-    <button class="nav-btn-primary" id="nav-login-btn" onclick="showAuth()">Iniciar Sesión</button>
-    <button class="nav-btn" id="nav-logout-btn" onclick="logout()" style="display:none;">Salir</button>
   </div>
-</nav>
+  <div class="sb-org">
+    <div class="sb-org-label">Institución</div>
+    <div class="sb-org-name" id="sb-org-name">—</div>
+    <div class="sb-org-meta" id="sb-org-meta"></div>
+  </div>
+  <nav class="sb-nav" id="sb-nav"></nav>
+  <div class="sb-footer">
+    <div class="user-avatar" id="nav-avatar">?</div>
+    <div class="sb-user-info">
+      <div class="sb-user-name" id="nav-username">Usuario</div>
+      <div class="sb-user-role" id="nav-role-label"></div>
+    </div>
+    <button class="icon-btn" onclick="logout()" title="Cerrar sesión" aria-label="Cerrar sesión">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
+  </div>
+</aside>
+<div id="sb-overlay" onclick="Shell.closeSidebar()"></div>
 
-<!-- AUTH -->
-<div id="view-auth" class="hidden">
+<!-- ═══════════════ TOPBAR DE LA APLICACIÓN ═══════════════ -->
+<header id="app-topbar">
+  <button class="icon-btn tb-menu" onclick="Shell.toggleSidebar()" aria-label="Abrir menú">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+  <div class="tb-titles">
+    <span class="tb-module" id="tb-module"><i></i><span id="tb-module-text">General</span></span>
+    <div style="min-width:0;">
+      <div class="tb-title" id="tb-title">Centro de control</div>
+      <div class="tb-sub" id="tb-sub"></div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="live-pill">EN VIVO</span>
+    <div class="tb-clock" id="tb-clock"></div>
+  </div>
+</header>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="view-auth" class="hidden" onclick="if(event.target===this)hideAuth()">
   <div class="auth-card">
-    <div style="display: flex; justify-content: flex-start; margin-bottom: 1.25rem;">
-      <button onclick="hideAuth()" style="background: transparent; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; padding: 0.25rem 0; transition: color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Volver
-      </button>
+    <button class="icon-btn auth-close" onclick="hideAuth()" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <div class="auth-logo">
+      <svg class="brand-mark" style="width:42px;height:42px;" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
     </div>
-    <div class="auth-logo">Valtek Optima</div>
-    <div class="auth-tagline">Plataforma SaaS de Gestión de Aseo, Portería y Contratistas</div>
-    <div class="auth-lock-badge">🔒 Acceso restringido — Solo usuarios autorizados</div>
+    <div class="auth-title">Ingresa a Valtek Optima</div>
+    <div class="auth-tagline">Acceso exclusivo para instituciones clientes</div>
     <div class="form-group">
-      <label class="form-label">Correo Electrónico</label>
-      <input class="form-input" type="email" id="login-email" placeholder="usuario@institucion.cl">
+      <label class="form-label" for="login-email">Correo electrónico</label>
+      <input class="form-input" type="email" id="login-email" placeholder="nombre@institucion.cl" autocomplete="username">
     </div>
     <div class="form-group">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <label class="form-label" for="login-password">Contraseña</label>
+      <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div id="login-error" class="error-msg">✖ Credenciales incorrectas o incompletas.</div>
-    <button class="btn-full btn-primary" onclick="doLogin()" style="margin-top:0.5rem;">Ingresar</button>
-    <div style="margin-top:1.25rem;padding:0.75rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid var(--border);">
-      <div style="font-size:0.72rem;color:var(--text-muted);text-align:center;margin-bottom:0.4rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Cuentas demo</div>
-      <div style="font-size:0.78rem;color:var(--text-dim);text-align:left;line-height:1.9;max-height:120px;overflow-y:auto;padding-right:0.25rem;">
-        <strong>juanjo:</strong> juanjo / <strong>123</strong><br>
-        🏢 <strong>Proveedor:</strong> proveedor@valtek.cl / <strong>1234</strong><br>
-        🚪 <strong>Portería:</strong> porteria@valtek.cl / <strong>1234</strong><br>
-        👑 <strong>Directora:</strong> admin@valtek.cl / <strong>1234</strong><br>
-        👔 <strong>Jefe Aseo:</strong> jefe@valtek.cl / <strong>1234</strong><br>
-        📱 <strong>Trabajador:</strong> maria@valtek.cl / <strong>1234</strong>
-      </div>
+    <div id="login-error" class="error-msg">Credenciales incorrectas o incompletas.</div>
+    <button class="btn-full btn-primary" onclick="doLogin()" style="margin-top:8px;">Ingresar</button>
+    <div class="auth-divider">Accesos de demostración</div>
+    <div class="auth-quick">
+      <button onclick="Shell.demoLogin('admin@valtek.cl','1234')"><b>Dirección</b><span>admin@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('jefe@valtek.cl','1234')"><b>Jefatura de aseo</b><span>jefe@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('maria@valtek.cl','1234')"><b>Operaria</b><span>maria@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><b>Portería</b><span>porteria@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><b>Contratista</b><span>proveedor@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('juanjo','123')"><b>Super admin</b><span>juanjo</span></button>
     </div>
   </div>
 </div>
 
-<!-- LANDING -->
+<!-- ═══════════════ LANDING (speech comercial) ═══════════════ -->
 <div id="view-landing" class="app-view active">
+
+  <!-- HERO -->
   <section class="hero">
-    <div style="position:relative;z-index:1;">
-      <div class="hero-badge"><span></span> SaaS para Control & Trazabilidad Institucional</div>
-      <h1 class="hero-title">Valtek Optima</h1>
-      <p class="hero-subtitle">La solución integral para la gestión de contratistas, seguridad en portería y eficiencia de aseo.</p>
-      <p class="hero-impact">Elimine la incertidumbre operativa. Controle el personal externo, centralice la documentación legal y verifique el rendimiento real de aseo y mantención.</p>
+    <div class="grid-bg"></div>
+    <div class="lp-container hero-inner">
+      <div class="hero-badge"><b>EN OPERACIÓN</b> Piloto activo en el Colegio San Nicolás de Myra, Santiago</div>
+      <h1 class="hero-title">El aseo y la seguridad de tu recinto, <em>en una sola plataforma.</em></h1>
+      <p class="hero-subtitle">Valtek Optima digitaliza la limpieza y el control de acceso de universidades, colegios y centros comerciales. Sabes qué se limpió, quién entró y si cada contratista tiene sus papeles al día, en tiempo real.</p>
       <div class="hero-ctas">
-        <button class="btn-hero-primary" onclick="showAuth()">🚀 Solicitar Acceso</button>
-        <button class="btn-hero-outline" onclick="document.getElementById('benefits').scrollIntoView({behavior:'smooth'})">Ver Beneficios</button>
+        <button class="btn btn-primary btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver la demo en vivo</button>
+        <button class="btn btn-lg" onclick="document.getElementById('modulos').scrollIntoView({behavior:'smooth'})">Conocer la plataforma</button>
+      </div>
+      <div class="hero-note">Sin instalar aplicaciones · Funciona en cualquier celular · Tratamiento de datos según Ley 19.628</div>
+
+      <div class="hero-visual">
+        <div class="hv-frame">
+          <div class="hv-screen">
+            <div class="hv-bar"><i></i><i></i><i></i><span>VALTEK OPTIMA · CENTRO DE CONTROL</span></div>
+            <div class="hv-body">
+              <div class="hv-pane">
+                <h4><i style="background:var(--mod-clean);box-shadow:0 0 8px var(--mod-clean);"></i>Aseo y Personal · Hoy</h4>
+                <div class="hv-big">38<small>/ 51 zonas limpias</small></div>
+                <div class="hv-caption">4 operarios en turno · 14 min promedio por zona</div>
+                <div class="hv-bars">
+                  <span style="height:40%;animation-delay:.05s"></span><span style="height:62%;animation-delay:.1s"></span><span style="height:48%;animation-delay:.15s"></span><span style="height:80%;animation-delay:.2s"></span><span style="height:70%;animation-delay:.25s"></span><span style="height:92%;animation-delay:.3s"></span><span style="height:58%;animation-delay:.35s"></span><span style="height:76%;animation-delay:.4s"></span><span style="height:66%;animation-delay:.45s"></span><span style="height:88%;animation-delay:.5s"></span><span style="height:72%;animation-delay:.55s"></span><span style="height:96%;animation-delay:.6s"></span>
+                </div>
+              </div>
+              <div class="hv-pane">
+                <h4><i style="background:var(--mod-access);box-shadow:0 0 8px var(--mod-access);"></i>Seguridad y Acceso · Hoy</h4>
+                <div class="hv-big">214<small>accesos registrados</small></div>
+                <div class="hv-rows">
+                  <div class="hv-row">Pedro Soto · Contratista <span class="mono">08:12</span> <b class="ok">AUTORIZADO</b></div>
+                  <div class="hv-row">Juan Pérez · Docs. vencidos <span class="mono">08:31</span> <b class="no">BLOQUEADO</b></div>
+                  <div class="hv-row">Carlos Muñoz · Evento <span class="mono">09:04</span> <b class="ok">P2 OK</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sector-strip">
+        <div class="sector-strip-label">Diseñado para</div>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>Universidades</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Colegios</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Centros comerciales</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20" opacity=".0"/><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>Clínicas</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="1.5"/><path d="M9 6h1M14 6h1M9 10h1M14 10h1M9 14h1M14 14h1M10 22v-4h4v4"/></svg>Edificios corporativos</span>
       </div>
     </div>
   </section>
 
-  <div id="benefits" style="background:rgba(99,102,241,0.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-    <div class="section">
-      <div class="section-tag">Nuestros Pilares</div>
-      <h2 class="section-title">Control absoluto en un solo panel</h2>
-      <p class="section-desc">Garantice el cumplimiento de normativas legales y de higiene con un flujo digital inteligente.</p>
-      <div class="cards-grid">
-        <div class="feature-card">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div class="card-title">Control de Contratistas</div>
-          <div class="card-desc">Carga centralizada de personal externo, carpetas de arranque y checklist legal de 6 documentos indispensables.</div>
+  <!-- PROBLEMA -->
+  <section class="lp-section" id="problema">
+    <div class="lp-container">
+      <div class="eyebrow reveal"><i></i>El problema</div>
+      <h2 class="lp-h2 reveal">Hoy un recinto se gestiona con planillas, WhatsApp y un cuaderno en portería. <span class="muted">Cuando algo falla, nadie puede demostrar qué pasó.</span></h2>
+      <div class="pain-grid reveal">
+        <div class="pain"><span class="pain-num">01</span><div class="pain-q">¿Se limpió de verdad?</div><div class="pain-a">Sin horarios ni evidencia, la calidad del aseo depende de la confianza. Los reclamos llegan antes que los datos.</div></div>
+        <div class="pain"><span class="pain-num">02</span><div class="pain-q">¿Quién está dentro del recinto?</div><div class="pain-a">Visitas, proveedores y asistentes a eventos entran con una lista impresa. No queda registro confiable de entradas ni salidas.</div></div>
+        <div class="pain"><span class="pain-num">03</span><div class="pain-q">¿El contratista está habilitado?</div><div class="pain-a">Antecedentes, inhabilidades o certificaciones vencidas pasan inadvertidos. La responsabilidad legal recae en la institución.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MÓDULOS -->
+  <section class="lp-section" id="modulos">
+    <div class="lp-container">
+      <div class="eyebrow reveal"><i></i>La plataforma</div>
+      <h2 class="lp-h2 reveal">Dos módulos independientes. <span class="muted">Un solo centro de control.</span></h2>
+      <p class="lp-lead reveal">Contrata uno o ambos. Cada módulo funciona por sí solo, y juntos te dan una vista completa de la operación diaria de tu recinto.</p>
+
+      <div class="module-grid">
+        <article class="module-card clean reveal">
+          <div class="module-tag"><i></i>Módulo 01 · Aseo y Personal</div>
+          <div class="module-name">Optima Clean</div>
+          <p class="module-pitch">Planifica, ejecuta y audita la limpieza de cada sala, baño y espacio común. Tu equipo registra su trabajo desde el celular y la dirección ve el avance en vivo.</p>
+          <ul class="module-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><div><b>Asignación de zonas</b><span>Reparte salas, baños, camarines y canchas entre tu equipo en segundos.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg><div><b>App móvil para operarios</b><span>Sin descargas: inicio, diagnóstico, foto del antes y después, y término de cada zona.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><div><b>Monitor en tiempo real</b><span>Quién está dónde, qué zonas están listas y cuáles siguen pendientes.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><div><b>Informes y rankings</b><span>Tiempos por zona, rendimiento por persona y zonas críticas. Exportables a PDF.</span></div></li>
+          </ul>
+          <div class="module-roles"><span>Dirección</span><span>Jefatura de aseo</span><span>Operarios</span></div>
+        </article>
+
+        <article class="module-card access reveal">
+          <div class="module-tag"><i></i>Módulo 02 · Seguridad y Acceso</div>
+          <div class="module-name">Optima Access</div>
+          <p class="module-pitch">Controla quién entra a tu recinto y bajo qué condiciones: desde contratistas con su documentación legal hasta eventos masivos con acceso automatizado por QR.</p>
+          <ul class="module-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg><div><b>Control de contratistas</b><span>6 documentos obligatorios con vencimiento. Si algo falta o vence, el acceso se bloquea solo.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><b>Portería por RUT</b><span>Respuesta inmediata: autorizado, bloqueado o no registrado, con registro de entrada y salida.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div><b>Eventos con pre-acreditación</b><span>Creas el evento, compartes el link y apruebas a cada visitante con carnet y selfie.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg><div><b>Acceso automatizado P1 → P2</b><span>QR personal validado en la puerta exterior y en el torniquete, con monitoreo en vivo.</span></div></li>
+          </ul>
+          <div class="module-roles"><span>Dirección</span><span>Portería</span><span>Empresas contratistas</span><span>Visitantes</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLUJO DE ACCESO -->
+  <section class="lp-section" id="acceso">
+    <div class="lp-container">
+      <div class="eyebrow access reveal"><i></i>Acceso automatizado</div>
+      <h2 class="lp-h2 reveal">De la inscripción al torniquete, <span class="muted">sin filas ni listas impresas.</span></h2>
+      <p class="lp-lead reveal">Cada visitante pasa por dos puntos de control. El torniquete interior solo se libera si la persona ya validó su QR en la puerta exterior, dentro del horario del evento.</p>
+      <div class="flow reveal">
+        <div class="flow-step"><div class="flow-dot">01</div><div><div class="flow-title">Registro</div><div class="flow-desc">El visitante se inscribe desde el link del evento con su RUT, carnet y selfie.</div></div></div>
+        <div class="flow-step"><div class="flow-dot">02</div><div><div class="flow-title">Aprobación</div><div class="flow-desc">La administración revisa la ficha y aprueba. El visitante recibe su QR personal.</div></div></div>
+        <div class="flow-step"><div class="flow-dot">P1</div><div><div class="flow-title">Puerta exterior</div><div class="flow-desc">El lector valida el QR, la fecha y la ventana horaria del evento.</div></div></div>
+        <div class="flow-step"><div class="flow-dot">P2</div><div><div class="flow-title">Torniquete</div><div class="flow-desc">El acceso interior solo se libera si la persona pasó por P1.</div></div></div>
+        <div class="flow-step"><div class="flow-dot">✓</div><div><div class="flow-title">Registro en vivo</div><div class="flow-desc">Cada ingreso queda auditado y visible en el panel de seguridad.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTORES -->
+  <section class="lp-section" id="sectores">
+    <div class="lp-container">
+      <div class="eyebrow reveal"><i></i>Sectores</div>
+      <h2 class="lp-h2 reveal">Una plataforma, <span class="muted">adaptada a cada tipo de recinto.</span></h2>
+      <div class="sector-grid">
+        <div class="sector-card reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>
+          <h3>Universidades</h3>
+          <p>Varios edificios y sedes, alto flujo de proveedores y eventos abiertos al público.</p>
+          <ul><li>Control por sede y edificio</li><li>Ceremonias, seminarios y admisión con acreditación QR</li><li>Contratistas de aseo, mantención y casinos</li></ul>
         </div>
-        <div class="feature-card">
-          <div class="card-icon green">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <div class="card-title">Seguridad en Portería</div>
-          <div class="card-desc">Búsqueda rápida por RUT en accesos. Bloqueo automático para contratistas con documentación vencida o incompleta.</div>
+        <div class="sector-card reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>
+          <h3>Colegios</h3>
+          <p>La seguridad de los estudiantes como prioridad, con aseo controlado jornada a jornada.</p>
+          <ul><li>Verificación de inhabilidades para trabajar con menores</li><li>Registro de visitas y apoderados en eventos</li><li>Aseo de salas y baños por jornada</li></ul>
         </div>
-        <div class="feature-card">
-          <div class="card-icon orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <div class="card-title">Reportes de Eficiencia</div>
-          <div class="card-desc">Estadísticas de aseo en tiempo real, rankings de eficiencia y generación de informes ejecutivos en PDF descargables.</div>
+        <div class="sector-card reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <h3>Centros comerciales</h3>
+          <p>Baños, patios de comida y áreas comunes impecables durante todo el horario de atención.</p>
+          <ul><li>Rondas de aseo con evidencia fotográfica</li><li>Proveedores con documentación al día</li><li>Eventos y activaciones con control de acceso</li></ul>
+        </div>
+        <div class="sector-card reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="1.5"/><path d="M9 6h1M14 6h1M9 10h1M14 10h1M9 14h1M14 14h1M10 22v-4h4v4"/></svg>
+          <h3>Clínicas y edificios</h3>
+          <p>Estándares de higiene y de acceso que se pueden demostrar frente a una auditoría.</p>
+          <ul><li>Protocolos de limpieza trazables</li><li>Control de visitas y personal externo</li><li>Reportes listos para auditorías</li></ul>
+        </div>
+      </div>
+
+      <div class="figures reveal">
+        <div class="figure"><b>51</b><span>zonas monitoreadas a diario en el piloto</span></div>
+        <div class="figure"><b>6</b><span>documentos legales verificados por cada contratista</span></div>
+        <div class="figure"><b>2</b><span>puntos de validación en cada acceso (P1 + P2)</span></div>
+        <div class="figure"><b>30<small style="font-size:.45em;color:var(--text-muted);font-weight:500;"> días</small></b><span>para la eliminación automática de datos de visitantes</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="lp-section" id="implementacion">
+    <div class="lp-container">
+      <div class="eyebrow reveal"><i></i>Implementación</div>
+      <h2 class="lp-h2 reveal">Te acompañamos <span class="muted">desde el primer día.</span></h2>
+      <div class="how-grid">
+        <div class="how-card reveal"><span class="n">01</span><h3>Levantamiento</h3><p>Recorremos tu recinto y mapeamos zonas, pisos, puertas y torniquetes.</p></div>
+        <div class="how-card reveal"><span class="n">02</span><h3>Configuración</h3><p>Cargamos a tu equipo, a los contratistas, los roles y los permisos de cada usuario.</p></div>
+        <div class="how-card reveal"><span class="n">03</span><h3>Capacitación</h3><p>Tu equipo aprende en una sesión. La app del operario se usa con tres toques.</p></div>
+        <div class="how-card reveal"><span class="n">04</span><h3>Operación y reportes</h3><p>La dirección recibe indicadores diarios y reportes para sus comités y auditorías.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGURIDAD -->
+  <section class="lp-section" id="seguridad">
+    <div class="lp-container trust-grid">
+      <div>
+        <div class="eyebrow reveal"><i></i>Seguridad y cumplimiento</div>
+        <h2 class="lp-h2 reveal">Datos personales tratados <span class="muted">con el estándar que exige la ley.</span></h2>
+        <p class="lp-lead reveal">Diseñado para cumplir con la Ley 19.628 sobre protección de la vida privada y para adaptarse a la nueva Ley 21.719 de Protección de Datos Personales.</p>
+      </div>
+      <div class="trust-list reveal">
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><div><b>Consentimiento explícito</b><span>Cada visitante acepta el tratamiento de sus datos antes de registrarse.</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg><div><b>Eliminación automática</b><span>Los datos de visitantes se anonimizan 30 días después de cada evento.</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><b>Permisos por rol</b><span>Cada usuario ve solo lo que necesita: dirección, jefatura, portería o contratistas.</span></div></div>
+        <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><b>Trazabilidad completa</b><span>Cada acceso, aprobación y registro de aseo queda guardado con fecha, hora y responsable.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANES -->
+  <section class="lp-section" id="planes">
+    <div class="lp-container">
+      <div class="eyebrow reveal"><i></i>Planes</div>
+      <h2 class="lp-h2 reveal">Elige los módulos <span class="muted">que tu recinto necesita.</span></h2>
+      <p class="lp-lead reveal">El valor depende del tamaño del recinto y de la cantidad de sedes. Cotizamos en base a un levantamiento sin costo.</p>
+      <div class="plan-grid">
+        <div class="plan-card reveal">
+          <div class="plan-kicker">Módulo 01</div>
+          <h3>Optima Clean</h3>
+          <p>Para recintos que quieren profesionalizar y medir su aseo.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Asignación de zonas y app para operarios</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Monitor en vivo y mensajes al equipo</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Evidencia fotográfica antes y después</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Informes PDF y rankings de rendimiento</li>
+          </ul>
+          <button class="btn btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo de aseo</button>
+        </div>
+        <div class="plan-card featured reveal">
+          <div class="plan-kicker" style="color:#b7c5ff;">Recomendado</div>
+          <h3>Suite Optima</h3>
+          <p>Aseo y seguridad en un solo centro de control.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Optima Clean</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Optima Access</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Centro de control con alertas unificadas</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Capacitación y soporte prioritario</li>
+          </ul>
+          <button class="btn btn-primary btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver la demo completa</button>
+        </div>
+        <div class="plan-card reveal">
+          <div class="plan-kicker">Módulo 02</div>
+          <h3>Optima Access</h3>
+          <p>Para recintos con alto flujo de personas y contratistas.</p>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Contratistas y vencimiento de documentos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Portería por RUT con registro de accesos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Eventos con pre-acreditación y QR</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Integración con lectores y torniquetes</li>
+          </ul>
+          <button class="btn btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo de acceso</button>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="lp-section" id="demo">
+    <div class="lp-container">
+      <div class="cta-box reveal">
+        <div class="eyebrow" style="justify-content:center;"><i></i>Demo interactiva<i></i></div>
+        <h2 class="lp-h2" style="margin:0 auto;">Míralo funcionando.</h2>
+        <p class="lp-lead" style="margin-left:auto;margin-right:auto;">Entra con cualquiera de los perfiles. Cada uno ve exactamente lo que vería en tu institución.</p>
+        <div class="demo-roles">
+          <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('admin@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></span><div><b>Dirección</b><span>Centro de control y ambos módulos</span></div></button>
+          <button class="demo-role" data-mod="clean" onclick="Shell.demoLogin('jefe@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><div><b>Jefatura de aseo</b><span>Asignación, monitor e informes</span></div></button>
+          <button class="demo-role" data-mod="clean" onclick="Shell.demoLogin('maria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span><div><b>Operaria de aseo</b><span>App móvil en terreno</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><div><b>Portería</b><span>Control por RUT y QR</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><div><b>Empresa contratista</b><span>Carga de personal y documentos</span></div></button>
+          <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('juanjo','123')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><div><b>Super admin Valtek</b><span>Clientes, usuarios y métricas</span></div></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="lp-container">
+      <div class="brand" style="font-size:.95rem;">
+        <svg class="brand-mark" style="width:22px;height:22px;" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
+        Valtek Optima
+      </div>
+      <div>© 2026 Valtek · Santiago de Chile</div>
+      <div><a href="#modulos">Plataforma</a> &nbsp;·&nbsp; <a href="#seguridad">Seguridad</a> &nbsp;·&nbsp; <a href="#" onclick="showAuth();return false;">Ingresar</a></div>
+    </div>
+  </footer>
 </div>
+
+<!-- ═══════════════ CENTRO DE CONTROL ═══════════════ -->
+<div id="view-overview" class="app-view">
+  <div class="page" id="overview-root"></div>
+</div>
+
 
 <!-- ADMINISTRADOR MAYOR -->
 <div id="view-superadmin" class="app-view">
   <div class="sa-header">
     <div class="sa-header-top"><div><div class="sa-title-text">Panel de juanjo (Super Admin)</div><div class="sa-title-sub">Control global de colegios, usuarios, contratistas y auditorías</div></div></div>
     <div class="sa-tabs">
-      <button class="sa-tab active" onclick="switchSaTab('colegios')">🏫 Colegios y Usuarios</button>
-      <button class="sa-tab" onclick="switchSaTab('aprobaciones')">✅ Aprobaciones de Personal</button>
-      <button class="sa-tab" onclick="switchSaTab('metricas')">📊 Métricas Globales</button>
-      <button class="sa-tab" onclick="switchSaTab('bitacora')">📁 Bitácora de Archivos</button>
+      <button class="sa-tab active" onclick="switchSaTab('colegios')">Colegios y Usuarios</button>
+      <button class="sa-tab" onclick="switchSaTab('aprobaciones')">Aprobaciones de Personal</button>
+      <button class="sa-tab" onclick="switchSaTab('metricas')">Métricas Globales</button>
+      <button class="sa-tab" onclick="switchSaTab('bitacora')">Bitácora de Archivos</button>
     </div>
   </div>
   <div class="sa-body">
@@ -831,36 +411,46 @@
     <div class="sa-tab-content active" id="sa-tab-colegios">
       <div class="j-grid-2">
         <div class="j-card">
-          <div class="j-card-title">🏫 Registrar Colegio</div>
-          <div class="f-group"><label class="f-label">Nombre</label><input class="f-input" id="sch-name" placeholder="Colegio San Nicolás"></div>
+          <div class="j-card-title">Registrar institución</div>
+          <div class="f-group"><label class="f-label">Nombre</label><input class="f-input" id="sch-name" placeholder="Universidad, colegio, mall…"></div>
+          <div class="f-group">
+            <label class="f-label">Tipo de institución</label>
+            <select class="f-input f-select" id="sch-type">
+              <option value="Universidad">Universidad</option>
+              <option value="Colegio">Colegio</option>
+              <option value="Centro comercial">Centro comercial</option>
+              <option value="Clínica">Clínica</option>
+              <option value="Empresa">Edificio corporativo / Empresa</option>
+            </select>
+          </div>
           <div class="f-group"><label class="f-label">Ciudad</label><input class="f-input" id="sch-city" placeholder="Santiago"></div>
           <div class="f-group">
             <label class="f-label">Plan Contratado</label>
             <select class="f-input f-select" id="sch-plan">
-              <option value="Básico">🔹 Básico</option>
-              <option value="Profesional" selected>🔷 Profesional</option>
-              <option value="Enterprise">💎 Enterprise</option>
+              <option value="Básico">Básico</option>
+              <option value="Profesional" selected>Profesional</option>
+              <option value="Enterprise">Enterprise</option>
             </select>
           </div>
-          <button class="btn-sm btn-gold-sm" onclick="createSchool()">+ Agregar Colegio</button>
+          <button class="btn-sm btn-gold-sm" onclick="createSchool()">Agregar institución</button>
         </div>
         <div class="j-card">
-          <div class="j-card-title">👥 Dar de Alta Usuario</div>
+          <div class="j-card-title">Dar de Alta Usuario</div>
           <div class="f-group"><label class="f-label">Nombre</label><input class="f-input" id="nu-name" placeholder="Juan Pérez"></div>
           <div class="f-group"><label class="f-label">Email</label><input class="f-input" type="email" id="nu-email" placeholder="jperez@colegio.cl"></div>
           <div class="f-group"><label class="f-label">Contraseña</label><input class="f-input" type="text" id="nu-pass" placeholder="Mín. 4 caracteres"></div>
           <div class="f-group">
             <label class="f-label">Rol</label>
             <select class="f-input f-select" id="nu-role">
-              <option value="admin">👑 Directora</option>
-              <option value="jefe">👔 Jefe de Aseo</option>
-              <option value="trabajador">📱 Trabajador</option>
-              <option value="proveedor">🏢 Proveedor Terciario</option>
-              <option value="porteria">🚪 Portería</option>
+              <option value="admin">Administración (dirección)</option>
+              <option value="jefe">Jefatura de aseo</option>
+              <option value="trabajador">Operario/a de aseo</option>
+              <option value="proveedor">Empresa contratista</option>
+              <option value="porteria">Portería y seguridad</option>
             </select>
           </div>
           <div class="f-group">
-            <label class="f-label">Colegio Asociado</label>
+            <label class="f-label">Institución</label>
             <select class="f-input f-select" id="nu-school"></select>
           </div>
           <div class="f-group">
@@ -868,14 +458,14 @@
             <input class="f-input" id="nu-plan-display" readonly style="color:var(--text-muted);cursor:default;">
           </div>
           <div id="nu-error" style="color:var(--dirty);font-size:0.8rem;margin-bottom:0.75rem;display:none;"></div>
-          <button class="btn-sm btn-gold-sm" onclick="createUser()">✅ Dar de Alta Usuario</button>
+          <button class="btn-sm btn-gold-sm" onclick="createUser()">Dar de Alta Usuario</button>
         </div>
       </div>
       <div class="j-card">
-        <div class="j-card-title">Colegios Registrados</div>
+        <div class="j-card-title">Instituciones clientes</div>
         <div style="overflow-x:auto;">
           <table class="data-table">
-            <thead><tr><th>#</th><th>Nombre</th><th>Ciudad</th><th>Plan</th><th>Usuarios</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>#</th><th>Nombre</th><th>Tipo</th><th>Ciudad</th><th>Plan</th><th>Usuarios</th><th>Acciones</th></tr></thead>
             <tbody id="schools-tbody"></tbody>
           </table>
         </div>
@@ -884,7 +474,7 @@
         <div class="j-card-title">Todos los Usuarios de la Plataforma</div>
         <div style="overflow-x:auto;">
           <table class="data-table">
-            <thead><tr><th>#</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Colegio</th><th>Plan</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>#</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Institución</th><th>Plan</th><th>Acciones</th></tr></thead>
             <tbody id="users-tbody"></tbody>
           </table>
         </div>
@@ -916,16 +506,16 @@
     <!-- Tab Métricas Globales -->
     <div class="sa-tab-content" id="sa-tab-metricas">
       <div class="kpi-row">
-        <div class="kpi-box"><div class="kpi-value" id="sa-kpi-schools" style="color:var(--gold);">0</div><div class="kpi-label">Colegios Registrados</div></div>
+        <div class="kpi-box"><div class="kpi-value" id="sa-kpi-schools" style="color:var(--gold);">0</div><div class="kpi-label">Instituciones</div></div>
         <div class="kpi-box"><div class="kpi-value" id="sa-kpi-workers" style="color:var(--accent);">0</div><div class="kpi-label">Trabajadores Totales</div></div>
-        <div class="kpi-box"><div class="kpi-value" id="sa-kpi-external" style="color:var(--primary);">0</div><div class="kpi-label">Contratistas Externos</div></div>
+        <div class="kpi-box"><div class="kpi-value" id="sa-kpi-external" style="color:var(--primary);">0</div><div class="kpi-label">Contratistas</div></div>
         <div class="kpi-box"><div class="kpi-value" id="sa-kpi-access" style="color:var(--clean);">0</div><div class="kpi-label">Accesos Registrados Hoy</div></div>
       </div>
       <div class="j-card">
-        <div class="j-card-title">Información y Métricas Globales</div>
+        <div class="j-card-title">Reporte consolidado</div>
         <div style="font-size:0.9rem;line-height:1.7;color:var(--text-dim);">
           <p style="margin-bottom:1rem;">Desde este panel consolida toda la actividad del sistema. Utilice el botón a continuación para descargar el reporte ejecutivo global de trazabilidad.</p>
-          <button class="btn-sm btn-green" onclick="generateExecutiveReport()">🖨 Imprimir Reporte Consolidado (PDF)</button>
+          <button class="btn-sm btn-green" onclick="generateExecutiveReport()">Imprimir Reporte Consolidado (PDF)</button>
         </div>
       </div>
     </div>
@@ -934,7 +524,7 @@
     <div class="sa-tab-content" id="sa-tab-bitacora">
       <div class="j-grid-2">
         <div class="j-card">
-          <div class="j-card-title">📁 Subir Archivo a Bitácora</div>
+          <div class="j-card-title">Subir Archivo a Bitácora</div>
           <div class="f-group">
             <label class="f-label">Trabajador Vinculado</label>
             <select class="f-input f-select" id="bitacora-worker-select"></select>
@@ -946,15 +536,15 @@
           <div class="f-group">
             <label class="f-label">Archivo</label>
             <div id="bitacora-dropzone" style="border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: rgba(255,255,255,0.02); transition: all 0.2s;" onclick="document.getElementById('bitacora-file-input').click()">
-              <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">📁</span>
+              <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;"></span>
               <span id="bitacora-dropzone-text" style="font-size: 0.82rem; color: var(--text-muted);">Haz clic para seleccionar o arrastra un archivo</span>
               <input type="file" id="bitacora-file-input" style="display: none;" accept="image/*,application/pdf" onchange="handleBitacoraFileSelect(event)">
             </div>
           </div>
-          <button class="btn-sm btn-gold-sm" onclick="addBitacoraEntry()">💾 Registrar en Bitácora</button>
+          <button class="btn-sm btn-gold-sm" onclick="addBitacoraEntry()">Registrar en Bitácora</button>
         </div>
         <div class="j-card">
-          <div class="j-card-title">📖 Historial de Bitácora General</div>
+          <div class="j-card-title">Historial documental general</div>
           <div style="overflow-x:auto;">
             <table class="data-table">
               <thead>
@@ -979,25 +569,25 @@
 <!-- PROVEEDOR TERCIARIO -->
 <div id="view-proveedor" class="app-view">
   <div class="prov-header">
-    <div class="sa-header-top"><div class="sa-crown" style="font-size:1.8rem;">🏢</div><div><div class="sa-title-text" style="color:var(--primary);">Panel de Proveedor Terciario</div><div class="sa-title-sub">Carga de personal y entrega de documentación legal de subcontratistas</div></div></div>
+    <div class="sa-header-top"><div class="sa-crown" style="font-size:1.8rem;"></div><div><div class="sa-title-text" style="color:var(--primary);">Portal de empresas contratistas</div><div class="sa-title-sub">Carga de personal y entrega de documentación legal de subcontratistas</div></div></div>
     <div class="prov-tabs">
-      <button class="prov-tab active" onclick="switchProvTab('cargar')">👷 Cargar Personal</button>
-      <button class="prov-tab" onclick="switchProvTab('docs')">📄 Documentación Legal</button>
-      <button class="prov-tab" onclick="switchProvTab('estado')">📋 Estado de Mis Trabajadores</button>
+      <button class="prov-tab active" onclick="switchProvTab('cargar')">Cargar Personal</button>
+      <button class="prov-tab" onclick="switchProvTab('docs')">Documentación Legal</button>
+      <button class="prov-tab" onclick="switchProvTab('estado')">Estado de Mis Trabajadores</button>
     </div>
   </div>
   <div class="prov-body">
     <!-- Cargar Personal -->
     <div class="prov-tab-content active" id="prov-tab-cargar">
       <div class="j-card" style="max-width: 600px; margin: 0 auto;">
-        <div class="j-card-title">👷 Enrolamiento de Trabajador Externo</div>
+        <div class="j-card-title">Enrolamiento de Trabajador Externo</div>
         <div class="f-group"><label class="f-label">Nombre Completo</label><input class="f-input" id="prov-worker-name" placeholder="Pedro Soto"></div>
         <div class="f-group"><label class="f-label">RUT</label><input class="f-input" id="prov-worker-rut" placeholder="18.765.432-1"></div>
         <div class="f-group">
           <label class="f-label">Tipo de Servicio</label>
           <select class="f-input f-select" id="prov-worker-type">
-            <option value="aseo">🧹 Personal de Aseo</option>
-            <option value="mantencion">🛠 Personal de Mantención</option>
+            <option value="aseo">Personal de Aseo</option>
+            <option value="mantencion">Personal de Mantención</option>
           </select>
         </div>
         <div class="f-group">
@@ -1014,7 +604,7 @@
     <!-- Documentación Legal -->
     <div class="prov-tab-content" id="prov-tab-docs">
       <div class="j-card">
-        <div class="j-card-title">📄 Carpeta Legal Digital por Trabajador</div>
+        <div class="j-card-title">Carpeta Legal Digital por Trabajador</div>
         <div class="f-group" style="max-width: 400px; margin-bottom: 1.5rem;">
           <label class="f-label">Seleccionar Trabajador</label>
           <select class="f-input f-select" id="prov-worker-select" onchange="renderDocChecklist()"></select>
@@ -1054,26 +644,26 @@
   <div class="port-container">
     <!-- Porteria Tabs -->
     <div class="port-tabs">
-      <button class="port-tab-btn active" onclick="switchPorteriaTab('contratistas')">🔍 Contratistas / Personal</button>
-      <button class="port-tab-btn" onclick="switchPorteriaTab('eventos')">🎟️ Eventos Fin de Semana</button>
+      <button class="port-tab-btn active" onclick="switchPorteriaTab('contratistas')">Contratistas / Personal</button>
+      <button class="port-tab-btn" onclick="switchPorteriaTab('eventos')">Eventos</button>
     </div>
 
     <!-- TAB: Contratistas (existing content) -->
     <div class="port-tab-panel active" id="port-panel-contratistas">
       <div class="port-search-card">
-        <h2 class="port-title">Control de Acceso y Portería</h2>
-        <p class="port-subtitle">Verificación instantánea de documentación de contratistas y personal de aseo</p>
+        <h2 class="port-title">Consulta de acceso por RUT</h2>
+        <p class="port-subtitle">Verifica al instante si un contratista o trabajador puede ingresar al recinto</p>
         <div class="port-input-wrapper">
           <input class="port-input" id="porteria-rut-search" placeholder="18.765.432-1" onkeydown="if(event.key==='Enter')lookupRut()">
           <button class="btn-port-search" onclick="lookupRut()">Consultar</button>
         </div>
 
         <!-- Result screens -->
-        <!-- 🟢 AUTORIZADO -->
+        <!-- AUTORIZADO -->
         <div class="status-screen status-authorized" id="port-screen-auth">
           <div class="status-header">
             <div class="status-icon">✓</div>
-            <div class="status-text">🟢 ACCESO PERMITIDO</div>
+            <div class="status-text">ACCESO PERMITIDO</div>
           </div>
           <div class="worker-detail-grid">
             <div class="worker-avatar-lg" id="port-auth-avatar">?</div>
@@ -1087,10 +677,10 @@
           <!-- Warning alert for forced authorization -->
           <div id="port-auth-warning" style="display: none; background: rgba(245, 158, 11, 0.15); border: 1px dashed var(--process); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem; text-align: left;">
             <div style="color: var(--process); font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
-              <span>⚠️ ADVERTENCIA DE SEGURIDAD</span>
+              <span>ADVERTENCIA DE SEGURIDAD</span>
             </div>
             <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">
-              Autorizado manualmente por el Administrador Mayor con documentación pendiente o vencida.
+              Autorizado manualmente por la administración con documentación pendiente o vencida.
             </div>
             <ul id="port-auth-warning-list" style="margin: 0.4rem 0 0 1.25rem; padding: 0; font-size: 0.72rem; color: var(--process);"></ul>
           </div>
@@ -1100,11 +690,11 @@
           </div>
         </div>
 
-        <!-- 🔴 BLOQUEADO -->
+        <!-- BLOQUEADO -->
         <div class="status-screen status-blocked" id="port-screen-blocked">
           <div class="status-header">
             <div class="status-icon">⚠</div>
-            <div class="status-text">🔴 ACCESO DENEGADO</div>
+            <div class="status-text">ACCESO DENEGADO</div>
           </div>
           <div style="font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:1rem;" id="port-blocked-warning-title">INGRESO PROHIBIDO</div>
           <div class="worker-detail-grid">
@@ -1122,19 +712,19 @@
           </div>
         </div>
 
-        <!-- ⚪ NO ENCONTRADO -->
+        <!-- NO ENCONTRADO -->
         <div class="status-screen status-notfound" id="port-screen-notfound">
           <div class="status-header">
             <div class="status-icon">?</div>
             <div class="status-text">RUT NO REGISTRADO</div>
           </div>
-          <p style="font-size:0.9rem;color:var(--text-muted);">El RUT ingresado no coincide con ningún trabajador interno o externo cargado en el sistema. Solicite asistencia al administrador mayor.</p>
+          <p style="font-size:0.9rem;color:var(--text-muted);">El RUT ingresado no coincide con ningún trabajador interno o externo cargado en el sistema. Solicite asistencia a la administración.</p>
         </div>
       </div>
 
       <!-- Gate Log -->
       <div class="j-card">
-        <div class="j-card-title">🚪 Historial de Accesos Registrados de Hoy</div>
+        <div class="j-card-title">Accesos registrados hoy</div>
         <div style="overflow-x:auto;">
           <table class="data-table">
             <thead>
@@ -1152,13 +742,13 @@
       </div>
     </div>
 
-    <!-- TAB: Eventos Fin de Semana -->
+    <!-- TAB: Eventos -->
     <div class="port-tab-panel" id="port-panel-eventos">
-      <!-- Sistema de Acceso Automático Autónomo (P1 + P2) -->
+      <!-- Acceso automatizado en dos etapas -->
       <div class="j-card" style="border: 1px solid rgba(0, 242, 254, 0.2); background: radial-gradient(ellipse at 50% 0%, rgba(0,242,254,0.05) 0%, rgba(13,17,36,0.3) 75%);">
         <div style="text-align: center; margin-bottom: 1.5rem;">
-          <div style="font-size: 1.8rem; margin-bottom: 0.25rem;">🤖 🚪</div>
-          <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #fff;">Sistema de Acceso Automático Autónomo (P1 + P2)</div>
+          <div style="font-size: 1.8rem; margin-bottom: 0.25rem;"></div>
+          <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #fff;">Acceso automatizado en dos etapas</div>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.25rem 0 0 0; line-height: 1.4;">
             Control de flujo secuencial sin intervención humana. Los lectores externos abren la puerta y los internos liberan los torniquetes.
           </p>
@@ -1167,37 +757,37 @@
         <div class="auto-access-grid">
           <!-- P1: PUERTA PRINCIPAL -->
           <div class="auto-reader-card" id="auto-reader-p1">
-            <div style="font-size: 1.2rem; font-family: var(--font-display); font-weight: 700; margin-bottom: 0.25rem; color: #fff;">🪪 Lector QR P1</div>
+            <div style="font-size: 1.2rem; font-family: var(--font-display); font-weight: 700; margin-bottom: 0.25rem; color: #fff;">Lector QR P1</div>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">Puerta Exterior</div>
             <div class="reader-status-indicator closed" id="status-p1-indicator">
-              <span id="status-p1-icon">🔒</span> <span id="status-p1-text">CERRADO</span>
+              <span id="status-p1-icon"></span> <span id="status-p1-text">CERRADO</span>
             </div>
             
             <div class="f-group" style="margin-top: 1rem; margin-bottom: 0.75rem;">
               <input class="f-input" id="auto-qr-p1-input" placeholder="Token QR (Ej: QR_...)" style="font-size:0.75rem; text-align:center; height: 32px;">
             </div>
-            <button class="btn-sm btn-blue" onclick="simularEscaneoP1()" style="width: 100%;">🔓 Escanear QR en P1</button>
+            <button class="btn-sm btn-blue" onclick="simularEscaneoP1()" style="width: 100%;">Escanear QR en P1</button>
           </div>
 
           <!-- P2: TORNIQUETE -->
           <div class="auto-reader-card" id="auto-reader-p2">
-            <div style="font-size: 1.2rem; font-family: var(--font-display); font-weight: 700; margin-bottom: 0.25rem; color: #fff;">🌀 Lector QR P2</div>
+            <div style="font-size: 1.2rem; font-family: var(--font-display); font-weight: 700; margin-bottom: 0.25rem; color: #fff;">Lector QR P2</div>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">Torniquete Interior</div>
             <div class="reader-status-indicator closed" id="status-p2-indicator">
-              <span id="status-p2-icon">🔒</span> <span id="status-p2-text">BLOQUEADO</span>
+              <span id="status-p2-icon"></span> <span id="status-p2-text">BLOQUEADO</span>
             </div>
             
             <div class="f-group" style="margin-top: 1rem; margin-bottom: 0.75rem;">
               <input class="f-input" id="auto-qr-p2-input" placeholder="Token QR (Ej: QR_...)" style="font-size:0.75rem; text-align:center; height: 32px;">
             </div>
-            <button class="btn-sm btn-green" onclick="simularEscaneoP2()" style="width: 100%;">🔓 Escanear QR en P2</button>
+            <button class="btn-sm btn-green" onclick="simularEscaneoP2()" style="width: 100%;">Escanear QR en P2</button>
           </div>
         </div>
 
         <!-- DEMO DE SIMULACIÓN AUTOMÁTICA EN VIVO -->
         <div class="demo-timeline-container">
           <div style="font-weight: bold; font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; display:flex; align-items:center; justify-content:space-between; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 1rem;">
-            <span>⚡ Demo en Vivo: Trayecto Autónomo Automatizado</span>
+            <span>Simulación: recorrido completo de un visitante</span>
             <span id="demo-status-lbl" style="font-size:0.75rem; color:var(--text-muted); text-transform:none; font-family:var(--font-display);">Listo para simular</span>
           </div>
 
@@ -1223,10 +813,10 @@
               <select class="f-input f-select" id="demo-visitor-select" style="font-size:0.8rem; background:rgba(0,0,0,0.3); height:32px; padding:0 0.5rem;"></select>
             </div>
             <button class="btn-sm btn-green" id="btn-run-demo" onclick="iniciarDemoAutonoma()" style="min-width: 220px; font-weight: bold; box-shadow: 0 0 15px rgba(16,185,129,0.25);">
-              ⚡ Iniciar Simulación Automática
+              Iniciar simulación
             </button>
             <button class="btn-sm btn-red" id="btn-stop-demo" onclick="detenerDemoAutonoma()" style="display: none; min-width: 120px;">
-              ⏹ Detener Demo
+              Detener Demo
             </button>
           </div>
         </div>
@@ -1234,7 +824,7 @@
 
       <!-- Manual RUT Lookup for Events -->
       <div class="j-card">
-        <div class="j-card-title">🔍 Buscar Visitante por RUT (Apertura Manual)</div>
+        <div class="j-card-title">Buscar visitante por RUT (apertura manual)</div>
         <div class="flex-row" style="margin-bottom:1rem;">
           <div class="f-group" style="flex:2;"><input class="f-input" id="port-evento-rut-search" placeholder="12.345.678-9"></div>
           <button class="btn-sm btn-blue" onclick="lookupEventoRut()">Buscar</button>
@@ -1246,17 +836,17 @@
       <div class="j-card">
         <div class="j-card-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clean)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
-          Monitoreo en Vivo — Accesos de Eventos
+          Accesos de eventos en vivo
           <span style="margin-left:auto;font-size:0.7rem;color:var(--clean);font-weight:500;">● LIVE</span>
         </div>
         <div class="ws-feed" id="ws-feed-container">
-          <div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.88rem;">⏳ Esperando accesos de visitantes...</div>
+          <div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.88rem;">Esperando accesos de visitantes...</div>
         </div>
       </div>
 
       <!-- Eventos de Hoy -->
       <div class="j-card">
-        <div class="j-card-title">📅 Eventos de Hoy</div>
+        <div class="j-card-title">Eventos de Hoy</div>
         <div id="port-eventos-hoy-list">
           <div style="text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.88rem;">No hay eventos programados para hoy.</div>
         </div>
@@ -1268,28 +858,28 @@
 <!-- JEFE PANEL (4 tabs: Personal, Asignación, Monitoreo, Informes) -->
 <div id="view-jefe" class="app-view">
   <div class="jefe-header">
-    <div class="jefe-title"><span id="jefe-title-text">👑 Panel Directora</span> <span id="jefe-school-label"></span></div>
+    <div class="jefe-title"><span id="jefe-title-text">Panel Directora</span> <span id="jefe-school-label"></span></div>
     <div class="jefe-tabs">
-      <button class="jefe-tab active" onclick="switchJefeTab('personal')">👥 Personal</button>
-      <button class="jefe-tab" onclick="switchJefeTab('asignacion')">📋 Asignación</button>
-      <button class="jefe-tab" onclick="switchJefeTab('monitoreo')">📡 Monitor en Vivo</button>
-      <button class="jefe-tab" onclick="switchJefeTab('informes')">📊 Informes</button>
-      <button class="jefe-tab" id="jefe-tab-btn-aprobaciones" onclick="switchJefeTab('aprobaciones')">✅ Aprobación Contratistas</button>
-      <button class="jefe-tab" id="jefe-tab-btn-bitacora" onclick="switchJefeTab('bitacora')">📁 Bitácora de Archivos</button>
-      <button class="jefe-tab" id="jefe-tab-btn-eventos" onclick="switchJefeTab('eventos')">📅 Eventos Finde</button>
+      <button class="jefe-tab active" onclick="switchJefeTab('personal')">Personal</button>
+      <button class="jefe-tab" onclick="switchJefeTab('asignacion')">Asignación</button>
+      <button class="jefe-tab" onclick="switchJefeTab('monitoreo')">Monitor en Vivo</button>
+      <button class="jefe-tab" onclick="switchJefeTab('informes')">Informes</button>
+      <button class="jefe-tab" id="jefe-tab-btn-aprobaciones" onclick="switchJefeTab('aprobaciones')">Aprobación Contratistas</button>
+      <button class="jefe-tab" id="jefe-tab-btn-bitacora" onclick="switchJefeTab('bitacora')">Bitácora de Archivos</button>
+      <button class="jefe-tab" id="jefe-tab-btn-eventos" onclick="switchJefeTab('eventos')">Eventos</button>
     </div>
   </div>
   <div class="jefe-body">
 
     <!-- TAB: PERSONAL -->
     <div class="jefe-tab-content active" id="jefe-tab-personal">
-      <div class="j-card"><div class="j-card-title">Nómina de Trabajadores</div>
+      <div class="j-card"><div class="j-card-title">Nómina del equipo de aseo</div>
         <table class="data-table"><thead><tr><th>Nombre</th><th>Email</th><th>Zonas Hoy</th><th>Estado</th></tr></thead><tbody id="jefe-workers-tbody"></tbody></table>
       </div>
-      <div class="j-card"><div class="j-card-title">📋 Onboarding — 3 Pasos</div>
+      <div class="j-card"><div class="j-card-title">Cómo se suma un operario</div>
         <div class="steps-grid">
           <div class="step-card"><div class="step-num">1</div><div class="step-title">Compartir Link</div><div class="step-desc">Envía el enlace por WhatsApp. No necesita instalar nada.</div></div>
-          <div class="step-card"><div class="step-num">2</div><div class="step-title">Iniciar Sesión</div><div class="step-desc">Ingresa con email y contraseña del Administrador.</div></div>
+          <div class="step-card"><div class="step-num">2</div><div class="step-title">Iniciar Sesión</div><div class="step-desc">Ingresa con el correo y la contraseña que le entrega la administración.</div></div>
           <div class="step-card"><div class="step-num">3</div><div class="step-title">Marcar Zonas</div><div class="step-desc">Toca para iniciar, carita de diagnóstico, toca para finalizar.</div></div>
         </div>
       </div>
@@ -1297,15 +887,15 @@
 
     <!-- TAB: ASIGNACIÓN -->
     <div class="jefe-tab-content" id="jefe-tab-asignacion">
-      <div class="j-card"><div class="j-card-title">Mensaje del Día</div>
+      <div class="j-card"><div class="j-card-title">Mensaje del día para el equipo</div>
         <div class="f-group"><textarea class="f-input" id="msg-input" rows="3" placeholder="Escribe aquí el mensaje..."></textarea></div>
-        <button class="btn-sm btn-green" onclick="publishMessage()">📢 Publicar Mensaje</button>
+        <button class="btn-sm btn-green" onclick="publishMessage()">Publicar Mensaje</button>
       </div>
       <div class="j-card"><div class="j-card-title">Asignación de Zonas</div>
         <div class="flex-row" style="margin-bottom:1rem;">
           <div class="f-group" style="flex:2;margin-bottom:0;"><label class="f-label">Trabajador</label><select class="f-input f-select" id="assign-worker-select" onchange="renderAssignGrid()"></select></div>
-          <button class="btn-sm btn-blue" onclick="assignAll()">✅ Todas</button>
-          <button class="btn-sm btn-red" onclick="unassignAll()">❌ Ninguna</button>
+          <button class="btn-sm btn-blue" onclick="assignAll()">Todas</button>
+          <button class="btn-sm btn-red" onclick="unassignAll()">Ninguna</button>
         </div>
         <div id="assign-counter" style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;"></div>
         <div class="zone-grid" id="assign-grid"></div>
@@ -1318,7 +908,7 @@
       <div class="j-card">
         <div class="j-card-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--process)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
-          Monitor en Tiempo Real — ¿Dónde está cada trabajador ahora?
+          ¿Dónde está cada operario ahora?
           <span style="margin-left:auto;font-size:0.7rem;color:var(--process);font-weight:500;">● LIVE</span>
         </div>
         <div class="live-grid" id="live-monitor-grid"></div>
@@ -1343,18 +933,18 @@
           </div>
           <div style="flex:1;min-width:180px;">
             <div style="font-size:0.85rem;color:var(--text-muted);line-height:2;">
-              <div>🟢 Limpias: <strong id="kpi-clean2" style="color:var(--clean);">0</strong></div>
-              <div>🟡 En proceso: <strong id="kpi-process2" style="color:var(--process);">0</strong></div>
-              <div>⚪ Pendientes: <strong id="kpi-pending2" style="color:var(--text-muted);">51</strong></div>
+              <div>Limpias: <strong id="kpi-clean2" style="color:var(--clean);">0</strong></div>
+              <div>En proceso: <strong id="kpi-process2" style="color:var(--process);">0</strong></div>
+              <div>Pendientes: <strong id="kpi-pending2" style="color:var(--text-muted);">51</strong></div>
             </div>
-            <button class="btn-sm btn-red" style="margin-top:1rem;" onclick="resetDemo()">🔄 Reiniciar Demo</button>
+            <button class="btn-sm btn-red" style="margin-top:1rem;" onclick="resetDemo()">Reiniciar Demo</button>
           </div>
         </div>
       </div>
       <!-- Audit table -->
       <div class="j-card">
         <div class="j-card-title">Bitácora de Actividad</div>
-        <div id="audit-empty" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;">⏳ Sin actividad aún.</div>
+        <div id="audit-empty" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;">Sin actividad aún.</div>
         <div style="overflow-x:auto;"><table class="data-table" id="audit-table" style="display:none;"><thead><tr><th>Zona</th><th>Operario</th><th>Entrada</th><th>Diagnóstico</th><th>Fotos</th><th>Salida</th><th>Duración</th><th>Estado</th></tr></thead><tbody id="audit-tbody"></tbody></table></div>
       </div>
     </div>
@@ -1362,13 +952,13 @@
     <!-- TAB: INFORMES -->
     <div class="jefe-tab-content" id="jefe-tab-informes">
       <div class="report-header">
-        <h3>📊 Informe de Rendimiento</h3>
-        <button class="btn-sm btn-green" onclick="generateReport()">🖨 Generar Informe (PDF)</button>
+        <h3>Informe de Rendimiento</h3>
+        <button class="btn-sm btn-green" onclick="generateReport()">Generar Informe (PDF)</button>
       </div>
       
       <!-- Date Picker Selector (Calendar) -->
       <div class="j-card" style="margin-bottom: 1.5rem;">
-        <div class="j-card-title">📅 Filtrar por Fecha</div>
+        <div class="j-card-title">Filtrar por Fecha</div>
         <div class="flex-row" style="align-items: center; gap: 1rem;">
           <div class="f-group" style="margin-bottom: 0; max-width: 220px;">
             <label class="f-label">Seleccionar Día</label>
@@ -1406,8 +996,8 @@
 
       <!-- Day's detailed log -->
       <div class="j-card" style="margin-bottom: 1.5rem;">
-        <div class="j-card-title">📋 Bitácora de Limpieza del Día Seleccionado</div>
-        <div id="day-audit-empty" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;">⏳ Sin registros para este día.</div>
+        <div class="j-card-title">Bitácora de Limpieza del Día Seleccionado</div>
+        <div id="day-audit-empty" style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.9rem;">Sin registros para este día.</div>
         <div style="overflow-x:auto;">
           <table class="data-table" id="day-audit-table" style="display:none;">
             <thead>
@@ -1430,15 +1020,15 @@
       <!-- Rankings -->
       <div class="j-grid-3">
         <div class="j-card">
-          <div class="j-card-title">🏆 Ranking de Eficiencia (Menor tiempo promedio)</div>
+          <div class="j-card-title">Ranking de Eficiencia (Menor tiempo promedio)</div>
           <div id="rank-efficiency"></div>
         </div>
         <div class="j-card">
-          <div class="j-card-title">🥇 Ranking de Productividad (Más zonas limpias)</div>
+          <div class="j-card-title">Ranking de Productividad (Más zonas limpias)</div>
           <div id="rank-productivity"></div>
         </div>
         <div class="j-card">
-          <div class="j-card-title">⚠️ Zonas Más Sucias (Peor diagnóstico promedio)</div>
+          <div class="j-card-title">Zonas Más Sucias (Peor diagnóstico promedio)</div>
           <div id="rank-dirtiest-zones"></div>
         </div>
       </div>
@@ -1470,7 +1060,7 @@
     <div class="jefe-tab-content" id="jefe-tab-bitacora">
       <div class="j-grid-2">
         <div class="j-card">
-          <div class="j-card-title">📁 Subir Archivo a Bitácora</div>
+          <div class="j-card-title">Subir Archivo a Bitácora</div>
           <div class="f-group">
             <label class="f-label">Trabajador Vinculado</label>
             <select class="f-input f-select" id="jefe-bitacora-worker-select"></select>
@@ -1482,15 +1072,15 @@
           <div class="f-group">
             <label class="f-label">Archivo</label>
             <div id="jefe-bitacora-dropzone" style="border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; background: rgba(255,255,255,0.02); transition: all 0.2s;" onclick="document.getElementById('jefe-bitacora-file-input').click()">
-              <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">📁</span>
+              <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;"></span>
               <span id="jefe-bitacora-dropzone-text" style="font-size: 0.82rem; color: var(--text-muted);">Haz clic para seleccionar o arrastra un archivo</span>
               <input type="file" id="jefe-bitacora-file-input" style="display: none;" accept="image/*,application/pdf" onchange="handleJefeBitacoraFileSelect(event)">
             </div>
           </div>
-          <button class="btn-sm btn-gold-sm" onclick="addJefeBitacoraEntry()">💾 Registrar en Bitácora</button>
+          <button class="btn-sm btn-gold-sm" onclick="addJefeBitacoraEntry()">Registrar en Bitácora</button>
         </div>
         <div class="j-card">
-          <div class="j-card-title">📖 Historial de Bitácora del Colegio</div>
+          <div class="j-card-title">Historial documental</div>
           <div style="overflow-x:auto;">
             <table class="data-table">
               <thead>
@@ -1514,8 +1104,8 @@
     <div class="jefe-tab-content" id="jefe-tab-eventos">
       <div class="j-grid-2">
         <div class="j-card">
-          <div class="j-card-title">📅 Crear Nuevo Evento</div>
-          <div class="f-group"><label class="f-label">Nombre del Evento</label><input class="f-input" id="evento-nombre" placeholder="Ej: Copa San Nicolás, Feria de Ciencias..."></div>
+          <div class="j-card-title">Crear Nuevo Evento</div>
+          <div class="f-group"><label class="f-label">Nombre del Evento</label><input class="f-input" id="evento-nombre" placeholder="Ej: Ceremonia de titulación, Feria de admisión…"></div>
           <div class="f-group"><label class="f-label">Fecha</label><input type="date" class="f-input" id="evento-fecha"></div>
           <div class="j-grid-2" style="gap:1rem;">
             <div class="f-group"><label class="f-label">Hora Inicio</label><input type="time" class="f-input" id="evento-hora-inicio" value="09:00"></div>
@@ -1529,24 +1119,24 @@
               <label class="zone-check-item" style="display:flex;"><input type="checkbox" value="Torniquete Acceso Sur"> Torniquete Acceso Sur</label>
             </div>
           </div>
-          <button class="btn-sm btn-green" onclick="crearEvento()" style="margin-top:0.5rem;">✅ Crear Evento y Generar Link</button>
+          <button class="btn-sm btn-green" onclick="crearEvento()" style="margin-top:0.5rem;">Crear Evento y Generar Link</button>
         </div>
         <div>
           <div class="j-card">
-            <div class="j-card-title">🗓 Eventos Registrados</div>
+            <div class="j-card-title">Eventos Registrados</div>
             <div id="eventos-list-container"></div>
           </div>
           <div class="j-card">
-            <div class="j-card-title">🔒 Compliance — Ley de Datos Personales</div>
+            <div class="j-card-title">Compliance — Ley de Datos Personales</div>
             <p style="font-size:0.85rem; color:var(--text-dim); line-height:1.6; margin-bottom:1rem;">Los datos personales de visitantes (RUT, nombre, teléfono) se anonimizan automáticamente 30 días después del evento, cumpliendo con la Ley N° 19.628 de Protección de Datos de Carácter Personal de Chile.</p>
-            <button class="btn-sm btn-red" onclick="ejecutarPurgaDatos()">🗑 Ejecutar Purga Manual de Datos (+30 días)</button>
+            <button class="btn-sm btn-red" onclick="ejecutarPurgaDatos()">Ejecutar Purga Manual de Datos (+30 días)</button>
           </div>
         </div>
       </div>
 
       <!-- Invitados del evento seleccionado -->
       <div class="j-card" id="evento-invitados-card" style="display:none;">
-        <div class="j-card-title" id="evento-invitados-title">👥 Invitados del Evento</div>
+        <div class="j-card-title" id="evento-invitados-title">Invitados del Evento</div>
         <div style="overflow-x:auto;">
           <table class="data-table">
             <thead>
@@ -1570,9 +1160,9 @@
 <div id="view-trabajador" class="app-view">
   <div class="phone-frame">
     <div class="phone-notch"><div class="notch-bar"></div></div>
-    <div class="phone-status-bar"><span id="phone-time">10:30</span><span>📶 🔋 87%</span></div>
-    <div class="phone-header"><div><div class="phone-user-name" id="phone-worker-name">Trabajador</div><div class="phone-role-badge">Personal de Aseo</div></div><div style="font-size:1.5rem;">📱</div></div>
-    <div class="msg-banner" id="msg-banner"><strong>📢 Comunicado Dirección:</strong><span id="msg-banner-text"></span></div>
+    <div class="phone-status-bar"><span id="phone-time">10:30</span><span>87%</span></div>
+    <div class="phone-header"><div><div class="phone-user-name" id="phone-worker-name">Trabajador</div><div class="phone-role-badge">Personal de Aseo</div></div><div style="font-size:1.5rem;"></div></div>
+    <div class="msg-banner" id="msg-banner"><strong>Comunicado Dirección:</strong><span id="msg-banner-text"></span></div>
     <div class="phone-body" id="phone-body"></div>
   </div>
 </div>
@@ -1617,11 +1207,11 @@
     </div>
     <div class="consent-check">
       <input type="checkbox" id="enrol-consent">
-      <label for="enrol-consent">Acepto el tratamiento de mis datos personales de acuerdo a la Política de Seguridad del Colegio, con el único fin de gestionar el control de acceso y seguridad del recinto. Los datos serán eliminados automáticamente tras 30 días del evento.</label>
+      <label for="enrol-consent">Acepto el tratamiento de mis datos personales de acuerdo a la Política de Seguridad de la institución, con el único fin de gestionar el control de acceso y seguridad del recinto. Los datos serán eliminados automáticamente tras 30 días del evento.</label>
     </div>
     <div id="enrol-error" class="error-msg">Complete todos los campos obligatorios y acepte el consentimiento.</div>
-    <button class="btn-full btn-primary" onclick="submitEnrolamiento()" style="margin-top:0.5rem;">📲 Registrarme y Solicitar Acreditación</button>
-    <div style="text-align:center; margin-top:1rem;"><span class="diag-cancel" onclick="closeEnrolamiento()">← Volver al sistema</span></div>
+    <button class="btn-full btn-primary" onclick="submitEnrolamiento()" style="margin-top:0.5rem;">Registrarme y solicitar acreditación</button>
+    <div style="text-align:center; margin-top:1rem;"><span class="diag-cancel" onclick="closeEnrolamiento()">Volver</span></div>
   </div>
 
   <div class="enrol-card enrol-success" id="enrol-review-card" style="display:none; text-align:center;">
@@ -1875,14 +1465,14 @@
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
 <script>
   const SUPER_ADMIN = { email: 'juanjo@valtek.cl', aliasEmail: 'juanjo', password: '123', name: 'juanjo', role: 'superadmin', schoolId: 'sch1' };
-  const SEED_SCHOOLS = [{ id: 'sch1', name: 'Colegio San Nicolás de Myra', city: 'Santiago', plan: 'Profesional' }];
+  const SEED_SCHOOLS = [{ id: 'sch1', name: 'Colegio San Nicolás de Myra', type: 'Colegio', city: 'Santiago', plan: 'Profesional' }];
   const SEED_USERS = [
-    { id: 'u1', name: 'Directora', email: 'admin@valtek.cl', password: '1234', role: 'admin', schoolId: 'sch1', createdAt: '06/06/2026' },
-    { id: 'u_jefe', name: 'Jefe de Aseo', email: 'jefe@valtek.cl', password: '1234', role: 'jefe', schoolId: 'sch1', createdAt: '06/06/2026' },
-    { id: 'u2', name: 'Tía María', email: 'maria@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
-    { id: 'u3', name: 'Tía Carmen', email: 'carmen@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
-    { id: 'u4', name: 'Tía Rosa', email: 'rosa@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
-    { id: 'u5', name: 'Tía Patricia', email: 'patricia@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u1', name: 'Andrea Fuentes', email: 'admin@valtek.cl', password: '1234', role: 'admin', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u_jefe', name: 'Luis Carrasco', email: 'jefe@valtek.cl', password: '1234', role: 'jefe', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u2', name: 'María Soto', email: 'maria@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u3', name: 'Carmen Rojas', email: 'carmen@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u4', name: 'Rosa Díaz', email: 'rosa@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
+    { id: 'u5', name: 'Patricia Muñoz', email: 'patricia@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
     { id: 'u_prov', name: 'Servicios Limpieza SpA', email: 'proveedor@valtek.cl', password: '1234', role: 'proveedor', schoolId: 'sch1', createdAt: '07/06/2026' },
     { id: 'u_port', name: 'Portería Central', email: 'porteria@valtek.cl', password: '1234', role: 'porteria', schoolId: 'sch1', createdAt: '07/06/2026' }
   ];
@@ -1990,7 +1580,7 @@
   ];
 
   const SEED_FILE_LOG = [
-    { id: 'fl_demo1', workerId: 'u2', workerName: 'Tía María (Interno)', fileName: 'contrato_firmado.pdf', description: 'Copia del contrato de trabajo', uploadedBy: 'Super Admin Valtek', uploadDate: Date.now() - 7200000 }
+    { id: 'fl_demo1', workerId: 'u2', workerName: 'María Soto (Interno)', fileName: 'contrato_firmado.pdf', description: 'Copia del contrato de trabajo', uploadedBy: 'Super Admin Valtek', uploadDate: Date.now() - 7200000 }
   ];
 
   // ── SEED DATA: EVENTOS ──
@@ -2195,10 +1785,10 @@
   function generateHistoricalAuditLogs() {
     const auditLog = [];
     const workers = [
-      { id: 'u2', name: 'Tía María', zones: ['z1','z2','z3','z4','z5','z6','z7','z8','z9','z10','c1','bP10'] },
-      { id: 'u3', name: 'Tía Carmen', zones: ['z11','z12','z13','z14','z15','z16','z17','z18','z19','z20','c2','bP11','bP12','bP13'] },
-      { id: 'u4', name: 'Tía Rosa', zones: ['z21','z22','z23','z24','z25','z26','z27','z28','z29','z30','c3','bP20','bP21','bP22','bP23'] },
-      { id: 'u5', name: 'Tía Patricia', zones: ['bP30','bP31','bP32','bP33','cam0','cam1','cam2','bpc0','bpc1','bpc2'] }
+      { id: 'u2', name: 'María Soto', zones: ['z1','z2','z3','z4','z5','z6','z7','z8','z9','z10','c1','bP10'] },
+      { id: 'u3', name: 'Carmen Rojas', zones: ['z11','z12','z13','z14','z15','z16','z17','z18','z19','z20','c2','bP11','bP12','bP13'] },
+      { id: 'u4', name: 'Rosa Díaz', zones: ['z21','z22','z23','z24','z25','z26','z27','z28','z29','z30','c3','bP20','bP21','bP22','bP23'] },
+      { id: 'u5', name: 'Patricia Muñoz', zones: ['bP30','bP31','bP32','bP33','cam0','cam1','cam2','bpc0','bpc1','bpc2'] }
     ];
 
     const today = new Date();
@@ -2262,7 +1852,7 @@
   }
 
   // ── PERSISTENCE ──
-  const DATA_VERSION = '5.1'; // Incremented version for visitor pre-approval & uploads module
+  const DATA_VERSION = '6.0'; // Incremented version for visitor pre-approval & uploads module
   function saveData() { 
     try {
       localStorage.setItem('vo_version', DATA_VERSION); 
@@ -2357,7 +1947,7 @@
   function seedTodayActivity() {
     const now = Date.now();
     
-    // u2 (Tía María)
+    // u2 (María Soto)
     const cleanU2 = ['z1', 'z2', 'z3', 'z4', 'z5', 'bP10'];
     cleanU2.forEach((zid, index) => {
       const z = state.zones.find(x => x.id === zid);
@@ -2370,7 +1960,7 @@
         state.auditLog.push({
           zid: z.id,
           zoneName: z.name,
-          workerName: 'Tía María',
+          workerName: 'María Soto',
           workerId: 'u2',
           entradaTime: z.entradaTime,
           diagnostic: z.diagnostic,
@@ -2390,7 +1980,7 @@
       state.auditLog.push({
         zid: progU2.id,
         zoneName: progU2.name,
-        workerName: 'Tía María',
+        workerName: 'María Soto',
         workerId: 'u2',
         entradaTime: progU2.entradaTime,
         diagnostic: progU2.diagnostic,
@@ -2401,7 +1991,7 @@
       });
     }
 
-    // u3 (Tía Carmen)
+    // u3 (Carmen Rojas)
     const cleanU3 = ['z11', 'z12', 'z13', 'z14', 'bP11', 'bP12'];
     cleanU3.forEach((zid, index) => {
       const z = state.zones.find(x => x.id === zid);
@@ -2414,7 +2004,7 @@
         state.auditLog.push({
           zid: z.id,
           zoneName: z.name,
-          workerName: 'Tía Carmen',
+          workerName: 'Carmen Rojas',
           workerId: 'u3',
           entradaTime: z.entradaTime,
           diagnostic: z.diagnostic,
@@ -2426,7 +2016,7 @@
       }
     });
 
-    // u4 (Tía Rosa)
+    // u4 (Rosa Díaz)
     const cleanU4 = ['z21', 'z22', 'z23', 'z24', 'bP20', 'bP21'];
     cleanU4.forEach((zid, index) => {
       const z = state.zones.find(x => x.id === zid);
@@ -2439,7 +2029,7 @@
         state.auditLog.push({
           zid: z.id,
           zoneName: z.name,
-          workerName: 'Tía Rosa',
+          workerName: 'Rosa Díaz',
           workerId: 'u4',
           entradaTime: z.entradaTime,
           diagnostic: z.diagnostic,
@@ -2459,7 +2049,7 @@
       state.auditLog.push({
         zid: progU4.id,
         zoneName: progU4.name,
-        workerName: 'Tía Rosa',
+        workerName: 'Rosa Díaz',
         workerId: 'u4',
         entradaTime: progU4.entradaTime,
         diagnostic: progU4.diagnostic,
@@ -2470,7 +2060,7 @@
       });
     }
 
-    // u5 (Tía Patricia)
+    // u5 (Patricia Muñoz)
     const cleanU5 = ['bP30', 'bP31', 'cam0', 'cam1', 'bpc0'];
     cleanU5.forEach((zid, index) => {
       const z = state.zones.find(x => x.id === zid);
@@ -2483,7 +2073,7 @@
         state.auditLog.push({
           zid: z.id,
           zoneName: z.name,
-          workerName: 'Tía Patricia',
+          workerName: 'Patricia Muñoz',
           workerId: 'u5',
           entradaTime: z.entradaTime,
           diagnostic: z.diagnostic,
@@ -2544,78 +2134,36 @@
     loginSuccess(user);
   }
 
-  function loginSuccess(user) {
-    state.currentUser = user; 
+  // La navegación por módulos (menú lateral, rutas, centro de control) vive en assets/shell.js
+  function loginSuccess(user, opts) {
+    opts = opts || {};
+    state.currentUser = user;
     hideAuth();
-    document.getElementById('navbar-user-info').style.display = 'flex';
-    document.getElementById('nav-avatar').textContent = user.name.charAt(0).toUpperCase();
-    document.getElementById('nav-avatar').className = 'user-avatar' + (user.role==='superadmin'?' gold':'');
-    document.getElementById('nav-username').textContent = user.name;
-    const rl = {superadmin:'juanjo', admin:'👑 Directora', jefe:'👔 Jefe de Aseo', trabajador:'📱 Trabajador', proveedor:'🏢 Proveedor', porteria:'🚪 Portero'};
-    document.getElementById('nav-role-chip').innerHTML = '<span class="role-chip '+user.role+'">'+(rl[user.role]||user.role)+'</span>';
-    
-    document.getElementById('nav-login-btn').style.display = 'none';
-    document.getElementById('nav-logout-btn').style.display = 'inline-flex';
-    
-    // Role-based Navbar visibility
-    document.getElementById('nav-superadmin').style.display = user.role==='superadmin'?'inline-flex':'none';
-    document.getElementById('nav-proveedor').style.display = (user.role==='proveedor'||user.role==='superadmin'||user.role==='admin'||user.role==='jefe')?'inline-flex':'none';
-    document.getElementById('nav-porteria').style.display = (user.role==='porteria'||user.role==='superadmin'||user.role==='admin'||user.role==='jefe')?'inline-flex':'none';
-    document.getElementById('nav-directora').style.display = (user.role==='admin'||user.role==='superadmin')?'inline-flex':'none';
-    document.getElementById('nav-jefe').style.display = (user.role==='jefe'||user.role==='superadmin')?'inline-flex':'none';
-    document.getElementById('nav-trabajador').style.display = (user.role==='trabajador'||user.role==='superadmin')?'inline-flex':'none';
-
-    if (user.role==='superadmin') showView('superadmin'); 
-    else if (user.role==='proveedor') showView('proveedor');
-    else if (user.role==='porteria') showView('porteria');
-    else if (user.role==='admin') showJefeView('admin'); 
-    else if (user.role==='jefe') showJefeView('jefe'); 
-    else showView('trabajador');
-
-    showToast('👋 ¡Bienvenido/a '+user.name+'!');
+    document.getElementById('login-error').classList.remove('show');
+    Shell.enterApp(user, opts.route);
+    const greetName = (user.role === 'proveedor' || user.role === 'porteria') ? user.name : user.name.split(' ')[0];
+    if (!opts.silent) showToast('Hola, ' + greetName + '. Sesión iniciada.');
   }
 
   function logout() {
     state.currentUser = null;
-    document.getElementById('navbar-user-info').style.display='none'; 
-    document.getElementById('nav-login-btn').style.display='inline-flex'; 
-    document.getElementById('nav-logout-btn').style.display='none';
-    document.getElementById('nav-superadmin').style.display='none'; 
-    document.getElementById('nav-proveedor').style.display='none'; 
-    document.getElementById('nav-porteria').style.display='none'; 
-    document.getElementById('nav-directora').style.display='none'; 
-    document.getElementById('nav-jefe').style.display='none'; 
-    document.getElementById('nav-trabajador').style.display='none';
-    
-    // Clean inputs
     document.getElementById('login-email').value = '';
     document.getElementById('login-password').value = '';
-    
-    showView('landing'); 
-    showAuth();
+    Shell.exitApp();
+    showView('landing');
   }
 
   // ── VIEWS ──
   function showView(v) {
     document.querySelectorAll('.app-view').forEach(el=>el.classList.remove('active'));
     const el=document.getElementById('view-'+v); if(el) el.classList.add('active');
-    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-    
-    if (v === 'jefe') {
-      const activeMode = state.jefeMode || (state.currentUser ? state.currentUser.role : 'admin');
-      const targetId = activeMode === 'admin' ? 'nav-directora' : 'nav-jefe';
-      const nb = document.getElementById(targetId);
-      if (nb) nb.classList.add('active');
-    } else {
-      const nb = document.getElementById('nav-'+v);
-      if (nb) nb.classList.add('active');
-    }
-    
-    if(v==='superadmin') renderSuperAdmin(); 
+
+    if(v==='superadmin') renderSuperAdmin();
     else if(v==='proveedor') renderProveedorAll();
     else if(v==='porteria') renderPorteriaAll();
-    else if(v==='jefe') renderJefeAll(); 
+    else if(v==='jefe') renderJefeAll();
     else if(v==='trabajador') renderWorkerView();
+    else if(v==='overview') Shell.renderOverview();
   }
 
   function showJefeView(mode) {
@@ -2645,15 +2193,16 @@
   function createSchool() { 
     const n=document.getElementById('sch-name').value.trim();
     const c=document.getElementById('sch-city').value.trim();
-    const p=document.getElementById('sch-plan').value; 
-    if(!n||!c){showToast('⚠ Completa nombre y ciudad.',true);return;} 
-    state.schools.push({id:'sch'+Date.now(),name:n,city:c,plan:p}); 
+    const p=document.getElementById('sch-plan').value;
+    const t=document.getElementById('sch-type').value;
+    if(!n||!c){showToast('⚠ Completa nombre y ciudad.',true);return;}
+    state.schools.push({id:'sch'+Date.now(),name:n,type:t,city:c,plan:p});
     saveData(); 
     document.getElementById('sch-name').value=''; 
     document.getElementById('sch-city').value=''; 
     renderSchoolsTable(); 
     populateSchoolSelect(); 
-    showToast('🏫 Colegio registrado.'); 
+    showToast('Institución registrada.'); 
   }
 
   function deleteSchool(id) { 
@@ -2668,11 +2217,11 @@
   function renderSchoolsTable() { 
     const tb=document.getElementById('schools-tbody'); 
     if(!tb)return; 
-    if(!state.schools.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Sin instituciones.</td></tr>';return;} 
+    if(!state.schools.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Sin instituciones.</td></tr>';return;}
     tb.innerHTML=state.schools.map((s,i)=>{
       const uc=state.users.filter(u=>u.schoolId===s.id).length; 
       const pc=s.plan==='Enterprise'?'plan-enterprise':s.plan==='Profesional'?'plan-profesional':'plan-basico'; 
-      return '<tr><td style="color:var(--text-muted);">'+(i+1)+'</td><td><strong>'+s.name+'</strong></td><td>'+s.city+'</td><td><span class="plan-badge '+pc+'">'+s.plan+'</span></td><td style="color:var(--primary);font-weight:700;">'+uc+'</td><td><button class="btn-sm btn-red" onclick="deleteSchool(\''+s.id+'\')">🗑</button></td></tr>';
+      return '<tr><td style="color:var(--text-muted);">'+(i+1)+'</td><td><strong>'+s.name+'</strong></td><td>'+(s.type||'Colegio')+'</td><td>'+s.city+'</td><td><span class="plan-badge '+pc+'">'+s.plan+'</span></td><td style="color:var(--primary);font-weight:700;">'+uc+'</td><td><button class="btn-sm btn-red" onclick="deleteSchool(\''+s.id+'\')">🗑</button></td></tr>';
     }).join(''); 
   }
 
@@ -2702,7 +2251,7 @@
     if(!n||!e||!p){er.textContent='✖ Completa todos los campos.';er.style.display='block';return;} 
     if(p.length<4){er.textContent='✖ Contraseña mín. 4 caracteres.';er.style.display='block';return;} 
     if(e===SUPER_ADMIN.email||state.users.find(u=>u.email===e)){er.textContent='✖ Email ya en uso.';er.style.display='block';return;} 
-    if(!sid){er.textContent='✖ Selecciona un colegio.';er.style.display='block';return;} 
+    if(!sid){er.textContent='✖ Selecciona una institución.';er.style.display='block';return;} 
     const sch=state.schools.find(s=>s.id===sid); 
     state.users.push({id:'u'+Date.now(),name:n,email:e,password:p,role:r,schoolId:sid,plan:sch?sch.plan:'–',createdAt:new Date().toLocaleDateString('es-CL')}); 
     saveData(); 
@@ -2729,12 +2278,12 @@
     tb.innerHTML=all.map((u,i)=>{
       const sch=state.schools.find(s=>s.id===u.schoolId); 
       const rolesHTML = {
-        superadmin:'<span class="role-chip superadmin">juanjo</span>', 
-        admin:'<span class="role-chip admin">👑 Directora</span>',
-        jefe:'<span class="role-chip jefe">👔 Jefe de Aseo</span>',
-        trabajador:'<span class="role-chip trabajador">📱 Trabajador</span>',
-        proveedor:'<span class="role-chip proveedor">🏢 Proveedor</span>',
-        porteria:'<span class="role-chip porteria">🚪 Portería</span>'
+        superadmin:'<span class="role-chip superadmin">Super admin</span>',
+        admin:'<span class="role-chip admin">Administración</span>',
+        jefe:'<span class="role-chip jefe">Jefatura de aseo</span>',
+        trabajador:'<span class="role-chip trabajador">Operario/a</span>',
+        proveedor:'<span class="role-chip proveedor">Contratista</span>',
+        porteria:'<span class="role-chip porteria">Portería</span>'
       };
       const rl=rolesHTML[u.role] || '<span class="role-chip">'+u.role+'</span>'; 
       const pc=u.plan==='Enterprise'?'plan-enterprise':u.plan==='Profesional'?'plan-profesional':u.plan==='Básico'?'plan-basico':''; 
@@ -3032,7 +2581,7 @@
     html += '<div class="print-kpi-grid">' +
               '<div class="print-kpi-card">' +
                 '<div class="print-kpi-val">' + state.schools.length + '</div>' +
-                '<div class="print-kpi-lbl">Colegios Activos</div>' +
+                '<div class="print-kpi-lbl">Instituciones activas</div>' +
               '</div>' +
               '<div class="print-kpi-card">' +
                 '<div class="print-kpi-val">' + state.externalWorkers.length + '</div>' +
@@ -3049,7 +2598,7 @@
             '</div>';
             
     // 3. Schools list
-    html += '<h2>Colegios Registrados en la Plataforma</h2>' +
+    html += '<h2>Instituciones registradas en la plataforma</h2>' +
       '<table>' +
         '<thead>' +
           '<tr>' +
@@ -3936,7 +3485,7 @@
     const filteredWorkers = state.externalWorkers.filter(w => w.schoolId === schoolId);
 
     if (!filteredWorkers.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No hay personal de contratistas registrado en este colegio.</td></tr>';
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No hay personal de contratistas registrado en esta institución.</td></tr>';
       return;
     }
 
@@ -3999,7 +3548,7 @@
     });
 
     if (!filteredFiles.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No hay archivos en la bitácora de este colegio.</td></tr>';
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No hay archivos en la bitácora de esta institución.</td></tr>';
       return;
     }
 
@@ -6345,5 +5894,6 @@
     if (ns) ns.addEventListener('change', updatePlanDisplay);
   });
 </script>
+<script src="assets/shell.js"></script>
 </body>
 </html>
