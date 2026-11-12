@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/valtek.css?v=6.0.3">
+  <link rel="stylesheet" href="assets/valtek.css?v=6.1.2">
 </head>
 <body>
 <!-- Definiciones SVG compartidas (gradiente de marca) -->
@@ -109,6 +109,8 @@
     <button class="btn-full btn-primary" onclick="doLogin()" style="margin-top:8px;">Ingresar</button>
     <div class="auth-divider">Accesos de demostración</div>
     <div class="auth-quick">
+      <button onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><b>Seguridad · Industria</b><span>seguridad@valtek.cl</span></button>
+      <button onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><b>Guardia · Industria</b><span>guardia@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('admin@valtek.cl','1234')"><b>Dirección</b><span>admin@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('jefe@valtek.cl','1234')"><b>Jefatura de aseo</b><span>jefe@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('maria@valtek.cl','1234')"><b>Operaria</b><span>maria@valtek.cl</span></button>
@@ -164,6 +166,7 @@
 
       <div class="sector-strip">
         <div class="sector-strip-label">Diseñado para</div>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10"/></svg>Industria y minería</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>Universidades</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Colegios</span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Centros comerciales</span>
@@ -196,7 +199,7 @@
       <div class="module-grid">
         <article class="module-card clean reveal">
           <div class="module-tag"><i></i>Módulo 01 · Aseo y Personal</div>
-          <div class="module-name">Optima Clean</div>
+          <div class="module-name">Valtek Clean</div>
           <p class="module-pitch">Planifica, ejecuta y audita la limpieza de cada sala, baño y espacio común. Tu equipo registra su trabajo desde el celular y la dirección ve el avance en vivo.</p>
           <ul class="module-features">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg><div><b>Asignación de zonas</b><span>Reparte salas, baños, camarines y canchas entre tu equipo en segundos.</span></div></li>
@@ -209,15 +212,15 @@
 
         <article class="module-card access reveal">
           <div class="module-tag"><i></i>Módulo 02 · Seguridad y Acceso</div>
-          <div class="module-name">Optima Access</div>
-          <p class="module-pitch">Controla quién entra a tu recinto y bajo qué condiciones: desde contratistas con su documentación legal hasta eventos masivos con acceso automatizado por QR.</p>
+          <div class="module-name">Valtek Access</div>
+          <p class="module-pitch">Controla quién entra a tu recinto y bajo qué condiciones. Cada persona se valida en garita, torniquete y zonas restringidas contra su documentación, su empresa y sus autorizaciones.</p>
           <ul class="module-features">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg><div><b>Control de contratistas</b><span>6 documentos obligatorios con vencimiento. Si algo falta o vence, el acceso se bloquea solo.</span></div></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><b>Portería por RUT</b><span>Respuesta inmediata: autorizado, bloqueado o no registrado, con registro de entrada y salida.</span></div></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div><b>Eventos con pre-acreditación</b><span>Creas el evento, compartes el link y apruebas a cada visitante con carnet y selfie.</span></div></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg><div><b>Acceso automatizado P1 → P2</b><span>QR personal validado en la puerta exterior y en el torniquete, con monitoreo en vivo.</span></div></li>
           </ul>
-          <div class="module-roles"><span>Dirección</span><span>Portería</span><span>Empresas contratistas</span><span>Visitantes</span></div>
+          <div class="module-roles"><span>Jefatura de seguridad</span><span>Guardias</span><span>Empresas contratistas</span><span>Visitas</span></div>
         </article>
       </div>
     </div>
@@ -264,10 +267,10 @@
           <ul><li>Rondas de aseo con evidencia fotográfica</li><li>Proveedores con documentación al día</li><li>Eventos y activaciones con control de acceso</li></ul>
         </div>
         <div class="sector-card reveal">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="1.5"/><path d="M9 6h1M14 6h1M9 10h1M14 10h1M9 14h1M14 14h1M10 22v-4h4v4"/></svg>
-          <h3>Clínicas y edificios</h3>
-          <p>Estándares de higiene y de acceso que se pueden demostrar frente a una auditoría.</p>
-          <ul><li>Protocolos de limpieza trazables</li><li>Control de visitas y personal externo</li><li>Reportes listos para auditorías</li></ul>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10"/></svg>
+          <h3>Industria y minería</h3>
+          <p>Plantas y faenas donde entrar sin estar habilitado es un riesgo para la vida y para la empresa.</p>
+          <ul><li>Contratistas según la Ley de Subcontratación (F30 y F30-1)</li><li>Inducción, examen y EPP vigentes antes de entrar</li><li>Lista de evacuación en tiempo real</li></ul>
         </div>
       </div>
 
@@ -320,7 +323,7 @@
       <div class="plan-grid">
         <div class="plan-card reveal">
           <div class="plan-kicker">Módulo 01</div>
-          <h3>Optima Clean</h3>
+          <h3>Valtek Clean</h3>
           <p>Para recintos que quieren profesionalizar y medir su aseo.</p>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Asignación de zonas y app para operarios</li>
@@ -335,8 +338,8 @@
           <h3>Suite Optima</h3>
           <p>Aseo y seguridad en un solo centro de control.</p>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Optima Clean</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Optima Access</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Valtek Clean</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Todo lo de Valtek Access</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Centro de control con alertas unificadas</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Capacitación y soporte prioritario</li>
           </ul>
@@ -344,8 +347,8 @@
         </div>
         <div class="plan-card reveal">
           <div class="plan-kicker">Módulo 02</div>
-          <h3>Optima Access</h3>
-          <p>Para recintos con alto flujo de personas y contratistas.</p>
+          <h3>Valtek Access</h3>
+          <p>Para plantas, faenas y recintos con alto flujo de personas y contratistas.</p>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Contratistas y vencimiento de documentos</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Portería por RUT con registro de accesos</li>
@@ -371,6 +374,8 @@
           <button class="demo-role" data-mod="clean" onclick="Shell.demoLogin('maria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span><div><b>Operaria de aseo</b><span>App móvil en terreno</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><div><b>Portería</b><span>Control por RUT y QR</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><div><b>Empresa contratista</b><span>Carga de personal y documentos</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10"/></svg></span><div><b>Jefe de seguridad · Industria</b><span>Valtek Access en una planta</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span><div><b>Guardia de garita · Industria</b><span>Validación en garita y torniquete</span></div></button>
           <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('juanjo','123')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><div><b>Super admin Valtek</b><span>Clientes, usuarios y métricas</span></div></button>
         </div>
       </div>
@@ -392,6 +397,11 @@
 <!-- ═══════════════ CENTRO DE CONTROL ═══════════════ -->
 <div id="view-overview" class="app-view">
   <div class="page" id="overview-root"></div>
+</div>
+
+<!-- ═══════════════ VALTEK ACCESS (industria) ═══════════════ -->
+<div id="view-access" class="app-view">
+  <div class="page" id="access-root"></div>
 </div>
 
 
@@ -447,6 +457,8 @@
               <option value="trabajador">Operario/a de aseo</option>
               <option value="proveedor">Empresa contratista</option>
               <option value="porteria">Portería y seguridad</option>
+              <option value="seguridad">Jefatura de seguridad (industria)</option>
+              <option value="guardia">Guardia de seguridad (industria)</option>
             </select>
           </div>
           <div class="f-group">
@@ -1465,7 +1477,10 @@
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
 <script>
   const SUPER_ADMIN = { email: 'juanjo@valtek.cl', aliasEmail: 'juanjo', password: '123', name: 'juanjo', role: 'superadmin', schoolId: 'sch1' };
-  const SEED_SCHOOLS = [{ id: 'sch1', name: 'Colegio San Nicolás de Myra', type: 'Colegio', city: 'Santiago', plan: 'Profesional' }];
+  const SEED_SCHOOLS = [
+    { id: 'sch1', name: 'Colegio San Nicolás de Myra', type: 'Colegio', city: 'Santiago', plan: 'Profesional' },
+    { id: 'ind1', name: 'Planta Industrial Valle Norte', type: 'Industria', city: 'Quilicura', plan: 'Enterprise' }
+  ];
   const SEED_USERS = [
     { id: 'u1', name: 'Andrea Fuentes', email: 'admin@valtek.cl', password: '1234', role: 'admin', schoolId: 'sch1', createdAt: '06/06/2026' },
     { id: 'u_jefe', name: 'Luis Carrasco', email: 'jefe@valtek.cl', password: '1234', role: 'jefe', schoolId: 'sch1', createdAt: '06/06/2026' },
@@ -1474,7 +1489,9 @@
     { id: 'u4', name: 'Rosa Díaz', email: 'rosa@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
     { id: 'u5', name: 'Patricia Muñoz', email: 'patricia@valtek.cl', password: '1234', role: 'trabajador', schoolId: 'sch1', createdAt: '06/06/2026' },
     { id: 'u_prov', name: 'Servicios Limpieza SpA', email: 'proveedor@valtek.cl', password: '1234', role: 'proveedor', schoolId: 'sch1', createdAt: '07/06/2026' },
-    { id: 'u_port', name: 'Portería Central', email: 'porteria@valtek.cl', password: '1234', role: 'porteria', schoolId: 'sch1', createdAt: '07/06/2026' }
+    { id: 'u_port', name: 'Portería Central', email: 'porteria@valtek.cl', password: '1234', role: 'porteria', schoolId: 'sch1', createdAt: '07/06/2026' },
+    { id: 'u_seg', name: 'Rodrigo Álvarez', email: 'seguridad@valtek.cl', password: '1234', role: 'seguridad', schoolId: 'ind1', createdAt: '12/11/2026' },
+    { id: 'u_guard', name: 'Héctor Salinas', email: 'guardia@valtek.cl', password: '1234', role: 'guardia', schoolId: 'ind1', createdAt: '12/11/2026' }
   ];
 
   const SEED_EXTERNAL_WORKERS = [
@@ -1852,7 +1869,7 @@
   }
 
   // ── PERSISTENCE ──
-  const DATA_VERSION = '6.0'; // Incremented version for visitor pre-approval & uploads module
+  const DATA_VERSION = '6.1'; // Incremented version for visitor pre-approval & uploads module
   function saveData() { 
     try {
       localStorage.setItem('vo_version', DATA_VERSION); 
@@ -2283,7 +2300,9 @@
         jefe:'<span class="role-chip jefe">Jefatura de aseo</span>',
         trabajador:'<span class="role-chip trabajador">Operario/a</span>',
         proveedor:'<span class="role-chip proveedor">Contratista</span>',
-        porteria:'<span class="role-chip porteria">Portería</span>'
+        porteria:'<span class="role-chip porteria">Portería</span>',
+        seguridad:'<span class="role-chip porteria">Jefatura de seguridad</span>',
+        guardia:'<span class="role-chip porteria">Guardia</span>'
       };
       const rl=rolesHTML[u.role] || '<span class="role-chip">'+u.role+'</span>'; 
       const pc=u.plan==='Enterprise'?'plan-enterprise':u.plan==='Profesional'?'plan-profesional':u.plan==='Básico'?'plan-basico':''; 
@@ -5894,6 +5913,7 @@
     if (ns) ns.addEventListener('change', updatePlanDisplay);
   });
 </script>
-<script src="assets/shell.js?v=6.0.1"></script>
+<script src="assets/access.js?v=6.1.2"></script>
+<script src="assets/shell.js?v=6.1.0"></script>
 </body>
 </html>

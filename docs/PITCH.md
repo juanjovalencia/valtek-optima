@@ -4,7 +4,7 @@
 
 **Valtek Optima** es una plataforma que une el **aseo** y la **seguridad** de un recinto en un solo centro de control. Se vende en dos módulos que funcionan por separado o juntos:
 
-| | **Optima Clean**: Aseo y Personal | **Optima Access**: Seguridad y Acceso |
+| | **Valtek Clean**: Aseo y Personal | **Valtek Access**: Seguridad y Acceso |
 |---|---|---|
 | Qué resuelve | ¿Se limpió de verdad? ¿Quién lo hizo y cuánto demoró? | ¿Quién está dentro del recinto? ¿El contratista está habilitado? |
 | Funciones | Asignación de zonas · App móvil para operarios (diagnóstico + foto antes/después) · Monitor en vivo · Informes PDF y rankings | Contratistas con 6 documentos y vencimientos · Portería por RUT · Eventos con link de registro y acreditación · Acceso automatizado con QR en puerta (P1) y torniquete (P2) |
@@ -21,8 +21,8 @@
 ## 3. Speech de 2 minutos (estructura)
 
 1. **Problema** (planillas, WhatsApp y cuaderno; sin trazabilidad). Pregunta: *"Si mañana un apoderado o un auditor les pide demostrar que el baño del segundo piso se limpió a las 10, ¿cómo lo hacen hoy?"*
-2. **Módulo 1, Optima Clean:** asignación de zonas, app sin descargas y monitor en vivo. El dato que más impacta: tiempo promedio por zona y ranking de rendimiento.
-3. **Módulo 2, Optima Access:** contratistas bloqueados automáticamente si un documento vence, y eventos con QR personal y validación en dos etapas (P1 y P2).
+2. **Módulo 1, Valtek Clean:** asignación de zonas, app sin descargas y monitor en vivo. El dato que más impacta: tiempo promedio por zona y ranking de rendimiento.
+3. **Módulo 2, Valtek Access:** contratistas bloqueados automáticamente si un documento vence, y eventos con QR personal y validación en dos etapas (P1 y P2).
 4. **Cumplimiento:** consentimiento explícito, eliminación automática de los datos de visitantes a los 30 días (Ley 19.628) y permisos por rol.
 5. **Prueba:** piloto operando en el Colegio San Nicolás de Myra (51 zonas monitoreadas a diario).
 6. **Cierre:** *"Te propongo un levantamiento sin costo de tu recinto y una demo con tus propias zonas."*
@@ -48,7 +48,7 @@ Abrir la landing y bajar a **"Míralo funcionando"**. Entrar con cada perfil en 
 ## 6. Objeciones frecuentes
 
 - **"Mi personal no sabe usar apps."** No se instala nada: se abre un link en el celular y se usa con tres toques.
-- **"Ya tenemos torniquetes."** Optima Access se integra con lectores y torniquetes existentes (por ejemplo, ZKTeco).
+- **"Ya tenemos torniquetes."** Valtek Access se integra con lectores y torniquetes existentes (por ejemplo, ZKTeco).
 - **"¿Y los datos personales?"** Consentimiento explícito, eliminación automática a los 30 días y permisos por rol.
 - **"Solo necesito una parte."** Los módulos se contratan por separado.
 
@@ -59,3 +59,27 @@ Abrir la landing y bajar a **"Míralo funcionando"**. Entrar con cada perfil en 
 - Backend y base de datos multi-cliente (Supabase), con login seguro.
 - Integración real con lectores y torniquetes (hoy P1/P2 se simulan en pantalla).
 - Datos de contacto comercial reales en la landing (correo o WhatsApp para agendar).
+
+## 8. Valtek Access para industria (demo de planta)
+
+**Enlace directo:** https://juanjovalencia.github.io/valtek-optima/#valtek-access (entra como Jefe de seguridad de la "Planta Industrial Valle Norte"). Para la vista del guardia: `#guardia`.
+
+**Speech de 30 segundos (industria):**
+> "En una planta, que entre alguien sin estar habilitado no es un problema administrativo: es un riesgo para su vida y una multa para la empresa. Valtek Access valida a cada persona en la garita, en el torniquete y en las zonas restringidas contra su documentación, su empresa contratista y sus autorizaciones. Si algo está vencido, no entra, y queda registrado. Y si hay una emergencia, sabes exactamente quién está dentro y dónde."
+
+**Guion (5 minutos):**
+1. **Panel de seguridad:** personas dentro ahora, ingresos del día, rechazos y por qué, y dónde está la gente. El tráfico se mueve en vivo.
+2. **Control de acceso**, con los casos de demostración:
+   - *Jorge Muñoz* → Garita: **permitido**. Otra vez → Torniquete: **permitido**. Otra vez → **denegado por anti-passback** (ya está dentro).
+   - *Luis Herrera* (eléctrico) → Garita y Torniquete permitidos → Sala eléctrica: **denegado, licencia SEC vencida**.
+   - *Cristián Vega* → **denegado, examen pre-ocupacional vencido**.
+   - *Andrés Pino* → **denegado, su empresa tiene el F30-1 vencido** (Ley de Subcontratación).
+   - *Daniela Soto* → **denegado, sin inducción de seguridad**.
+   - *Patricia Lagos* (visita) → Garita permitida → Torniquete **denegado, solo está autorizada para oficinas**.
+   - Mostrar **"Autorizar excepción"**: queda registrado quién la autorizó y por qué.
+3. **Personas en planta** → **Imprimir lista de evacuación**.
+4. **Registro de personas** → ficha con documentos y vencimientos, agregar persona e importar nómina (CSV con columnas `nombre;rut;empresa;cargo`).
+5. **Empresas contratistas** → cumplimiento por empresa, F30 / F30-1 y suspensión automática.
+6. **Bitácora de accesos** → todo auditable y exportable a Excel (CSV).
+
+Si la demo queda "usada", se puede reiniciar borrando los datos del sitio en el navegador.

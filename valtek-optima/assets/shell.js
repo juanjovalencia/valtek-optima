@@ -45,12 +45,15 @@
     trabajador: 'Operario/a de aseo',
     proveedor: 'Empresa contratista',
     porteria: 'Portería y seguridad',
+    seguridad: 'Jefatura de seguridad',
+    guardia: 'Guardia de seguridad',
   };
 
   const GROUPS = {
     general: { label: 'General', mod: 'general' },
     clean: { label: 'Aseo y Personal', mod: 'clean', short: 'Aseo y Personal' },
     access: { label: 'Seguridad y Acceso', mod: 'access', short: 'Seguridad y Acceso' },
+    sec: { label: 'Valtek Access', mod: 'access', short: 'Valtek Access' },
     admin: { label: 'Administración Valtek', mod: 'admin', short: 'Administración' },
   };
 
@@ -67,6 +70,7 @@
   function openSa(tab) { showView('superadmin'); switchSaTab(tab); }
   function openPorteria(tab) { showView('porteria'); switchPorteriaTab(tab); }
   function openProv(tab) { showView('proveedor'); switchProvTab(tab); }
+  function openAccess(page) { showView('access'); Access.show(page); }
 
   // ── Mapa de rutas: cada pantalla pertenece a un módulo ──
   const ROUTES = [
@@ -108,6 +112,20 @@
     { id: 'vendor-status', group: 'access', icon: 'list', label: 'Estado de aprobación', roles: ['proveedor'],
       sub: 'Revisa qué trabajadores están habilitados para ingresar', open: () => openProv('estado') },
 
+    // Valtek Access · control de acceso industrial
+    { id: 'sec-dashboard', group: 'sec', icon: 'grid', label: 'Panel de seguridad', roles: ['seguridad', 'superadmin'],
+      sub: 'Quién está dentro, quién entró y quién fue rechazado', open: () => openAccess('dashboard') },
+    { id: 'sec-gate', group: 'sec', icon: 'scan', label: 'Control de acceso', roles: ['seguridad', 'guardia', 'superadmin'],
+      sub: 'Garita, torniquete y zonas restringidas: validación por RUT o credencial', open: () => openAccess('gate') },
+    { id: 'sec-presence', group: 'sec', icon: 'users', label: 'Personas en planta', roles: ['seguridad', 'guardia', 'superadmin'],
+      sub: 'Presencia en tiempo real y lista de evacuación', open: () => openAccess('presence') },
+    { id: 'sec-people', group: 'sec', icon: 'badge', label: 'Registro de personas', roles: ['seguridad', 'superadmin'],
+      sub: 'Base de datos de trabajadores, contratistas y visitas con su documentación', open: () => openAccess('people') },
+    { id: 'sec-companies', group: 'sec', icon: 'building', label: 'Empresas contratistas', roles: ['seguridad', 'superadmin'],
+      sub: 'Cumplimiento de la Ley de Subcontratación por empresa', open: () => openAccess('companies') },
+    { id: 'sec-log', group: 'sec', icon: 'list', label: 'Bitácora de accesos', roles: ['seguridad', 'guardia', 'superadmin'],
+      sub: 'Registro auditable de cada entrada, salida y rechazo', open: () => openAccess('log') },
+
     { id: 'admin-clients', group: 'admin', icon: 'globe', label: 'Clientes y usuarios', roles: ['superadmin'],
       sub: 'Instituciones, planes contratados y cuentas de acceso', open: () => openSa('colegios') },
     { id: 'admin-metrics', group: 'admin', icon: 'bars', label: 'Métricas globales', roles: ['superadmin'],
@@ -117,6 +135,7 @@
   const DEFAULT_ROUTE = {
     superadmin: 'overview', admin: 'overview', jefe: 'clean-monitor',
     trabajador: 'clean-app', proveedor: 'vendor-add', porteria: 'access-gate',
+    seguridad: 'sec-dashboard', guardia: 'sec-gate',
   };
 
   let currentRoute = null;
@@ -402,6 +421,13 @@
   // Restaura la sesión al recargar (solo en esta pestaña)
   function restoreSession() {
     if (window.location.hash.startsWith('#enrol-')) return;
+    // Enlace directo a la demo industrial: …/#valtek-access
+    if (window.location.hash === '#valtek-access' || window.location.hash === '#guardia') {
+      const guard = window.location.hash === '#guardia';
+      history.replaceState(null, '', window.location.pathname);
+      demoLogin(guard ? 'guardia@valtek.cl' : 'seguridad@valtek.cl', '1234');
+      return;
+    }
     let saved = null;
     try { saved = JSON.parse(sessionStorage.getItem('vo_session') || 'null'); } catch (e) { saved = null; }
     if (!saved || !saved.email) return;
