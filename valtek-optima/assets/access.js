@@ -1358,7 +1358,7 @@
       showToast(r.added + (r.added === 1 ? ' persona importada' : ' personas importadas')
         + (r.repeated ? ' · ' + r.repeated + (r.repeated === 1 ? ' ya estaba registrada' : ' ya estaban registradas') : '')
         + (invalid ? ' · ' + invalid + (invalid === 1 ? ' omitida' : ' omitidas') + ' por RUT inválido' : '')
-        + (r.added ? '. Quedan bloqueadas hasta anotar su documentación.' : '.'));
+        + (r.added === 1 ? '. Queda bloqueada hasta anotar su documentación.' : r.added ? '. Quedan bloqueadas hasta anotar su documentación.' : '.'));
     } catch (e) { showToast((e && e.message) || 'No se pudo importar la nómina.', true); }
   }
 
