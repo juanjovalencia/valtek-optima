@@ -27,6 +27,8 @@
 - `valtek-optima/assets/access.js`: **Valtek Access** para industria (garita, torniquete, zonas restringidas, contratistas y bitácora). Demo directa: `#valtek-access` y `#guardia`.
 - `valtek-optima/assets/rooms.js`: **Salas conectadas** para universidades y colegios (cerraduras con QR, asistencia automática, reservas de salas, apertura a distancia y control de vehículos por patente). El horario de la demo se arma alrededor de la hora actual. Demo directa: `#campus` (universidad) y `#salas` (colegio).
 - `docs/PITCH.md`: Planteamiento comercial, speech y guion de demo.
+- `docs/BACKEND.md`: Dónde vive cada cosa, etapas de la migración a Supabase y reglas (claves fuera del repositorio).
+- `supabase/migrations/`: Esquema de la base de datos (tablas por `org_id`, permisos por rol con RLS y buckets privados). Todo cambio de base de datos va aquí como archivo nuevo.
 - Probar en local: `python3 tools/serve.py` y abrir http://localhost:5173 (servidor sin caché, IPv4 e IPv6).
 - `valtek-optima/public/demo/index.html`: Copia de respaldo intacta del demo interactivo.
 - `valtek-optima/package.json`, `vite.config.js`, `.env.example`: Base inicial para la migración a **Vite + Supabase (PostgreSQL + Auth + Storage + Edge Functions)**.
