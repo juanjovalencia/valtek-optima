@@ -83,3 +83,25 @@ Abrir la landing y bajar a **"Míralo funcionando"**. Entrar con cada perfil en 
 6. **Bitácora de accesos** → todo auditable y exportable a Excel (CSV).
 
 Si la demo queda "usada", se puede reiniciar borrando los datos del sitio en el navegador.
+
+## 9. Salas conectadas para universidades y colegios
+
+**Enlaces directos:** `#campus` entra como Dirección de campus de la "Universidad Valle Norte"; `#salas` entra como Dirección del colegio y abre las salas.
+
+**Idea que se vende:** se eliminan las llaves. Cada sala tiene un lector QR y una cerradura conectada. La cerradura decide sola si abre, y todo queda registrado: quién abrió, quién está dentro y a cargo de quién.
+
+**Guion (5 minutos):**
+1. **Salas en vivo:** qué salas están abiertas, cuánta gente hay en cada una y quién está a cargo. Mostrar la alerta de la clase que empezó y nadie ha abierto, y **abrirla a distancia**.
+2. **Lector QR de sala**, con los casos de demostración en este orden:
+   - *Valentina Rojas* (estudiante) → **denegado: la sala está cerrada**.
+   - *Marcela Riquelme* (docente con clase ahora) → **sala abierta, queda a cargo**.
+   - *Valentina Rojas* otra vez → **asistencia registrada**.
+   - *Matías Fernández* (otra sección) → **denegado**.
+   - *Tomás Aravena* → **denegado: no tiene clase ni reserva**. Tocar "Reservarle esta sala", reservar y volver a probar: **ahora sí abre**.
+   - *Rosa Díaz* (aseo) → **ingreso de aseo registrado** en una sala libre.
+3. **Asistencia:** se marca sola con el QR. Presentes, atrasos y quién falta, exportable a Excel.
+4. **Reservas de salas:** quien reserva puede abrir la sala solo en su horario.
+5. **Vehículos y patentes:** la barrera abre si la patente está autorizada. Mostrar el proveedor con permiso vencido.
+6. **Bitácora de salas:** cada apertura, ingreso, cierre y rechazo.
+
+**Qué es demostración y qué falta:** los lectores, las cerraduras y la cámara de patentes se simulan en pantalla. La instalación real requiere el hardware en cada puerta y su integración con la plataforma.

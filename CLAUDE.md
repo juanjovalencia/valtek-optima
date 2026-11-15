@@ -21,9 +21,11 @@
 ---
 
 ## 2. Estructura Actual del Repositorio
-- `valtek-optima/index.html`: Aplicación principal actual (prototipo funcional con HTML + JS vanilla y persistencia en `localStorage` bajo claves `vo_*`, versión `DATA_VERSION = '6.0'`).
+- `valtek-optima/index.html`: Aplicación principal actual (prototipo funcional con HTML + JS vanilla y persistencia en `localStorage` bajo claves `vo_*`, versión `DATA_VERSION = '6.2'`).
 - `valtek-optima/assets/valtek.css`: Sistema de diseño v6 (minimalista, oscuro) que reemplaza el CSS inline.
 - `valtek-optima/assets/shell.js`: Navegación por módulos (menú lateral + topbar), rutas por rol, Centro de control, sesión persistente y landing. Los módulos son **Aseo y Personal** (Optima Clean) y **Seguridad y Acceso** (Optima Access).
+- `valtek-optima/assets/access.js`: **Valtek Access** para industria (garita, torniquete, zonas restringidas, contratistas y bitácora). Demo directa: `#valtek-access` y `#guardia`.
+- `valtek-optima/assets/rooms.js`: **Salas conectadas** para universidades y colegios (cerraduras con QR, asistencia automática, reservas de salas, apertura a distancia y control de vehículos por patente). El horario de la demo se arma alrededor de la hora actual. Demo directa: `#campus` (universidad) y `#salas` (colegio).
 - `docs/PITCH.md`: Planteamiento comercial, speech y guion de demo.
 - Probar en local: `python3 tools/serve.py` y abrir http://localhost:5173 (servidor sin caché, IPv4 e IPv6).
 - `valtek-optima/public/demo/index.html`: Copia de respaldo intacta del demo interactivo.
@@ -41,6 +43,8 @@
 | `trabajador` | `maria@valtek.cl`, `carmen@valtek.cl`, `rosa@valtek.cl`, `patricia@valtek.cl` | `1234` | Emulador móvil de operaria (restringido a 1 zona `en-proceso` a la vez) |
 | `proveedor` | `proveedor@valtek.cl` | `1234` | Registro de trabajadores externos y carga de los 6 documentos legales |
 | `porteria` | `porteria@valtek.cl` | `1234` | Control de acceso por RUT (contratistas/planta) y validación QR P1/P2 de eventos |
+| `seguridad` / `guardia` | `seguridad@valtek.cl`, `guardia@valtek.cl` | `1234` | Valtek Access en la planta industrial de demostración |
+| `campus` | `campus@valtek.cl` | `1234` | Salas conectadas en la universidad de demostración (el rol `admin` ve lo mismo con los datos del colegio) |
 
 ---
 

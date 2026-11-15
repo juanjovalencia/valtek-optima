@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/valtek.css?v=6.1.2">
+  <link rel="stylesheet" href="assets/valtek.css?v=6.2.0">
 </head>
 <body>
 <!-- Definiciones SVG compartidas (gradiente de marca) -->
@@ -109,6 +109,7 @@
     <button class="btn-full btn-primary" onclick="doLogin()" style="margin-top:8px;">Ingresar</button>
     <div class="auth-divider">Accesos de demostración</div>
     <div class="auth-quick">
+      <button onclick="Shell.demoLogin('campus@valtek.cl','1234')"><b>Campus · Universidad</b><span>campus@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><b>Seguridad · Industria</b><span>seguridad@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><b>Guardia · Industria</b><span>guardia@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('admin@valtek.cl','1234')"><b>Dirección</b><span>admin@valtek.cl</span></button>
@@ -219,6 +220,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><b>Portería por RUT</b><span>Respuesta inmediata: autorizado, bloqueado o no registrado, con registro de entrada y salida.</span></div></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div><b>Eventos con pre-acreditación</b><span>Creas el evento, compartes el link y apruebas a cada visitante con carnet y selfie.</span></div></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg><div><b>Acceso automatizado P1 → P2</b><span>QR personal validado en la puerta exterior y en el torniquete, con monitoreo en vivo.</span></div></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg><div><b>Salas sin llaves</b><span>Cada sala se abre con el QR de quien está autorizado. Ves quién está dentro, la asistencia se marca sola y puedes abrir una puerta a distancia.</span></div></li>
           </ul>
           <div class="module-roles"><span>Jefatura de seguridad</span><span>Guardias</span><span>Empresas contratistas</span><span>Visitas</span></div>
         </article>
@@ -374,6 +376,7 @@
           <button class="demo-role" data-mod="clean" onclick="Shell.demoLogin('maria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span><div><b>Operaria de aseo</b><span>App móvil en terreno</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><div><b>Portería</b><span>Control por RUT y QR</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><div><b>Empresa contratista</b><span>Carga de personal y documentos</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('campus@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14.5" cy="12" r="0.6" fill="currentColor"/></svg></span><div><b>Campus · Universidad</b><span>Salas con QR, asistencia y patentes</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10"/></svg></span><div><b>Jefe de seguridad · Industria</b><span>Valtek Access en una planta</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span><div><b>Guardia de garita · Industria</b><span>Validación en garita y torniquete</span></div></button>
           <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('juanjo','123')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><div><b>Super admin Valtek</b><span>Clientes, usuarios y métricas</span></div></button>
@@ -402,6 +405,11 @@
 <!-- ═══════════════ VALTEK ACCESS (industria) ═══════════════ -->
 <div id="view-access" class="app-view">
   <div class="page" id="access-root"></div>
+</div>
+
+<!-- ═══════════════ SALAS CONECTADAS (campus y colegio) ═══════════════ -->
+<div id="view-rooms" class="app-view">
+  <div class="page" id="rooms-root"></div>
 </div>
 
 
@@ -459,6 +467,7 @@
               <option value="porteria">Portería y seguridad</option>
               <option value="seguridad">Jefatura de seguridad (industria)</option>
               <option value="guardia">Guardia de seguridad (industria)</option>
+              <option value="campus">Dirección de campus (salas y cerraduras)</option>
             </select>
           </div>
           <div class="f-group">
@@ -1479,7 +1488,8 @@
   const SUPER_ADMIN = { email: 'juanjo@valtek.cl', aliasEmail: 'juanjo', password: '123', name: 'juanjo', role: 'superadmin', schoolId: 'sch1' };
   const SEED_SCHOOLS = [
     { id: 'sch1', name: 'Colegio San Nicolás de Myra', type: 'Colegio', city: 'Santiago', plan: 'Profesional' },
-    { id: 'ind1', name: 'Planta Industrial Valle Norte', type: 'Industria', city: 'Quilicura', plan: 'Enterprise' }
+    { id: 'ind1', name: 'Planta Industrial Valle Norte', type: 'Industria', city: 'Quilicura', plan: 'Enterprise' },
+    { id: 'uni1', name: 'Universidad Valle Norte', type: 'Universidad', city: 'Santiago', plan: 'Enterprise' }
   ];
   const SEED_USERS = [
     { id: 'u1', name: 'Andrea Fuentes', email: 'admin@valtek.cl', password: '1234', role: 'admin', schoolId: 'sch1', createdAt: '06/06/2026' },
@@ -1491,7 +1501,8 @@
     { id: 'u_prov', name: 'Servicios Limpieza SpA', email: 'proveedor@valtek.cl', password: '1234', role: 'proveedor', schoolId: 'sch1', createdAt: '07/06/2026' },
     { id: 'u_port', name: 'Portería Central', email: 'porteria@valtek.cl', password: '1234', role: 'porteria', schoolId: 'sch1', createdAt: '07/06/2026' },
     { id: 'u_seg', name: 'Rodrigo Álvarez', email: 'seguridad@valtek.cl', password: '1234', role: 'seguridad', schoolId: 'ind1', createdAt: '12/11/2026' },
-    { id: 'u_guard', name: 'Héctor Salinas', email: 'guardia@valtek.cl', password: '1234', role: 'guardia', schoolId: 'ind1', createdAt: '12/11/2026' }
+    { id: 'u_guard', name: 'Héctor Salinas', email: 'guardia@valtek.cl', password: '1234', role: 'guardia', schoolId: 'ind1', createdAt: '12/11/2026' },
+    { id: 'u_campus', name: 'Carolina Bustos', email: 'campus@valtek.cl', password: '1234', role: 'campus', schoolId: 'uni1', createdAt: '14/11/2026' }
   ];
 
   const SEED_EXTERNAL_WORKERS = [
@@ -1869,7 +1880,7 @@
   }
 
   // ── PERSISTENCE ──
-  const DATA_VERSION = '6.1'; // Incremented version for visitor pre-approval & uploads module
+  const DATA_VERSION = '6.2'; // Incremented version for visitor pre-approval & uploads module
   function saveData() { 
     try {
       localStorage.setItem('vo_version', DATA_VERSION); 
@@ -2302,7 +2313,8 @@
         proveedor:'<span class="role-chip proveedor">Contratista</span>',
         porteria:'<span class="role-chip porteria">Portería</span>',
         seguridad:'<span class="role-chip porteria">Jefatura de seguridad</span>',
-        guardia:'<span class="role-chip porteria">Guardia</span>'
+        guardia:'<span class="role-chip porteria">Guardia</span>',
+        campus:'<span class="role-chip porteria">Dirección de campus</span>'
       };
       const rl=rolesHTML[u.role] || '<span class="role-chip">'+u.role+'</span>'; 
       const pc=u.plan==='Enterprise'?'plan-enterprise':u.plan==='Profesional'?'plan-profesional':u.plan==='Básico'?'plan-basico':''; 
@@ -5914,6 +5926,7 @@
   });
 </script>
 <script src="assets/access.js?v=6.1.2"></script>
-<script src="assets/shell.js?v=6.1.0"></script>
+<script src="assets/rooms.js?v=6.2.0"></script>
+<script src="assets/shell.js?v=6.2.0"></script>
 </body>
 </html>

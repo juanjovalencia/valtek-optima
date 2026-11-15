@@ -35,6 +35,8 @@
     info: `<svg ${P}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
     sparkle: `<svg ${P}><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>`,
     login: `<svg ${P}><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>`,
+    door: `<svg ${P}><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14.5" cy="12" r="0.6" fill="currentColor"/></svg>`,
+    car: `<svg ${P}><path d="M5 16l1.5-5.2A2 2 0 0 1 8.4 9.4h7.2a2 2 0 0 1 1.9 1.4L19 16"/><rect x="3" y="16" width="18" height="4" rx="1.5"/><circle cx="7.5" cy="18" r="0.6" fill="currentColor"/><circle cx="16.5" cy="18" r="0.6" fill="currentColor"/></svg>`,
     arrow: `<svg ${P}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
   };
 
@@ -47,6 +49,7 @@
     porteria: 'Portería y seguridad',
     seguridad: 'Jefatura de seguridad',
     guardia: 'Guardia de seguridad',
+    campus: 'Dirección de campus',
   };
 
   const GROUPS = {
@@ -54,11 +57,13 @@
     clean: { label: 'Aseo y Personal', mod: 'clean', short: 'Aseo y Personal' },
     access: { label: 'Seguridad y Acceso', mod: 'access', short: 'Seguridad y Acceso' },
     sec: { label: 'Valtek Access', mod: 'access', short: 'Valtek Access' },
+    rooms: { label: 'Salas y cerraduras', mod: 'access', short: 'Salas y cerraduras' },
     admin: { label: 'Administración Valtek', mod: 'admin', short: 'Administración' },
   };
 
   const ALL_STAFF = ['superadmin', 'admin', 'jefe'];
   const ADMINS = ['superadmin', 'admin'];
+  const ROOM_ROLES = ['superadmin', 'admin', 'campus'];
 
   // ── Helpers de navegación hacia las vistas existentes ──
   function role() { return state.currentUser ? state.currentUser.role : null; }
@@ -71,6 +76,7 @@
   function openPorteria(tab) { showView('porteria'); switchPorteriaTab(tab); }
   function openProv(tab) { showView('proveedor'); switchProvTab(tab); }
   function openAccess(page) { showView('access'); Access.show(page); }
+  function openRooms(page) { showView('rooms'); Rooms.show(page); }
 
   // ── Mapa de rutas: cada pantalla pertenece a un módulo ──
   const ROUTES = [
@@ -126,6 +132,20 @@
     { id: 'sec-log', group: 'sec', icon: 'list', label: 'Bitácora de accesos', roles: ['seguridad', 'guardia', 'superadmin'],
       sub: 'Registro auditable de cada entrada, salida y rechazo', open: () => openAccess('log') },
 
+    // Salas conectadas · cerraduras con QR, asistencia, reservas y patentes
+    { id: 'rooms-live', group: 'rooms', icon: 'door', label: 'Salas en vivo', roles: ROOM_ROLES,
+      sub: 'Qué salas están abiertas, quién está dentro y quién las abrió', open: () => openRooms('live') },
+    { id: 'rooms-reader', group: 'rooms', icon: 'scan', label: 'Lector QR de sala', roles: ROOM_ROLES,
+      sub: 'Así decide la cerradura si abre o no cuando alguien acerca su QR', open: () => openRooms('reader') },
+    { id: 'rooms-attendance', group: 'rooms', icon: 'badge', label: 'Asistencia', roles: ROOM_ROLES,
+      sub: 'Se marca sola cuando cada persona pasa su QR por el lector de la sala', open: () => openRooms('attendance') },
+    { id: 'rooms-booking', group: 'rooms', icon: 'calendar', label: 'Reservas de salas', roles: ROOM_ROLES,
+      sub: 'Quien reserva puede abrir la sala con su QR solo en su horario', open: () => openRooms('booking') },
+    { id: 'rooms-vehicles', group: 'rooms', icon: 'car', label: 'Vehículos y patentes', roles: ROOM_ROLES,
+      sub: 'La barrera se abre sola si la patente está autorizada', open: () => openRooms('vehicles') },
+    { id: 'rooms-log', group: 'rooms', icon: 'list', label: 'Bitácora de salas', roles: ROOM_ROLES,
+      sub: 'Cada apertura, ingreso, cierre y rechazo, con hora y responsable', open: () => openRooms('log') },
+
     { id: 'admin-clients', group: 'admin', icon: 'globe', label: 'Clientes y usuarios', roles: ['superadmin'],
       sub: 'Instituciones, planes contratados y cuentas de acceso', open: () => openSa('colegios') },
     { id: 'admin-metrics', group: 'admin', icon: 'bars', label: 'Métricas globales', roles: ['superadmin'],
@@ -135,7 +155,7 @@
   const DEFAULT_ROUTE = {
     superadmin: 'overview', admin: 'overview', jefe: 'clean-monitor',
     trabajador: 'clean-app', proveedor: 'vendor-add', porteria: 'access-gate',
-    seguridad: 'sec-dashboard', guardia: 'sec-gate',
+    seguridad: 'sec-dashboard', guardia: 'sec-gate', campus: 'rooms-live',
   };
 
   let currentRoute = null;
@@ -426,6 +446,14 @@
       const guard = window.location.hash === '#guardia';
       history.replaceState(null, '', window.location.pathname);
       demoLogin(guard ? 'guardia@valtek.cl' : 'seguridad@valtek.cl', '1234');
+      return;
+    }
+    // Enlaces directos a las salas conectadas: …/#campus (universidad) y …/#salas (colegio)
+    if (window.location.hash === '#campus' || window.location.hash === '#salas') {
+      const colegio = window.location.hash === '#salas';
+      history.replaceState(null, '', window.location.pathname);
+      demoLogin(colegio ? 'admin@valtek.cl' : 'campus@valtek.cl', '1234');
+      if (colegio && state.currentUser) go('rooms-live');
       return;
     }
     let saved = null;
