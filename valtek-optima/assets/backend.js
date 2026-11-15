@@ -2,6 +2,8 @@
    Valtek Optima — Cuentas reales (Supabase)
    Inicio de sesión, creación de cuenta, recuperación de contraseña y la
    pantalla "Mi cuenta" (instituciones, personas con acceso y roles).
+   Cada cuenta trabaja en una institución activa: su rol ahí decide qué
+   pantallas de Valtek Access ve (assets/shell.js y assets/access.js).
    Las cuentas de demostración siguen funcionando aparte, con datos de ejemplo
    guardados en el navegador.
    Depende de: supabase-js (CDN), config.js, state/loginSuccess/showAuth/
@@ -13,7 +15,8 @@
   const CFG = window.VALTEK_CONFIG || {};
   const enabled = !!(window.supabase && CFG.supabaseUrl && CFG.supabaseKey);
   const sb = enabled ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey) : null;
-  const ctx = { profile: null, orgs: [], error: null };
+  const ctx = { profile: null, orgs: [], orgId: null, error: null };
+  const ORG_KEY = 'vo_org'; // institución en la que la cuenta trabajó la última vez
   let entering = false;
 
   const $ = id => document.getElementById(id);
@@ -132,28 +135,66 @@
   const myRole = org => { const m = (org.memberships || []).find(x => x.user_id === ctx.profile.id); return m ? m.role : null; };
   const canAdmin = org => ctx.profile.is_superadmin || myRole(org) === 'admin';
 
+  // ── Institución activa ───────────────────────────────────────────────────
+  // El super admin de Valtek administra cualquier institución aunque no sea parte de ella.
+  const orgRole = org => myRole(org) || (ctx.profile.is_superadmin ? 'admin' : null);
+  function pickOrg() {
+    let saved = null;
+    try { saved = localStorage.getItem(ORG_KEY); } catch (e) { /* almacenamiento no disponible */ }
+    const org = ctx.orgs.find(o => o.id === saved) || ctx.orgs.find(o => myRole(o)) || ctx.orgs[0] || null;
+    ctx.orgId = org ? org.id : null;
+  }
+  // Datos de la sesión que usa el resto de la aplicación (menú, permisos y Valtek Access).
+  function sessionUser() {
+    const p = ctx.profile, org = ctx.orgs.find(o => o.id === ctx.orgId) || null;
+    return {
+      id: p.id, name: p.full_name || p.email || 'Cuenta', email: p.email, role: 'cuenta', real: true, schoolId: null,
+      superadmin: !!p.is_superadmin,
+      orgId: org ? org.id : null, orgName: org ? org.name : '', orgType: org ? org.type : '', orgRole: org ? orgRole(org) : null,
+      modules: org ? (org.org_modules || []).filter(m => m.enabled).map(m => m.module) : [],
+      orgLabel: org ? org.name : 'Sin institución',
+    };
+  }
+  function useOrg(id) {
+    const org = ctx.orgs.find(o => o.id === id);
+    if (!org || !state.currentUser || !state.currentUser.real) return;
+    ctx.orgId = id;
+    try { localStorage.setItem(ORG_KEY, id); } catch (e) { /* almacenamiento no disponible */ }
+    Object.assign(state.currentUser, sessionUser());
+    Shell.enterApp(state.currentUser, 'account-home');
+    showToast('Ahora trabajas en ' + org.name + '.');
+  }
+
   async function enter(silent) {
     if (entering) return;
     entering = true;
     try {
       if (!(await loadContext())) return;
-      const p = ctx.profile;
-      const user = { id: p.id, name: p.full_name || p.email || 'Cuenta', email: p.email, role: 'cuenta', real: true, schoolId: null,
-        orgLabel: p.is_superadmin ? 'Todas las instituciones' : (ctx.orgs[0] ? ctx.orgs[0].name : 'Sin institución') };
-      loginSuccess(user, { silent });
+      pickOrg();
+      const user = sessionUser();
+      // Al recargar la página se vuelve a la misma pantalla en que estaba la cuenta.
+      let route;
+      try {
+        const saved = JSON.parse(sessionStorage.getItem('vo_session') || 'null');
+        if (silent && saved && saved.email === user.email) route = saved.route;
+      } catch (e) { /* almacenamiento no disponible */ }
+      loginSuccess(user, { silent, route });
     } finally { entering = false; }
   }
 
   // ── Pantalla "Mi cuenta" ─────────────────────────────────────────────────
   function orgCard(org) {
-    const admin = canAdmin(org), mine = myRole(org);
+    const admin = canAdmin(org), mine = myRole(org), active = org.id === ctx.orgId;
     const members = (org.memberships || []).slice().sort((a, b) => (a.profiles ? a.profiles.full_name : '').localeCompare(b.profiles ? b.profiles.full_name : ''));
     const mods = (org.org_modules || []).filter(m => m.enabled).map(m => `<span class="ac-chip">${esc(MODULE[m.module] || m.module)}</span>`).join('');
     return `
       <div class="ac-org">
         <div class="ac-org-head">
           <div><b>${esc(org.name)}</b><span>${esc([TYPE[org.type] || org.type, org.city, 'Plan ' + org.plan].filter(Boolean).join(' · '))}</span></div>
-          <span class="badge ${mine ? 'badge-clean' : 'badge-pending'}">${esc(mine ? 'Tu rol: ' + (ROLE[mine] || mine) : 'Super admin')}</span>
+          <div class="ax-actions">
+            ${ctx.orgs.length > 1 ? (active ? '<span class="badge badge-process">Institución activa</span>' : `<button class="btn btn-sm" onclick="Backend.useOrg('${org.id}')">Trabajar aquí</button>`) : ''}
+            <span class="badge ${mine ? 'badge-clean' : 'badge-pending'}">${esc(mine ? 'Tu rol: ' + (ROLE[mine] || mine) : 'Super admin')}</span>
+          </div>
         </div>
         <div class="ac-chips">${mods || '<span class="ax-muted">Sin módulos activos</span>'}</div>
         ${admin || members.length > 1 ? `
@@ -208,12 +249,20 @@
         <div class="j-card-title">Qué ya funciona con datos reales</div>
         <div class="alert-list">
           <div class="alert-item info"><div class="alert-ico">✓</div><div class="alert-text"><b>Cuentas, instituciones y roles</b><span>Inicio de sesión seguro. Cada institución solo ve sus propios datos.</span></div><span class="badge badge-clean">Conectado</span></div>
-          <div class="alert-item warn"><div class="alert-ico">…</div><div class="alert-text"><b>Valtek Access, Valtek Clean, Eventos y Salas</b><span>Por ahora se muestran con datos de ejemplo, desde los accesos de demostración. Se conectan a la base de datos módulo por módulo.</span></div><span class="badge badge-process">En demostración</span></div>
+          <div class="alert-item info"><div class="alert-ico">✓</div><div class="alert-text"><b>Valtek Access: control de acceso</b><span>Personas, empresas contratistas, documentos, puntos de control y bitácora. Está en el menú de la izquierda, según tu rol en la institución activa.</span></div><span class="badge badge-clean">Conectado</span></div>
+          <div class="alert-item warn"><div class="alert-ico">…</div><div class="alert-text"><b>Valtek Clean, Eventos y Salas</b><span>Por ahora se muestran con datos de ejemplo, desde los accesos de demostración. Se conectan a la base de datos módulo por módulo.</span></div><span class="badge badge-process">En demostración</span></div>
         </div>
       </section>`;
   }
 
-  async function refresh(quiet) { await loadContext(); render(); if (!quiet) showToast('Datos actualizados.'); }
+  async function refresh(quiet) {
+    await loadContext();
+    // Si cambió el rol o la institución activa ya no existe, el menú se ajusta.
+    if (!ctx.orgs.some(o => o.id === ctx.orgId)) pickOrg();
+    if (state.currentUser && state.currentUser.real) { Object.assign(state.currentUser, sessionUser()); Shell.syncUser(); }
+    render();
+    if (!quiet) showToast('Datos actualizados.');
+  }
 
   async function addMember(orgId) {
     const email = $('ac-email-' + orgId).value.trim().toLowerCase(), role = $('ac-role-' + orgId).value;
@@ -242,8 +291,9 @@
   }
 
   Object.assign(api, {
+    client: sb, useOrg,
     setMode, submit, signIn, render, refresh: () => refresh(false), addMember, removeMember, createOrg,
-    signOut() { if (enabled) sb.auth.signOut(); ctx.profile = null; ctx.orgs = []; },
+    signOut() { if (enabled) sb.auth.signOut(); ctx.profile = null; ctx.orgs = []; ctx.orgId = null; },
   });
   window.Backend = api;
 

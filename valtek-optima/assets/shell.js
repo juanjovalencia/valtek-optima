@@ -65,6 +65,10 @@
   const ALL_STAFF = ['superadmin', 'admin', 'jefe'];
   const ADMINS = ['superadmin', 'admin'];
   const ROOM_ROLES = ['superadmin', 'admin', 'campus'];
+  // Cuentas reales (rol de pantalla "cuenta"): lo que ven de Valtek Access depende de su rol en la
+  // institución activa. El guardia y la portería solo operan el control de acceso; no administran.
+  const REAL_MANAGE = ['admin', 'seguridad'];
+  const REAL_GATE = ['admin', 'seguridad', 'guardia', 'porteria'];
 
   // ── Helpers de navegación hacia las vistas existentes ──
   function role() { return state.currentUser ? state.currentUser.role : null; }
@@ -81,7 +85,8 @@
 
   // ── Mapa de rutas: cada pantalla pertenece a un módulo ──
   const ROUTES = [
-    // Cuentas reales (Supabase): por ahora ven su cuenta, sus instituciones y las personas con acceso
+    // Cuentas reales (Supabase): su cuenta, sus instituciones y las personas con acceso.
+    // Las rutas con "real" también aparecen para una cuenta real, según su rol en la institución activa.
     { id: 'account-home', group: 'general', icon: 'users', label: 'Mi cuenta', roles: ['cuenta'],
       sub: 'Tus instituciones, las personas con acceso y sus roles', open: () => { showView('account'); Backend.render(); } },
 
@@ -124,17 +129,21 @@
       sub: 'Revisa qué trabajadores están habilitados para ingresar', open: () => openProv('estado') },
 
     // Valtek Access · control de acceso industrial
-    { id: 'sec-dashboard', group: 'sec', icon: 'grid', label: 'Panel de seguridad', roles: ['seguridad', 'superadmin'],
+    { id: 'sec-dashboard', group: 'sec', icon: 'grid', label: 'Panel de seguridad', roles: ['seguridad', 'superadmin'], real: REAL_MANAGE,
       sub: 'Quién está dentro, quién entró y quién fue rechazado', open: () => openAccess('dashboard') },
-    { id: 'sec-gate', group: 'sec', icon: 'scan', label: 'Control de acceso', roles: ['seguridad', 'guardia', 'superadmin'],
+    { id: 'sec-gate', group: 'sec', icon: 'scan', label: 'Control de acceso', roles: ['seguridad', 'guardia', 'superadmin'], real: REAL_GATE,
       sub: 'Garita, torniquete y zonas restringidas: validación por RUT o credencial', open: () => openAccess('gate') },
-    { id: 'sec-presence', group: 'sec', icon: 'users', label: 'Personas en planta', roles: ['seguridad', 'guardia', 'superadmin'],
+    { id: 'sec-presence', group: 'sec', icon: 'users', label: 'Personas en planta', roles: ['seguridad', 'guardia', 'superadmin'], real: REAL_GATE,
+      labelFor: { cuenta: 'Personas dentro ahora' },
       sub: 'Presencia en tiempo real y lista de evacuación', open: () => openAccess('presence') },
-    { id: 'sec-people', group: 'sec', icon: 'badge', label: 'Registro de personas', roles: ['seguridad', 'superadmin'],
+    { id: 'sec-people', group: 'sec', icon: 'badge', label: 'Registro de personas', roles: ['seguridad', 'superadmin'], real: REAL_MANAGE,
       sub: 'Base de datos de trabajadores, contratistas y visitas con su documentación', open: () => openAccess('people') },
-    { id: 'sec-companies', group: 'sec', icon: 'building', label: 'Empresas contratistas', roles: ['seguridad', 'superadmin'],
+    { id: 'sec-companies', group: 'sec', icon: 'building', label: 'Empresas contratistas', roles: ['seguridad', 'superadmin'], real: REAL_MANAGE,
       sub: 'Cumplimiento de la Ley de Subcontratación por empresa', open: () => openAccess('companies') },
-    { id: 'sec-log', group: 'sec', icon: 'list', label: 'Bitácora de accesos', roles: ['seguridad', 'guardia', 'superadmin'],
+    // Solo cuentas reales: en la demostración los puntos de control son fijos.
+    { id: 'sec-points', group: 'sec', icon: 'door', label: 'Puntos de control', roles: [], real: REAL_MANAGE,
+      sub: 'Garitas, torniquetes y zonas restringidas de tu institución', open: () => openAccess('points') },
+    { id: 'sec-log', group: 'sec', icon: 'list', label: 'Bitácora de accesos', roles: ['seguridad', 'guardia', 'superadmin'], real: REAL_GATE,
       sub: 'Registro auditable de cada entrada, salida y rechazo', open: () => openAccess('log') },
 
     // Salas conectadas · cerraduras con QR, asistencia, reservas y patentes
@@ -165,7 +174,22 @@
 
   let currentRoute = null;
 
-  function routesFor(r) { return ROUTES.filter(rt => rt.roles.includes(r)); }
+  // ¿Puede la sesión actual abrir esta pantalla?
+  function allowed(rt) {
+    const u = state.currentUser;
+    if (!u) return false;
+    if (rt.roles.includes(u.role)) return true;
+    return !!(u.real && rt.real && rt.real.includes(u.orgRole) && (u.modules || []).includes('acceso'));
+  }
+  function routesFor() { return ROUTES.filter(allowed); }
+  // Pantalla de inicio: el guardia real parte en el control de acceso y la jefatura de seguridad en su panel.
+  function defaultRoute() {
+    const u = state.currentUser;
+    if (!u.real) return DEFAULT_ROUTE[u.role];
+    const want = u.orgRole === 'seguridad' ? 'sec-dashboard' : (u.orgRole === 'guardia' || u.orgRole === 'porteria') ? 'sec-gate' : 'account-home';
+    const rt = ROUTES.find(x => x.id === want);
+    return rt && allowed(rt) ? want : 'account-home';
+  }
   function labelOf(rt, r) { return (rt.labelFor && rt.labelFor[r]) || rt.label; }
 
   function pendingCounts() {
@@ -187,7 +211,7 @@
     const nav = document.getElementById('sb-nav');
     if (!nav || !r) return;
     const counts = pendingCounts();
-    const list = routesFor(r);
+    const list = routesFor();
     let html = '';
     Object.keys(GROUPS).forEach(g => {
       const items = list.filter(rt => rt.group === g);
@@ -218,8 +242,8 @@
   function go(id) {
     const r = role();
     if (!r) return;
-    let rt = ROUTES.find(x => x.id === id && x.roles.includes(r));
-    if (!rt) rt = ROUTES.find(x => x.id === DEFAULT_ROUTE[r]);
+    let rt = ROUTES.find(x => x.id === id && allowed(x));
+    if (!rt) rt = ROUTES.find(x => x.id === defaultRoute());
     currentRoute = rt.id;
     rt.open();
     setTopbar(rt);
@@ -229,16 +253,28 @@
     try { sessionStorage.setItem('vo_session', JSON.stringify({ email: state.currentUser.email, route: rt.id })); } catch (e) { /* almacenamiento no disponible */ }
   }
 
-  function enterApp(user, route) {
-    document.body.classList.add('in-app');
-    document.body.className = document.body.className.replace(/\brole-\S+/g, '').trim();
-    document.body.classList.add('role-' + user.role);
-
+  // Nombre, rol e institución de la sesión en el menú y la barra superior.
+  function syncUser() {
+    const user = state.currentUser;
+    if (!user) return;
     const av = document.getElementById('nav-avatar');
     av.textContent = (user.name || '?').charAt(0).toUpperCase();
     av.className = 'user-avatar' + (user.role === 'superadmin' ? ' gold' : '');
     document.getElementById('nav-username').textContent = user.name;
-    document.getElementById('nav-role-label').textContent = ROLE_LABEL[user.role] || user.role;
+    document.getElementById('nav-role-label').textContent = user.real
+      ? (user.superadmin ? ROLE_LABEL.superadmin : (ROLE_LABEL[user.orgRole] || ROLE_LABEL.cuenta))
+      : (ROLE_LABEL[user.role] || user.role);
+    if (user.real) {
+      document.getElementById('sb-org-name').textContent = user.orgLabel || 'Valtek Optima';
+      document.getElementById('sb-org-meta').textContent = 'Cuenta real' + (user.orgRole ? ' · ' + (ROLE_LABEL[user.orgRole] || user.orgRole) : '');
+      renderSidebar();
+    }
+  }
+
+  function enterApp(user, route) {
+    document.body.classList.add('in-app');
+    document.body.className = document.body.className.replace(/\brole-\S+/g, '').trim();
+    document.body.classList.add('role-' + user.role);
 
     const sch = state.schools.find(s => s.id === user.schoolId);
     document.getElementById('sb-org-name').textContent = user.role === 'superadmin' ? 'Todas las instituciones' : (sch ? sch.name : '—');
@@ -246,12 +282,9 @@
       ? state.schools.length + (state.schools.length === 1 ? ' cliente activo' : ' clientes activos')
       : (sch ? [(sch.type || 'Colegio'), sch.city, 'Plan ' + sch.plan].filter(Boolean).join(' · ') : '');
 
-    if (user.real) {
-      document.getElementById('sb-org-name').textContent = user.orgLabel || 'Valtek Optima';
-      document.getElementById('sb-org-meta').textContent = 'Cuenta real';
-    }
+    syncUser();
 
-    go(route || DEFAULT_ROUTE[user.role]);
+    go(route || defaultRoute());
   }
 
   function exitApp() {
@@ -492,5 +525,5 @@
     });
   });
 
-  window.Shell = { go, enterApp, exitApp, toggleSidebar, closeSidebar, demoLogin, renderOverview, renderSidebar, ROLE_LABEL };
+  window.Shell = { go, enterApp, exitApp, syncUser, toggleSidebar, closeSidebar, demoLogin, renderOverview, renderSidebar, ROLE_LABEL };
 })();
