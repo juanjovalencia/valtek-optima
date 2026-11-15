@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/valtek.css?v=6.2.0">
+  <link rel="stylesheet" href="assets/valtek.css?v=6.3.0">
 </head>
 <body>
 <!-- Definiciones SVG compartidas (gradiente de marca) -->
@@ -95,18 +95,25 @@
     <div class="auth-logo">
       <svg class="brand-mark" style="width:42px;height:42px;" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
     </div>
-    <div class="auth-title">Ingresa a Valtek Optima</div>
-    <div class="auth-tagline">Acceso exclusivo para instituciones clientes</div>
-    <div class="form-group">
+    <div class="auth-title" id="auth-title">Ingresa a Valtek Optima</div>
+    <div class="auth-tagline" id="auth-tagline">Acceso exclusivo para instituciones clientes</div>
+    <div class="form-group" id="login-name-group" hidden>
+      <label class="form-label" for="login-name">Nombre y apellido</label>
+      <input class="form-input" type="text" id="login-name" placeholder="Ej: Andrea Fuentes" autocomplete="name">
+    </div>
+    <div class="form-group" id="login-email-group">
       <label class="form-label" for="login-email">Correo electrónico</label>
       <input class="form-input" type="email" id="login-email" placeholder="nombre@institucion.cl" autocomplete="username">
     </div>
-    <div class="form-group">
+    <div class="form-group" id="login-password-group">
       <label class="form-label" for="login-password">Contraseña</label>
-      <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')authSubmit()">
     </div>
     <div id="login-error" class="error-msg">Credenciales incorrectas o incompletas.</div>
-    <button class="btn-full btn-primary" onclick="doLogin()" style="margin-top:8px;">Ingresar</button>
+    <div id="login-info" class="info-msg"></div>
+    <button class="btn-full btn-primary" id="login-submit" onclick="authSubmit()" style="margin-top:8px;">Ingresar</button>
+    <div class="auth-links" id="auth-links"></div>
+    <div id="auth-demo">
     <div class="auth-divider">Accesos de demostración</div>
     <div class="auth-quick">
       <button onclick="Shell.demoLogin('campus@valtek.cl','1234')"><b>Campus · Universidad</b><span>campus@valtek.cl</span></button>
@@ -118,6 +125,7 @@
       <button onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><b>Portería</b><span>porteria@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><b>Contratista</b><span>proveedor@valtek.cl</span></button>
       <button onclick="Shell.demoLogin('juanjo','123')"><b>Super admin</b><span>juanjo</span></button>
+    </div>
     </div>
   </div>
 </div>
@@ -410,6 +418,11 @@
 <!-- ═══════════════ SALAS CONECTADAS (campus y colegio) ═══════════════ -->
 <div id="view-rooms" class="app-view">
   <div class="page" id="rooms-root"></div>
+</div>
+
+<!-- ═══════════════ MI CUENTA (cuentas reales, Supabase) ═══════════════ -->
+<div id="view-account" class="app-view">
+  <div class="page" id="account-root"></div>
 </div>
 
 
@@ -2151,13 +2164,22 @@
 
   // ── AUTH ──
   function showAuth() { document.getElementById('view-auth').classList.remove('hidden'); }
-  function hideAuth() { document.getElementById('view-auth').classList.add('hidden'); }
+  function hideAuth() {
+    document.getElementById('view-auth').classList.add('hidden');
+    if (window.Backend && Backend.enabled && (Backend.authMode === 'signup' || Backend.authMode === 'reset')) Backend.setMode('login');
+  }
+  // El botón del formulario sirve para ingresar, crear cuenta o recuperar la contraseña.
+  function authSubmit() { if (window.Backend && Backend.enabled && Backend.authMode !== 'login') Backend.submit(); else doLogin(); }
   function doLogin() {
     const email = document.getElementById('login-email').value.trim().toLowerCase();
     const pass = document.getElementById('login-password').value;
     if ((email === SUPER_ADMIN.email || email === SUPER_ADMIN.aliasEmail) && pass === SUPER_ADMIN.password) { loginSuccess(SUPER_ADMIN); return; }
     const user = state.users.find(u => u.email.toLowerCase() === email && u.password === pass);
-    if (!user) { document.getElementById('login-error').classList.add('show'); return; }
+    if (!user) {
+      // No es una cuenta de demostración: se valida contra las cuentas reales (Supabase).
+      if (window.Backend && Backend.enabled) { Backend.signIn(email, pass); return; }
+      document.getElementById('login-error').classList.add('show'); return;
+    }
     document.getElementById('login-error').classList.remove('show');
     loginSuccess(user);
   }
@@ -2174,6 +2196,7 @@
   }
 
   function logout() {
+    if (state.currentUser && state.currentUser.real && window.Backend) Backend.signOut();
     state.currentUser = null;
     document.getElementById('login-email').value = '';
     document.getElementById('login-password').value = '';
@@ -5925,8 +5948,11 @@
     if (ns) ns.addEventListener('change', updatePlanDisplay);
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/config.js?v=6.3.0"></script>
 <script src="assets/access.js?v=6.1.2"></script>
 <script src="assets/rooms.js?v=6.2.0"></script>
-<script src="assets/shell.js?v=6.2.0"></script>
+<script src="assets/shell.js?v=6.3.0"></script>
+<script src="assets/backend.js?v=6.3.0"></script>
 </body>
 </html>

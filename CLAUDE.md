@@ -27,6 +27,7 @@
 - `valtek-optima/assets/access.js`: **Valtek Access** para industria (garita, torniquete, zonas restringidas, contratistas y bitácora). Demo directa: `#valtek-access` y `#guardia`.
 - `valtek-optima/assets/rooms.js`: **Salas conectadas** para universidades y colegios (cerraduras con QR, asistencia automática, reservas de salas, apertura a distancia y control de vehículos por patente). El horario de la demo se arma alrededor de la hora actual. Demo directa: `#campus` (universidad) y `#salas` (colegio).
 - `docs/PITCH.md`: Planteamiento comercial, speech y guion de demo.
+- `valtek-optima/assets/config.js` y `backend.js`: Conexión a **Supabase** (proyecto `valtek-optima`, ref `yhkqdsjjeciwjlsogkwo`, región São Paulo). Cuentas reales: ingresar, crear cuenta, recuperar contraseña y pantalla "Mi cuenta" (instituciones, personas con acceso y roles). Las cuentas de demostración siguen aparte, con datos en `localStorage`.
 - `docs/BACKEND.md`: Dónde vive cada cosa, etapas de la migración a Supabase y reglas (claves fuera del repositorio).
 - `supabase/migrations/`: Esquema de la base de datos (tablas por `org_id`, permisos por rol con RLS y buckets privados). Todo cambio de base de datos va aquí como archivo nuevo.
 - Probar en local: `python3 tools/serve.py` y abrir http://localhost:5173 (servidor sin caché, IPv4 e IPv6).

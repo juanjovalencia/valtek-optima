@@ -23,14 +23,20 @@ El esquema está en `supabase/migrations/`.
 
 ## Etapas
 
-1. **Base** — proyecto Supabase (región São Paulo), tablas, permisos por rol, buckets y dominio `valtekoptima.cl`.
-2. **Login real** — inicio de sesión con Supabase Auth. La demo pública sigue funcionando aparte, con datos de ejemplo.
+1. **Base** — hecho: proyecto Supabase `valtek-optima` (región São Paulo), 21 tablas, permisos por rol y buckets privados. Pendiente: dominio `valtekoptima.cl`.
+2. **Login real** — hecho: ingresar, crear cuenta, recuperar contraseña y pantalla "Mi cuenta" para administrar instituciones y accesos. La demo pública sigue funcionando aparte, con datos de ejemplo.
 3. **Valtek Access** — personas, empresas contratistas, documentos, puntos de control y bitácora en la base de datos.
 4. **Valtek Clean** — zonas, registros de aseo y fotos.
 5. **Eventos** — registro público, aprobación, QR real firmado y correo con el QR (Resend).
 6. **Salas** — cerraduras, clases, reservas, asistencia y vehículos. La apertura real depende de integrar el hardware de cada puerta.
 
 Cada etapa se prueba y se publica antes de empezar la siguiente.
+
+## Pendientes de configuración en Supabase
+
+- **Authentication → URL Configuration:** poner como *Site URL* la dirección de la página (`https://valtekoptima.cl` cuando esté activa). De ahí salen los enlaces de los correos de confirmación y de recuperación de contraseña.
+- **Correo propio (Resend):** el correo que trae Supabase solo sirve para pruebas y solo le escribe al dueño del proyecto. Para que los clientes reciban sus correos hay que conectar Resend con el dominio `valtekoptima.cl`.
+- **Primer super admin:** se marca en la base de datos después de que el dueño crea su cuenta.
 
 ## Reglas
 

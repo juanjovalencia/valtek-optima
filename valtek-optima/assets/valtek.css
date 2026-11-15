@@ -1381,3 +1381,28 @@ body.role-proveedor .prov-header { display: none; }
   .rm-modal-class { grid-template-columns: minmax(0, 1fr); }
   .rm-modal-class .btn { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 6px; }
 }
+
+/* ==========================================================================
+   Cuentas reales: formulario de acceso y pantalla "Mi cuenta"
+   ========================================================================== */
+.info-msg { display: none; margin-top: 8px; padding: 10px 12px; border-radius: 9px; font-size: 0.8rem; line-height: 1.45; color: var(--clean); background: rgba(47, 211, 154, 0.08); border: 1px solid rgba(47, 211, 154, 0.22); }
+.info-msg.show { display: block; }
+.auth-links { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; }
+.auth-links:empty { display: none; }
+.auth-links button { font-size: 0.8rem; color: var(--text-dim); text-decoration: underline; text-underline-offset: 3px; }
+.auth-links button:hover { color: var(--text); }
+#view-auth [hidden] { display: none !important; }
+.btn-full:disabled { opacity: 0.6; cursor: progress; }
+.ac-org { padding: 18px 0; border-bottom: 1px solid var(--border); display: grid; gap: 12px; }
+.ac-org:last-child { border-bottom: none; padding-bottom: 0; }
+.ac-org-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.ac-org-head b { display: block; font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+.ac-org-head div span { display: block; font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+.ac-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ac-chip { padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; color: var(--text-dim); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.03); }
+.ac-add { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 8px; }
+.ac-new { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 10px; align-items: end; }
+.ac-new label { display: grid; gap: 6px; font-size: 0.76rem; color: var(--text-dim); font-weight: 500; }
+@media (max-width: 900px) { .ac-new { grid-template-columns: 1fr 1fr; } .ac-add { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) { .ac-new { grid-template-columns: minmax(0, 1fr); } }
+@media print { #view-account { display: none !important; } }

@@ -50,6 +50,7 @@
     seguridad: 'Jefatura de seguridad',
     guardia: 'Guardia de seguridad',
     campus: 'Dirección de campus',
+    cuenta: 'Cuenta Valtek',
   };
 
   const GROUPS = {
@@ -80,6 +81,10 @@
 
   // ── Mapa de rutas: cada pantalla pertenece a un módulo ──
   const ROUTES = [
+    // Cuentas reales (Supabase): por ahora ven su cuenta, sus instituciones y las personas con acceso
+    { id: 'account-home', group: 'general', icon: 'users', label: 'Mi cuenta', roles: ['cuenta'],
+      sub: 'Tus instituciones, las personas con acceso y sus roles', open: () => { showView('account'); Backend.render(); } },
+
     { id: 'overview', group: 'general', icon: 'grid', label: 'Centro de control', roles: ADMINS,
       sub: 'Resumen en vivo de aseo y seguridad', open: () => showView('overview') },
 
@@ -155,7 +160,7 @@
   const DEFAULT_ROUTE = {
     superadmin: 'overview', admin: 'overview', jefe: 'clean-monitor',
     trabajador: 'clean-app', proveedor: 'vendor-add', porteria: 'access-gate',
-    seguridad: 'sec-dashboard', guardia: 'sec-gate', campus: 'rooms-live',
+    seguridad: 'sec-dashboard', guardia: 'sec-gate', campus: 'rooms-live', cuenta: 'account-home',
   };
 
   let currentRoute = null;
@@ -240,6 +245,11 @@
     document.getElementById('sb-org-meta').textContent = user.role === 'superadmin'
       ? state.schools.length + (state.schools.length === 1 ? ' cliente activo' : ' clientes activos')
       : (sch ? [(sch.type || 'Colegio'), sch.city, 'Plan ' + sch.plan].filter(Boolean).join(' · ') : '');
+
+    if (user.real) {
+      document.getElementById('sb-org-name').textContent = user.orgLabel || 'Valtek Optima';
+      document.getElementById('sb-org-meta').textContent = 'Cuenta real';
+    }
 
     go(route || DEFAULT_ROUTE[user.role]);
   }
