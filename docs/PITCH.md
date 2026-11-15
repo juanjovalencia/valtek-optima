@@ -62,7 +62,7 @@ Abrir la landing y bajar a **"Míralo funcionando"**. Entrar con cada perfil en 
 
 ## 8. Valtek Access para industria (demo de planta)
 
-**Enlace directo:** https://juanjovalencia.github.io/valtek-optima/#valtek-access (entra como Jefe de seguridad de la "Planta Industrial Valle Norte"). Para la vista del guardia: `#guardia`.
+**Enlace directo:** https://valtekoptima.cl/#valtek-access (entra como Jefe de seguridad de la "Planta Industrial Valle Norte"). Para la vista del guardia: `#guardia`.
 
 **Speech de 30 segundos (industria):**
 > "En una planta, que entre alguien sin estar habilitado no es un problema administrativo: es un riesgo para su vida y una multa para la empresa. Valtek Access valida a cada persona en la garita, en el torniquete y en las zonas restringidas contra su documentación, su empresa contratista y sus autorizaciones. Si algo está vencido, no entra, y queda registrado. Y si hay una emergencia, sabes exactamente quién está dentro y dónde."
