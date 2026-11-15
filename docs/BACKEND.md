@@ -34,7 +34,7 @@ Cada etapa se prueba y se publica antes de empezar la siguiente.
 
 ## Pendientes de configuración en Supabase
 
-- **Authentication → URL Configuration:** poner como *Site URL* la dirección de la página (`https://valtekoptima.cl` cuando esté activa). De ahí salen los enlaces de los correos de confirmación y de recuperación de contraseña.
+- **Authentication → URL Configuration:** hecho. El *Site URL* apunta a `https://juanjovalencia.github.io/valtek-optima/` y `valtekoptima.cl` ya está en la lista de direcciones permitidas. Cuando el dominio esté activo, hay que cambiar el *Site URL* a `https://valtekoptima.cl`.
 - **Correo propio (Resend):** el correo que trae Supabase solo sirve para pruebas y solo le escribe al dueño del proyecto. Para que los clientes reciban sus correos hay que conectar Resend con el dominio `valtekoptima.cl`.
 - **Primer super admin:** se marca en la base de datos después de que el dueño crea su cuenta.
 
