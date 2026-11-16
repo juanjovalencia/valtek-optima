@@ -3,7 +3,8 @@
    Organiza la aplicación en dos módulos:
      · Aseo y Personal   (Optima Clean)
      · Seguridad y Acceso (Optima Access)
-   y agrega el Centro de control, la sesión persistente y la landing.
+   y agrega el Centro de control, la sesión persistente y la landing
+   (menú del sitio en celular, revelado al hacer scroll y copia del correo).
    Depende de las funciones globales definidas en index.html
    (showView, switchJefeTab, switchSaTab, switchPorteriaTab, switchProvTab,
    checkWorkerStatus, state, SUPER_ADMIN, doLogin…).
@@ -291,13 +292,41 @@
     currentRoute = null;
     document.body.classList.remove('in-app', 'sb-open');
     document.body.className = document.body.className.replace(/\brole-\S+/g, '').trim();
-    document.title = 'Valtek Optima · Aseo y seguridad para instituciones';
+    document.title = 'Valtek Optima · Control de aseo y control de acceso';
     try { sessionStorage.removeItem('vo_session'); } catch (e) { /* noop */ }
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   function toggleSidebar() { document.body.classList.toggle('sb-open'); }
   function closeSidebar() { document.body.classList.remove('sb-open'); }
+
+  // ── Menú del sitio público en celular ──
+  function setSiteMenu(open) {
+    document.body.classList.toggle('nav-open', open);
+    const btn = document.getElementById('site-menu-btn');
+    if (btn) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Cerrar el menú' : 'Abrir el menú');
+    }
+  }
+  function toggleSiteMenu() { setSiteMenu(!document.body.classList.contains('nav-open')); }
+  function closeSiteMenu() { setSiteMenu(false); }
+
+  // Copia un texto (por ejemplo, el correo de contacto) y avisa con un mensaje breve.
+  function copyText(text, okMsg) {
+    const done = () => showToast(okMsg || 'Copiado.');
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) done(); else showToast('No se pudo copiar. La dirección es ' + text, true);
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
 
   function demoLogin(email, pass) {
     document.getElementById('login-email').value = email;
@@ -473,6 +502,17 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    // Los íconos son decorativos: los lectores de pantalla leen solo el texto que los acompaña.
+    document.querySelectorAll('#site-header svg, #view-landing svg, #view-auth svg').forEach(svg => {
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+    });
+
+    // Menú en celular: se cierra al elegir una sección o al volver a pantalla ancha.
+    const nav = document.getElementById('site-nav');
+    if (nav) nav.addEventListener('click', e => { if (e.target.closest('a')) closeSiteMenu(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 960) closeSiteMenu(); }, { passive: true });
+
     const els = document.querySelectorAll('.reveal');
     if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
     const io = new IntersectionObserver(entries => {
@@ -521,9 +561,20 @@
       renderSidebar();
     }, 10000);
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { hideAuth(); closeSidebar(); }
+      if (e.key === 'Escape') { hideAuth(); closeSidebar(); closeSiteMenu(); }
+      // Con la ventana de ingreso abierta, la tecla Tab recorre solo sus campos y botones.
+      if (e.key === 'Tab') {
+        const box = document.getElementById('view-auth');
+        if (!box || box.classList.contains('hidden')) return;
+        const items = Array.from(box.querySelectorAll('button, a[href], input, select, textarea')).filter(el => !el.disabled && el.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0], last = items[items.length - 1];
+        if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && (document.activeElement === first || document.activeElement === box.querySelector('.auth-card'))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
   });
 
-  window.Shell = { go, enterApp, exitApp, syncUser, toggleSidebar, closeSidebar, demoLogin, renderOverview, renderSidebar, ROLE_LABEL };
+  window.Shell = { go, enterApp, exitApp, syncUser, toggleSidebar, closeSidebar, toggleSiteMenu, closeSiteMenu, copyText, demoLogin, renderOverview, renderSidebar, ROLE_LABEL };
 })();

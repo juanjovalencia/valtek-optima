@@ -1,0 +1,7 @@
+# Valtek Optima · https://valtekoptima.cl
+User-agent: *
+Allow: /
+# Copia de respaldo de la demostración: no debe aparecer en los buscadores
+Disallow: /public/
+
+Sitemap: https://valtekoptima.cl/sitemap.xml

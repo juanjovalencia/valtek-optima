@@ -1,18 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-CL">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valtek Optima · Aseo y seguridad para instituciones</title>
-  <meta name="description" content="Valtek Optima: plataforma para universidades, colegios y centros comerciales que unifica el control de aseo y el control de acceso y seguridad, en tiempo real.">
+  <title>Valtek Optima · Control de aseo y control de acceso</title>
+  <meta name="description" content="Plataforma chilena de control de aseo y control de acceso para colegios, universidades, industria y centros comerciales. Contratistas y eventos con QR, en vivo.">
+  <link rel="canonical" href="https://valtekoptima.cl/">
   <meta name="theme-color" content="#05070b">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z' fill='%2305070b' stroke='%2346dcff' stroke-width='2'/%3E%3Cpath d='M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5Z' fill='%232fd39a'/%3E%3C/svg%3E">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Vista previa al compartir el enlace (WhatsApp, LinkedIn, correo) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Valtek Optima">
+  <meta property="og:locale" content="es_CL">
+  <meta property="og:url" content="https://valtekoptima.cl/">
+  <meta property="og:title" content="Valtek Optima · El aseo y la seguridad de tu recinto, en una sola plataforma">
+  <meta property="og:description" content="Sabes qué se limpió, quién entró y si cada contratista tiene sus papeles al día, en tiempo real. Para colegios, universidades, industria y centros comerciales.">
+  <meta property="og:image" content="https://valtekoptima.cl/assets/img/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Valtek Optima: el aseo y la seguridad de tu recinto, en una sola plataforma">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valtek Optima · El aseo y la seguridad de tu recinto, en una sola plataforma">
+  <meta name="twitter:description" content="Control de aseo, control de acceso, contratistas y eventos con QR, en tiempo real.">
+  <meta name="twitter:image" content="https://valtekoptima.cl/assets/img/og.jpg">
+
+  <!-- Íconos de la pestaña y del celular -->
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"Valtek Optima","url":"https://valtekoptima.cl/","logo":"https://valtekoptima.cl/assets/img/icon-512.png","email":"contacto@valtekoptima.cl","description":"Plataforma de control de aseo y control de acceso para colegios, universidades, industria y centros comerciales.","address":{"@type":"PostalAddress","addressLocality":"Santiago","addressCountry":"CL"}}
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/valtek.css?v=6.4.0">
+  <link rel="stylesheet" href="assets/valtek.css?v=6.5.0">
+  <noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
 </head>
 <body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<noscript><div class="noscript-note">Esta página necesita JavaScript para mostrar la demostración y el ingreso de clientes. Actívalo en tu navegador o escríbenos a contacto@valtekoptima.cl.</div></noscript>
 <!-- Definiciones SVG compartidas (gradiente de marca) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -24,20 +57,24 @@
 
 <!-- ═══════════════ HEADER PÚBLICO ═══════════════ -->
 <header id="site-header">
-  <a class="brand" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+  <a class="brand" href="./" aria-label="Valtek Optima, ir al inicio" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
     <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
     Valtek Optima
   </a>
-  <nav class="site-nav">
+  <nav class="site-nav" id="site-nav" aria-label="Secciones de la página">
     <a href="#modulos">Plataforma</a>
     <a href="#acceso">Acceso automatizado</a>
     <a href="#sectores">Sectores</a>
     <a href="#seguridad">Seguridad</a>
     <a href="#planes">Planes</a>
+    <a href="#contacto">Contacto</a>
   </nav>
   <div class="site-actions">
     <button class="btn btn-ghost" onclick="showAuth()">Ingresar</button>
-    <button class="btn btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo</button>
+    <a class="btn btn-primary" href="#demo">Ver demo</a>
+    <button class="icon-btn site-menu-btn" id="site-menu-btn" aria-label="Abrir el menú" aria-expanded="false" aria-controls="site-nav" onclick="Shell.toggleSiteMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
   </div>
 </header>
 
@@ -88,50 +125,45 @@
 
 <!-- ═══════════════ LOGIN ═══════════════ -->
 <div id="view-auth" class="hidden" onclick="if(event.target===this)hideAuth()">
-  <div class="auth-card">
+  <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="auth-title" tabindex="-1">
     <button class="icon-btn auth-close" onclick="hideAuth()" aria-label="Cerrar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
     </button>
     <div class="auth-logo">
       <svg class="brand-mark" style="width:42px;height:42px;" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
     </div>
-    <div class="auth-title" id="auth-title">Ingresa a Valtek Optima</div>
+    <h2 class="auth-title" id="auth-title">Ingresa a Valtek Optima</h2>
     <div class="auth-tagline" id="auth-tagline">Acceso exclusivo para instituciones clientes</div>
     <div class="form-group" id="login-name-group" hidden>
       <label class="form-label" for="login-name">Nombre y apellido</label>
-      <input class="form-input" type="text" id="login-name" placeholder="Ej: Andrea Fuentes" autocomplete="name">
+      <input class="form-input" type="text" id="login-name" placeholder="Ej: Andrea Fuentes" autocomplete="name" onkeydown="if(event.key==='Enter')authSubmit()">
     </div>
     <div class="form-group" id="login-email-group">
       <label class="form-label" for="login-email">Correo electrónico</label>
-      <input class="form-input" type="email" id="login-email" placeholder="nombre@institucion.cl" autocomplete="username">
+      <input class="form-input" type="email" id="login-email" placeholder="nombre@institucion.cl" autocomplete="username" onkeydown="if(event.key==='Enter')authSubmit()">
     </div>
     <div class="form-group" id="login-password-group">
       <label class="form-label" for="login-password">Contraseña</label>
       <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')authSubmit()">
     </div>
-    <div id="login-error" class="error-msg">Credenciales incorrectas o incompletas.</div>
-    <div id="login-info" class="info-msg"></div>
+    <div id="login-error" class="error-msg" role="alert">Credenciales incorrectas o incompletas.</div>
+    <div id="login-info" class="info-msg" role="status"></div>
     <button class="btn-full btn-primary" id="login-submit" onclick="authSubmit()" style="margin-top:8px;">Ingresar</button>
     <div class="auth-links" id="auth-links"></div>
     <div id="auth-demo">
-    <div class="auth-divider">Accesos de demostración</div>
-    <div class="auth-quick">
-      <button onclick="Shell.demoLogin('campus@valtek.cl','1234')"><b>Campus · Universidad</b><span>campus@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><b>Seguridad · Industria</b><span>seguridad@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><b>Guardia · Industria</b><span>guardia@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('admin@valtek.cl','1234')"><b>Dirección</b><span>admin@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('jefe@valtek.cl','1234')"><b>Jefatura de aseo</b><span>jefe@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('maria@valtek.cl','1234')"><b>Operaria</b><span>maria@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('porteria@valtek.cl','1234')"><b>Portería</b><span>porteria@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('proveedor@valtek.cl','1234')"><b>Contratista</b><span>proveedor@valtek.cl</span></button>
-      <button onclick="Shell.demoLogin('juanjo','123')"><b>Super admin</b><span>juanjo</span></button>
+      <div class="auth-divider">¿Aún no eres cliente?</div>
+      <div class="auth-next">
+        <button type="button" class="btn" onclick="hideAuth();document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Probar la demostración</button>
+        <button type="button" class="btn" onclick="hideAuth();document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Pedir una reunión</button>
+      </div>
     </div>
-    </div>
+    <p class="auth-foot">Al ingresar o crear tu cuenta aceptas los <a href="terminos.html">Términos de uso</a> y la <a href="privacidad.html">Política de privacidad</a>.</p>
   </div>
 </div>
 
 <!-- ═══════════════ LANDING (speech comercial) ═══════════════ -->
 <div id="view-landing" class="app-view active">
+  <main id="contenido">
 
   <!-- HERO -->
   <section class="hero">
@@ -141,10 +173,10 @@
       <h1 class="hero-title">El aseo y la seguridad de tu recinto, <em>en una sola plataforma.</em></h1>
       <p class="hero-subtitle">Valtek Optima digitaliza la limpieza y el control de acceso de universidades, colegios y centros comerciales. Sabes qué se limpió, quién entró y si cada contratista tiene sus papeles al día, en tiempo real.</p>
       <div class="hero-ctas">
-        <button class="btn btn-primary btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver la demo en vivo</button>
-        <button class="btn btn-lg" onclick="document.getElementById('modulos').scrollIntoView({behavior:'smooth'})">Conocer la plataforma</button>
+        <a class="btn btn-primary btn-lg" href="#demo">Ver la demo en vivo</a>
+        <a class="btn btn-lg" href="#contacto">Pedir una reunión</a>
       </div>
-      <div class="hero-note">Sin instalar aplicaciones · Funciona en cualquier celular · Tratamiento de datos según Ley 19.628</div>
+      <div class="hero-note">Sin instalar aplicaciones · Funciona en cualquier celular · <a href="privacidad.html">Tratamiento de datos según la ley chilena</a></div>
 
       <div class="hero-visual">
         <div class="hv-frame">
@@ -329,7 +361,7 @@
     <div class="lp-container">
       <div class="eyebrow reveal"><i></i>Planes</div>
       <h2 class="lp-h2 reveal">Elige los módulos <span class="muted">que tu recinto necesita.</span></h2>
-      <p class="lp-lead reveal">El valor depende del tamaño del recinto y de la cantidad de sedes. Cotizamos en base a un levantamiento sin costo.</p>
+      <p class="lp-lead reveal">El valor depende del tamaño del recinto y de la cantidad de sedes. Cotizamos según un levantamiento sin costo: <a class="text-link" href="#contacto">pide el tuyo</a>.</p>
       <div class="plan-grid">
         <div class="plan-card reveal">
           <div class="plan-kicker">Módulo 01</div>
@@ -341,7 +373,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Evidencia fotográfica antes y después</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Informes PDF y rankings de rendimiento</li>
           </ul>
-          <button class="btn btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo de aseo</button>
+          <a class="btn btn-lg" href="#demo">Ver demo de aseo</a>
         </div>
         <div class="plan-card featured reveal">
           <div class="plan-kicker" style="color:#b7c5ff;">Recomendado</div>
@@ -353,7 +385,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Centro de control con alertas unificadas</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Capacitación y soporte prioritario</li>
           </ul>
-          <button class="btn btn-primary btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver la demo completa</button>
+          <a class="btn btn-primary btn-lg" href="#demo">Ver la demo completa</a>
         </div>
         <div class="plan-card reveal">
           <div class="plan-kicker">Módulo 02</div>
@@ -365,7 +397,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Eventos con pre-acreditación y QR</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Integración con lectores y torniquetes</li>
           </ul>
-          <button class="btn btn-lg" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Ver demo de acceso</button>
+          <a class="btn btn-lg" href="#demo">Ver demo de acceso</a>
         </div>
       </div>
     </div>
@@ -377,7 +409,7 @@
       <div class="cta-box reveal">
         <div class="eyebrow" style="justify-content:center;"><i></i>Demo interactiva<i></i></div>
         <h2 class="lp-h2" style="margin:0 auto;">Míralo funcionando.</h2>
-        <p class="lp-lead" style="margin-left:auto;margin-right:auto;">Entra con cualquiera de los perfiles. Cada uno ve exactamente lo que vería en tu institución.</p>
+        <p class="lp-lead" style="margin-left:auto;margin-right:auto;">Elige un perfil y recorre la plataforma. Cada uno ve exactamente lo que vería en tu institución.</p>
         <div class="demo-roles">
           <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('admin@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></span><div><b>Dirección</b><span>Centro de control y ambos módulos</span></div></button>
           <button class="demo-role" data-mod="clean" onclick="Shell.demoLogin('jefe@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><div><b>Jefatura de aseo</b><span>Asignación, monitor e informes</span></div></button>
@@ -387,20 +419,79 @@
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('campus@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"/><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17"/><circle cx="14.5" cy="12" r="0.6" fill="currentColor"/></svg></span><div><b>Campus · Universidad</b><span>Salas con QR, asistencia y patentes</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('seguridad@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M4 20V10l5 3V10l5 3V6l6 4v10"/></svg></span><div><b>Jefe de seguridad · Industria</b><span>Valtek Access en una planta</span></div></button>
           <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('guardia@valtek.cl','1234')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg></span><div><b>Guardia de garita · Industria</b><span>Validación en garita y torniquete</span></div></button>
-          <button class="demo-role" data-mod="admin" onclick="Shell.demoLogin('juanjo','123')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><div><b>Super admin Valtek</b><span>Clientes, usuarios y métricas</span></div></button>
+          <button class="demo-role" data-mod="access" onclick="Shell.demoLogin('admin@valtek.cl','1234');Shell.go('rooms-live')"><span class="dr-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span><div><b>Salas conectadas · Colegio</b><span>Cerraduras con QR y asistencia automática</span></div></button>
         </div>
+        <p class="demo-note">Demostración con datos de ejemplo. Lo que hagas aquí se guarda solo en tu navegador y no llega a ninguna institución real.</p>
       </div>
     </div>
   </section>
 
+  <!-- CONTACTO -->
+  <section class="lp-section" id="contacto">
+    <div class="lp-container contact-grid">
+      <div>
+        <div class="eyebrow reveal"><i></i>Contacto</div>
+        <h2 class="lp-h2 reveal">Conversemos sobre <span class="muted">tu recinto.</span></h2>
+        <p class="lp-lead reveal">Cuéntanos qué tipo de recinto administras y qué necesitas controlar. Te mostramos la plataforma con un caso como el tuyo y cotizamos según un levantamiento sin costo.</p>
+        <ul class="contact-points reveal">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Demostración guiada, en línea o en tu recinto</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Levantamiento de zonas, puertas y torniquetes sin costo</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Propuesta según el tamaño del recinto y la cantidad de sedes</li>
+        </ul>
+      </div>
+      <div class="contact-card reveal">
+        <h3>Pide una demostración</h3>
+        <p>Escríbenos y coordinamos una reunión. Para avanzar más rápido, indícanos el tipo de recinto, cuántas sedes tiene y qué módulo te interesa.</p>
+        <a class="contact-mail" href="mailto:contacto@valtekoptima.cl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          <span>contacto@valtekoptima.cl</span>
+        </a>
+        <div class="contact-actions">
+          <a class="btn btn-primary btn-lg" href="mailto:contacto@valtekoptima.cl?subject=Quiero%20una%20demostraci%C3%B3n%20de%20Valtek%20Optima&amp;body=Hola%2C%20quiero%20conocer%20Valtek%20Optima.%0A%0AInstituci%C3%B3n%3A%20%0ATipo%20de%20recinto%3A%20%0ACantidad%20de%20sedes%3A%20%0AM%C3%B3dulo%20de%20inter%C3%A9s%20(aseo%2C%20acceso%20o%20ambos)%3A%20%0ATel%C3%A9fono%20de%20contacto%3A%20%0A">Escribir un correo</a>
+          <button type="button" class="btn btn-lg" onclick="Shell.copyText('contacto@valtekoptima.cl', 'Correo copiado: contacto@valtekoptima.cl')">Copiar la dirección</button>
+        </div>
+        <div class="contact-meta">Valtek Optima · Santiago de Chile</div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
   <footer class="site-footer">
     <div class="lp-container">
-      <div class="brand" style="font-size:.95rem;">
-        <svg class="brand-mark" style="width:22px;height:22px;" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
-        Valtek Optima
+      <div class="sf-top">
+        <div class="sf-brand">
+          <div class="brand">
+            <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25L16 2.5Z" stroke="url(#brandGrad)" stroke-width="1.6"/><path d="M16 9.5 21.6 12.75v6.5L16 22.5l-5.6-3.25v-6.5L16 9.5Z" fill="url(#brandGrad)" opacity=".9"/></svg>
+            Valtek Optima
+          </div>
+          <p>Control de aseo y control de acceso para colegios, universidades, industria y centros comerciales.</p>
+          <a href="mailto:contacto@valtekoptima.cl">contacto@valtekoptima.cl</a>
+        </div>
+        <nav class="sf-col" aria-label="Plataforma">
+          <h2>Plataforma</h2>
+          <a href="#modulos">Módulos</a>
+          <a href="#acceso">Acceso automatizado</a>
+          <a href="#sectores">Sectores</a>
+          <a href="#planes">Planes</a>
+        </nav>
+        <nav class="sf-col" aria-label="Empresa">
+          <h2>Empresa</h2>
+          <a href="#contacto">Contacto</a>
+          <a href="#demo">Demostración</a>
+          <button type="button" onclick="showAuth()">Ingreso de clientes</button>
+        </nav>
+        <nav class="sf-col" aria-label="Legal">
+          <h2>Legal</h2>
+          <a href="privacidad.html">Política de privacidad</a>
+          <a href="terminos.html">Términos de uso</a>
+          <a href="#seguridad">Seguridad y cumplimiento</a>
+        </nav>
       </div>
-      <div>© 2026 Valtek · Santiago de Chile</div>
-      <div><a href="#modulos">Plataforma</a> &nbsp;·&nbsp; <a href="#seguridad">Seguridad</a> &nbsp;·&nbsp; <a href="#" onclick="showAuth();return false;">Ingresar</a></div>
+      <div class="sf-bottom">
+        <span>© 2026 Valtek Optima · Santiago de Chile</span>
+        <span>Hecho en Chile para instituciones chilenas</span>
+      </div>
     </div>
   </footer>
 </div>
@@ -1241,7 +1332,7 @@
     </div>
     <div class="consent-check">
       <input type="checkbox" id="enrol-consent">
-      <label for="enrol-consent">Acepto el tratamiento de mis datos personales de acuerdo a la Política de Seguridad de la institución, con el único fin de gestionar el control de acceso y seguridad del recinto. Los datos serán eliminados automáticamente tras 30 días del evento.</label>
+      <label for="enrol-consent">Acepto el tratamiento de mis datos personales (RUT, fotos de mi cédula y de mi rostro) con el único fin de gestionar el control de acceso y la seguridad del recinto, según la <a href="privacidad.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">Política de privacidad</a>. Mis datos se eliminan automáticamente 30 días después del evento.</label>
     </div>
     <div id="enrol-error" class="error-msg">Complete todos los campos obligatorios y acepte el consentimiento.</div>
     <button class="btn-full btn-primary" onclick="submitEnrolamiento()" style="margin-top:0.5rem;">Registrarme y solicitar acreditación</button>
@@ -2163,10 +2254,25 @@
   }
 
   // ── AUTH ──
-  function showAuth() { document.getElementById('view-auth').classList.remove('hidden'); }
+  // La ventana de ingreso recuerda desde dónde se abrió para devolver ahí el teclado al cerrarla.
+  let authReturnFocus = null;
+  function showAuth() {
+    const box = document.getElementById('view-auth');
+    if (box.classList.contains('hidden')) authReturnFocus = document.activeElement;
+    box.classList.remove('hidden');
+    // En computador el cursor parte en el primer campo; en celular no, para no abrir el teclado encima.
+    const desktop = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const card = box.querySelector('.auth-card');
+    const first = desktop ? box.querySelector('.form-group:not([hidden]) input') : null;
+    setTimeout(() => { try { (first || card).focus(); } catch (e) { /* sin foco */ } }, 60);
+  }
   function hideAuth() {
-    document.getElementById('view-auth').classList.add('hidden');
+    const box = document.getElementById('view-auth');
+    const wasOpen = !box.classList.contains('hidden');
+    box.classList.add('hidden');
     if (window.Backend && Backend.enabled && (Backend.authMode === 'signup' || Backend.authMode === 'reset')) Backend.setMode('login');
+    if (wasOpen && authReturnFocus && document.body.contains(authReturnFocus)) { try { authReturnFocus.focus(); } catch (e) { /* sin foco */ } }
+    authReturnFocus = null;
   }
   // El botón del formulario sirve para ingresar, crear cuenta o recuperar la contraseña.
   function authSubmit() { if (window.Backend && Backend.enabled && Backend.authMode !== 'login') Backend.submit(); else doLogin(); }
@@ -5953,7 +6059,7 @@
 <script src="assets/access-data.js?v=6.4.0"></script>
 <script src="assets/access.js?v=6.4.0"></script>
 <script src="assets/rooms.js?v=6.2.0"></script>
-<script src="assets/shell.js?v=6.4.0"></script>
+<script src="assets/shell.js?v=6.5.0"></script>
 <script src="assets/backend.js?v=6.4.0"></script>
 </body>
 </html>
