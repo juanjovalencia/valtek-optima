@@ -59,7 +59,7 @@ Todavía no incluye: subir el archivo escaneado de cada documento (hoy se anota 
 ## Pendientes de configuración en Supabase
 
 - **Authentication → URL Configuration:** `valtekoptima.cl` ya está en la lista de direcciones permitidas. Pendiente: cambiar el *Site URL* a `https://valtekoptima.cl` (hoy apunta a la dirección antigua de github.io, que redirige al dominio).
-- **Dominio:** `valtekoptima.cl` está en NIC Chile con los servidores de Cloudflare (`cecelia` y `jakub`), con 4 registros A y un CNAME `www` hacia GitHub Pages, sin proxy. Pendiente: forzar HTTPS en GitHub Pages cuando el certificado esté emitido.
+- **Dominio:** `valtekoptima.cl` está activo en NIC Chile con los servidores de Cloudflare (`cecelia` y `jakub`), con 4 registros A y un CNAME `www` hacia GitHub Pages y **HTTPS forzado activo** (certificado Let's Encrypt emitido para `valtekoptima.cl` y `www.valtekoptima.cl`).
 - **Correo propio (Resend):** el correo que trae Supabase solo sirve para pruebas y solo le escribe al dueño del proyecto. Para que los clientes reciban sus correos hay que conectar Resend con el dominio `valtekoptima.cl`.
 - **Primer super admin:** se marca en la base de datos después de que el dueño crea su cuenta.
 
