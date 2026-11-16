@@ -29,7 +29,9 @@
 - `valtek-optima/assets/rooms.js`: **Salas conectadas** para universidades y colegios (cerraduras con QR, asistencia automática, reservas de salas, apertura a distancia y control de vehículos por patente). El horario de la demo se arma alrededor de la hora actual. Demo directa: `#campus` (universidad) y `#salas` (colegio).
 - `docs/PITCH.md`: Planteamiento comercial, speech y guion de demo.
 - `valtek-optima/assets/config.js` y `backend.js`: Conexión a **Supabase** (proyecto `valtek-optima`, ref `yhkqdsjjeciwjlsogkwo`, región São Paulo). Cuentas reales: ingresar, crear cuenta, recuperar contraseña y pantalla "Mi cuenta" (instituciones, personas con acceso y roles). Las cuentas de demostración siguen aparte, con datos en `localStorage`.
-- `docs/BACKEND.md`: Dónde vive cada cosa, etapas de la migración a Supabase y reglas (claves fuera del repositorio).
+- `docs/BACKEND.md`: Dónde vive cada cosa, etapas de la migración a Supabase y reglas (claves fuera del repositorio). También explica el sitio público, dónde se aloja la página y el plan de correos del dominio.
+- `valtek-optima/privacidad.html`, `terminos.html`, `404.html`, `robots.txt`, `sitemap.xml`, `site.webmanifest`, `favicon.ico` y `assets/img/`: **sitio público** (páginas legales, página de error, archivos para buscadores, íconos e imagen al compartir el enlace). La sección de contacto y el pie están en `index.html`; sus estilos, al final de `valtek.css`.
+- `docs/ROADMAP.md`: Etapas siguientes (control de alumnos y credencial única por tarjeta, huella o QR). `docs/CORREOS.md`: textos en español para los correos automáticos de Supabase.
 - `supabase/migrations/`: Esquema de la base de datos (tablas por `org_id`, permisos por rol con RLS y buckets privados). Todo cambio de base de datos va aquí como archivo nuevo.
 - Probar en local: `python3 tools/serve.py` y abrir http://localhost:5173 (servidor sin caché, IPv4 e IPv6).
 - `valtek-optima/public/demo/index.html`: Copia de respaldo intacta del demo interactivo.
